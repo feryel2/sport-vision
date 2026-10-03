@@ -1,0 +1,19 @@
+# Build outputs
+backend/target/
+frontend/dist/
+frontend/.angular/
+
+# Dependencies
+frontend/node_modules/
+
+# Local environment and editor files
+.env
+.env.*
+!.env.example
+.idea/
+*.iml
+
+# Logs and operating-system files
+*.log
+.DS_Store
+Thumbs.db
