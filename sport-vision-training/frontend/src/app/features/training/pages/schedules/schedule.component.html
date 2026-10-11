@@ -1,0 +1,32 @@
+<section class="program-shell">
+  <p class="eyebrow">MON ENTRAÎNEMENT</p><h1>Planification des séances</h1>
+  <p>Tous les horaires sont en <strong>Africa/Tunis</strong>, quel que soit le fuseau de votre appareil. Chaque créneau conserve la révision choisie du programme.</p>
+  <p *ngIf="message" class="notice success" role="status">{{message}}</p>
+  <div *ngIf="error" class="notice error" role="alert">{{error}} <button class="btn-sv btn-sv-outline" [disabled]="loading||busy" (click)="load(page)">Recharger</button><a *ngIf="activeWorkoutId" [routerLink]="['/entrainement/seances',activeWorkoutId]">Reprendre la séance en cours</a></div>
+  <section class="sv-card section-space"><h2>Planifier une séance</h2>
+    <form class="actions" (ngSubmit)="searchPrograms()"><label for="program-search">Programme actif</label><input id="program-search" class="form-control-sv" name="search" [(ngModel)]="search" maxlength="120" placeholder="Rechercher un programme"><button class="btn-sv btn-sv-outline" [disabled]="programLoading||busy">Rechercher</button></form>
+    <p *ngIf="programLoading" role="status">Chargement des programmes…</p>
+    <div class="program-choices" *ngIf="programList as list"><button type="button" class="btn-sv btn-sv-outline" *ngFor="let p of list.items" [disabled]="programLoading||busy" [attr.aria-pressed]="selected?.id===p.id" (click)="choose(p.id)">{{p.name}}</button>
+      <p *ngIf="!list.items.length">Aucun programme actif trouvé. <a routerLink="/entrainement/programmes">Mes programmes</a></p>
+      <nav *ngIf="list.totalPages>1" class="pagination" aria-label="Programmes"><button class="btn-sv btn-sv-outline" [disabled]="programLoading||busy||programPage===0" (click)="searchPrograms(programPage-1)">Précédents</button><span>{{programPage+1}} / {{list.totalPages}}</span><button class="btn-sv btn-sv-outline" [disabled]="programLoading||busy||programPage+1>=list.totalPages" (click)="searchPrograms(programPage+1)">Suivants</button></nav>
+    </div>
+    <form *ngIf="selected as p" (ngSubmit)="create()"><h3>{{p.name}} · révision {{p.currentRevision}}</h3><div class="schedule-fields">
+      <div><label class="form-label-sv" for="session">Séance</label><select class="form-control-sv" id="session" name="session" [(ngModel)]="sessionId" required [disabled]="busy"><option *ngFor="let s of p.version.sessions" [ngValue]="s.id">{{s.name}}</option></select></div>
+      <div><label class="form-label-sv" for="scheduled">Date et heure (Africa/Tunis)</label><input class="form-control-sv" id="scheduled" name="scheduled" type="datetime-local" step="60" [(ngModel)]="scheduledLocal" required [disabled]="busy"></div>
+    </div><button class="btn-sv btn-sv-primary" [disabled]="busy||loading||!sessionId||!scheduledLocal">Planifier</button></form>
+  </section>
+  <section class="sv-card section-space"><h2>Mes séances planifiées</h2>
+    <form class="schedule-fields" (ngSubmit)="load()"><div><label class="form-label-sv" for="from">Du</label><input class="form-control-sv" type="date" id="from" name="from" [(ngModel)]="from" required [disabled]="loading||busy"></div><div><label class="form-label-sv" for="to">Au (inclus)</label><input class="form-control-sv" type="date" id="to" name="to" [(ngModel)]="to" required [disabled]="loading||busy"></div><button class="btn-sv btn-sv-outline" [disabled]="loading||busy">Afficher</button></form>
+    <p class="demo-note">Période maximale : 93 jours. Les séances passées restent consultables en changeant les dates.</p>
+    <p *ngIf="loading||busy" role="status">Chargement…</p><p *ngIf="result&&!result.totalElements">Aucune séance planifiée sur cette période.</p>
+    <section *ngFor="let group of groups"><h3 class="section-title">{{dateLabel(group.date)}}</h3><article *ngFor="let s of group.items" class="prescription">
+      <div class="heading-row"><h4>{{s.scheduledLocal.slice(11,16)}} · {{s.sessionName}}</h4><span class="badge-sv">{{label(s.status)}}</span></div>
+      <p>{{s.programName}} · révision {{s.programRevision}}</p><a [routerLink]="['/entrainement/programmes',s.programId]" [queryParams]="{revision:s.programRevision}">Consulter la révision planifiée</a>
+      <div class="actions section-title" *ngIf="s.status==='PLANNED'"><button class="btn-sv btn-sv-primary" [disabled]="busy||loading" (click)="start(s)">Démarrer</button><button class="btn-sv btn-sv-outline" [disabled]="busy||loading" (click)="edit(s)">Modifier la date</button><button class="btn-sv btn-sv-danger" [disabled]="busy||loading" (click)="cancelling=s;editing=undefined">Annuler la planification</button></div>
+      <a *ngIf="s.workoutId" class="btn-sv btn-sv-outline" [routerLink]="['/entrainement/seances',s.workoutId]">{{s.status==='IN_PROGRESS'?'Reprendre l’entraînement':'Consulter dans l’historique'}}</a>
+      <form *ngIf="editing?.id===s.id" (ngSubmit)="save()" class="schedule-fields"><div><label class="form-label-sv" [for]="'edit-'+s.id">Nouvelle date et heure (Africa/Tunis)</label><input class="form-control-sv" [id]="'edit-'+s.id" name="editDate" type="datetime-local" step="60" required [(ngModel)]="editDate" [disabled]="busy"></div><div class="actions"><button class="btn-sv btn-sv-primary" [disabled]="busy">Enregistrer</button><button type="button" class="btn-sv btn-sv-outline" [disabled]="busy" (click)="editing=undefined">Fermer</button></div></form>
+      <div *ngIf="cancelling?.id===s.id" class="notice warning"><p>Annuler ce créneau ? Aucun entraînement ni historique ne sera supprimé.</p><div class="actions"><button class="btn-sv btn-sv-danger" [disabled]="busy" (click)="cancel(s)">Confirmer l’annulation</button><button class="btn-sv btn-sv-outline" [disabled]="busy" (click)="cancelling=undefined">Conserver</button></div></div>
+    </article></section>
+    <nav *ngIf="result&&result.totalPages>1" class="pagination" aria-label="Séances planifiées"><button class="btn-sv btn-sv-outline" [disabled]="busy||loading||page===0" (click)="load(page-1)">Précédent</button><span>{{page+1}} / {{result.totalPages}}</span><button class="btn-sv btn-sv-outline" [disabled]="busy||loading||page+1>=result.totalPages" (click)="load(page+1)">Suivant</button></nav>
+  </section>
+</section>

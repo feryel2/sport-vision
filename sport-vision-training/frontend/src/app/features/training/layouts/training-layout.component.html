@@ -1,0 +1,55 @@
+<a class="skip-link" href="#main-content">Aller au contenu</a>
+<div class="top-banner">
+  <div class="container banner-content">
+    <span><strong class="brand-tag">SPORT VISION</strong> Exercices & programmes d'entraînement</span>
+    <span class="module-label">MODULE 2</span>
+  </div>
+</div>
+<header class="main-header">
+  <div class="container navbar-container">
+    <a routerLink="/entrainement" class="logo" aria-label="Sport Vision — Accueil entraînement">
+      <img src="assets/logo.svg" alt="" width="44" height="44">
+      <span><span class="logo-brand">SPORT<span class="text-accent">VISION</span></span>
+        <span class="logo-sub">EXERCICES & PROGRAMMES</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Navigation entraînement">
+      <a routerLink="/entrainement" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" ariaCurrentWhenActive="page">Accueil</a>
+      <a routerLink="/entrainement/exercices" routerLinkActive="active" ariaCurrentWhenActive="page">Exercices</a>
+      <a routerLink="/entrainement/programmes" routerLinkActive="active" ariaCurrentWhenActive="page">Programmes</a>
+      <a routerLink="/entrainement/planification" routerLinkActive="active" ariaCurrentWhenActive="page">Planification</a>
+      <a routerLink="/entrainement/historique" routerLinkActive="active" ariaCurrentWhenActive="page">Historique</a>
+      <a routerLink="/entrainement/progression" routerLinkActive="active" ariaCurrentWhenActive="page">Progression</a>
+      <a routerLink="/admin/entrainement/exercices" routerLinkActive="active" ariaCurrentWhenActive="page">Administration</a>
+    </nav>
+  </div>
+</header>
+<div class="container current-workout" *ngIf="workouts.active$|async as active">
+  <a *ngIf="active.workout as workout" class="btn-sv btn-sv-primary" [routerLink]="['/entrainement/seances',workout.id]">Reprendre ma séance · {{workout.sessionName}}</a>
+  <p *ngIf="active.error" role="alert">Séance en cours indisponible : {{active.error}} <button class="btn-sv btn-sv-outline" (click)="workouts.refreshCurrent()">Réessayer</button></p>
+</div>
+<main id="main-content" tabindex="-1"><router-outlet></router-outlet></main>
+<footer class="main-footer" id="a-propos">
+  <div class="container footer-grid">
+    <div>
+      <a routerLink="/entrainement" class="logo footer-logo">
+        <img src="assets/logo.svg" alt="" width="44" height="44">
+        <span class="logo-brand text-white">SPORT<span class="text-accent">VISION</span></span>
+      </a>
+      <p>Un espace dédié aux exercices et aux programmes d'entraînement.</p>
+    </div>
+    <div>
+      <h2>Votre espace entraînement</h2>
+      <a routerLink="/entrainement">Accueil du module</a>
+      <a routerLink="/entrainement/exercices">Catalogue des exercices</a>
+    </div>
+    <div>
+      <h2>Un projet en construction</h2>
+      <p>Mini-projet universitaire<br>IA for Software Engineering</p>
+      <span class="footer-note">Les fonctionnalités seront ajoutées progressivement.</span>
+    </div>
+  </div>
+  <div class="footer-bottom"><div class="container">Sport Vision • Module 2 — Exercices & programmes d'entraînement</div></div>
+</footer>
+
+
+

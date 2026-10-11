@@ -1,0 +1,21 @@
+<section class="program-shell">
+  <div class="heading-row"><div><p class="eyebrow">VOTRE PRATIQUE</p><h1>Historique des séances</h1></div><a class="btn-sv btn-sv-primary" routerLink="/entrainement/programmes">Mes programmes</a></div>
+  <p class="intro">Retrouvez les objectifs et les résultats enregistrés à chaque séance. Les durées incluent les temps de repos.</p>
+  <p class="demo-note">Mode démonstration local · Historique partagé, sans authentification.</p>
+  <div class="filters"><div><label for="workout-status" class="form-label-sv">Statut de la séance</label><select id="workout-status" class="form-control-sv" [formControl]="status"><option value="">Tous les statuts</option><option value="IN_PROGRESS">En cours</option><option value="COMPLETED">Terminées</option><option value="ABANDONED">Abandonnées</option></select></div></div>
+  <ng-container *ngIf="state$|async as state">
+    <p *ngIf="state.loading" class="sv-card state-panel" role="status">Chargement de l’historique…</p>
+    <div *ngIf="state.error" class="notice error" role="alert">{{state.error}} <button class="btn-sv btn-sv-outline" (click)="refresh.next()">Réessayer</button></div>
+    <ng-container *ngIf="state.page as result">
+      <p class="result-count">{{result.totalElements}} séance(s)</p>
+      <div *ngIf="!result.items.length" class="sv-card state-panel"><h2>Aucune séance à afficher</h2><p>Démarrez une séance depuis un programme actif.</p><a routerLink="/entrainement/programmes" class="btn-sv btn-sv-outline">Voir mes programmes</a></div>
+      <div class="history-list"><article class="sv-card" *ngFor="let w of result.items">
+        <div class="heading-row"><div><p class="eyebrow">{{w.programName}} · RÉVISION {{w.programRevision}}</p><h2>{{w.sessionName}}</h2></div><span class="badge-sv" [class.badge-success]="w.status==='COMPLETED'" [class.badge-warning]="w.status!=='COMPLETED'">{{labels[w.status]}}</span></div>
+        <div class="history-facts"><span>{{w.startedAt|date:'dd/MM/yyyy à HH:mm'}}</span><span>Temps écoulé : {{elapsedLabel(w.elapsedSeconds)}}</span><span>{{w.doneSets}} / {{w.totalSets}} séries réalisées · {{w.skippedSets}} ignorées</span></div>
+        <a class="btn-sv btn-sv-outline" [routerLink]="['/entrainement/seances',w.id]">{{w.status==='IN_PROGRESS'?'Reprendre la séance':'Consulter le récapitulatif'}}</a>
+      </article></div>
+      <nav class="pagination" *ngIf="result.totalPages>1" aria-label="Pages de l’historique des séances"><button class="btn-sv btn-sv-outline" [disabled]="result.page===0" (click)="go(result.page-1)">Précédent</button><span>{{result.page+1}} / {{result.totalPages}}</span><button class="btn-sv btn-sv-outline" [disabled]="result.page+1>=result.totalPages" (click)="go(result.page+1)">Suivant</button></nav>
+    </ng-container>
+  </ng-container>
+</section>
+
