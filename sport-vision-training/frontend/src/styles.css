@@ -1,0 +1,409 @@
+/* ===================================================================
+   SPORT VISION - CHARTE GRAPHIQUE BLEU & BLANC
+   Combinaison athlétique, high-tech et moderne
+   =================================================================== */
+
+:root {
+  /* Nuances Principales Bleu */
+  --sv-primary: #1d4ed8;       /* Bleu Royal Sportif */
+  --sv-primary-hover: #1e40af; /* Bleu Royal Sombre */
+  --sv-accent: #0284c7;        /* Bleu Azur / Électrique */
+  --sv-accent-hover: #0369a1;
+  --sv-cyan: #06b6d4;          /* Cyan High-Tech */
+  --sv-dark: #0f172a;          /* Bleu Nuit Profond */
+  --sv-navy: #1e293b;          /* Bleu Anthracite */
+
+  /* Nuances de Blanc et Pastels Glacés */
+  --sv-white: #ffffff;         /* Blanc Pur */
+  --sv-ice: #f8fafc;           /* Fond Blanc Givré */
+  --sv-blue-50: #eff6ff;       /* Bleu Glacé Très Clair */
+  --sv-blue-100: #dbeafe;      /* Bleu Pastel Doux */
+  --sv-blue-200: #bfdbfe;      /* Bleu Bordure Douce */
+  --sv-gray-100: #f1f5f9;
+  --sv-gray-200: #e2e8f0;
+  --sv-gray-400: #94a3b8;
+  --sv-gray-600: #475569;
+  --sv-gray-800: #1e293b;
+
+  /* Statuts fonctionnels */
+  --sv-success: #10b981;
+  --sv-warning: #f59e0b;
+  --sv-danger: #ef4444;
+
+  /* Ombres et Effets */
+  --sv-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --sv-shadow-md: 0 4px 16px rgba(29, 78, 216, 0.08);
+  --sv-shadow-card: 0 12px 30px -8px rgba(29, 78, 216, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+  --sv-shadow-glow: 0 0 25px rgba(2, 132, 199, 0.3);
+  --sv-radius: 12px;
+  --sv-radius-lg: 18px;
+  --sv-transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reset Global & Polices */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--sv-navy);
+  background-color: var(--sv-ice);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  color: var(--sv-dark);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+a {
+  color: var(--sv-primary);
+  text-decoration: none;
+  transition: var(--sv-transition);
+}
+
+a:hover {
+  color: var(--sv-primary-hover);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ===================================================================
+   BOUTONS BLEU & BLANC
+   =================================================================== */
+
+.btn-sv {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: var(--sv-radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: var(--sv-transition);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.btn-sv-primary {
+  background: linear-gradient(135deg, var(--sv-primary) 0%, var(--sv-accent) 100%);
+  color: var(--sv-white);
+  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.3);
+}
+
+.btn-sv-primary:hover {
+  background: linear-gradient(135deg, var(--sv-primary-hover) 0%, var(--sv-accent-hover) 100%);
+  color: var(--sv-white);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(29, 78, 216, 0.4);
+}
+
+.btn-sv-outline {
+  background: transparent;
+  color: var(--sv-primary);
+  border: 2px solid var(--sv-primary);
+}
+
+.btn-sv-outline:hover {
+  background: var(--sv-blue-50);
+  border-color: var(--sv-primary-hover);
+  color: var(--sv-primary-hover);
+}
+
+.btn-sv-white {
+  background: var(--sv-white);
+  color: var(--sv-primary);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.btn-sv-white:hover {
+  background: var(--sv-blue-50);
+  color: var(--sv-primary-hover);
+  transform: translateY(-2px);
+}
+
+.btn-sv-secondary {
+  background: var(--sv-blue-100);
+  color: var(--sv-primary);
+}
+
+.btn-sv-secondary:hover {
+  background: var(--sv-blue-200);
+  color: var(--sv-primary-hover);
+}
+
+.btn-sv-danger {
+  background: #fee2e2;
+  color: var(--sv-danger);
+  border: 1px solid #fecaca;
+}
+
+.btn-sv-danger:hover {
+  background: var(--sv-danger);
+  color: var(--sv-white);
+}
+
+.btn-sv-sm {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+}
+
+.btn-sv-lg {
+  padding: 14px 32px;
+  font-size: 1.1rem;
+  border-radius: 14px;
+}
+
+/* ===================================================================
+   BADGES & LABELS
+   =================================================================== */
+
+.badge-sv {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-blue {
+  background-color: var(--sv-blue-100);
+  color: var(--sv-primary);
+  border: 1px solid var(--sv-blue-200);
+}
+
+.badge-white {
+  background-color: var(--sv-white);
+  color: var(--sv-primary);
+  border: 1px solid var(--sv-white);
+}
+
+.badge-success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.badge-warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.badge-danger {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* ===================================================================
+   CARTES (CARDS) & SURFACES
+   =================================================================== */
+
+.sv-card {
+  background: var(--sv-white);
+  border-radius: var(--sv-radius);
+  border: 1px solid var(--sv-gray-200);
+  padding: 24px;
+  box-shadow: var(--sv-shadow-card);
+  transition: var(--sv-transition);
+}
+
+.sv-card:hover {
+  border-color: var(--sv-blue-200);
+}
+
+.sv-card-interactive {
+  cursor: pointer;
+}
+
+.sv-card-interactive:hover {
+  transform: translateY(-4px);
+  border-color: var(--sv-primary);
+  box-shadow: 0 16px 36px -10px rgba(29, 78, 216, 0.16);
+}
+
+.sv-card-blue {
+  background: linear-gradient(135deg, var(--sv-primary) 0%, var(--sv-accent) 100%);
+  color: var(--sv-white);
+  border: none;
+}
+
+.sv-card-blue h1, .sv-card-blue h2, .sv-card-blue h3, .sv-card-blue p {
+  color: var(--sv-white);
+}
+
+/* ===================================================================
+   FORMULAIRES & INPUTS
+   =================================================================== */
+
+.form-group-sv {
+  margin-bottom: 18px;
+}
+
+.form-label-sv {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--sv-navy);
+  margin-bottom: 6px;
+}
+
+.form-control-sv {
+  width: 100%;
+  padding: 11px 16px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--sv-dark);
+  background-color: var(--sv-white);
+  border: 1.5px solid var(--sv-gray-200);
+  border-radius: 10px;
+  transition: var(--sv-transition);
+  outline: none;
+}
+
+.form-control-sv:focus {
+  border-color: var(--sv-primary);
+  box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.12);
+  background-color: var(--sv-white);
+}
+
+textarea.form-control-sv {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* ===================================================================
+   TABLEAUX (TABLES) ADMIN
+   =================================================================== */
+
+.sv-table-container {
+  background: var(--sv-white);
+  border-radius: var(--sv-radius);
+  border: 1px solid var(--sv-gray-200);
+  box-shadow: var(--sv-shadow-card);
+  overflow-x: auto;
+}
+
+.sv-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.92rem;
+}
+
+.sv-table th {
+  background-color: var(--sv-blue-50);
+  color: var(--sv-primary);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.5px;
+  padding: 14px 20px;
+  border-bottom: 1.5px solid var(--sv-blue-200);
+}
+
+.sv-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--sv-gray-100);
+  vertical-align: middle;
+}
+
+.sv-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.sv-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* ===================================================================
+   MODALES
+   =================================================================== */
+
+.sv-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 20px;
+  animation: svFadeIn 0.2s ease-out;
+}
+
+.sv-modal-dialog {
+  background: var(--sv-white);
+  border-radius: var(--sv-radius-lg);
+  border: 1px solid var(--sv-blue-100);
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  width: 100%;
+  max-width: 650px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: svSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sv-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--sv-gray-200);
+  background-color: var(--sv-blue-50);
+  border-radius: var(--sv-radius-lg) var(--sv-radius-lg) 0 0;
+}
+
+.sv-modal-body {
+  padding: 24px;
+}
+
+.sv-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--sv-gray-200);
+  background-color: #fbfcfe;
+  border-radius: 0 0 var(--sv-radius-lg) var(--sv-radius-lg);
+}
+
+/* Animations */
+@keyframes svFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes svSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Utilitaires */
+.text-primary { color: var(--sv-primary) !important; }
+.text-accent { color: var(--sv-accent) !important; }
+.text-dark { color: var(--sv-dark) !important; }
+.text-white { color: var(--sv-white) !important; }
+.text-muted { color: var(--sv-gray-600) !important; }
+.bg-white { background-color: var(--sv-white) !important; }
+.bg-ice { background-color: var(--sv-ice) !important; }
+.bg-blue-light { background-color: var(--sv-blue-50) !important; }

@@ -1,0 +1,3 @@
+# Secrets locaux, jamais à suivre
+.env.local
+**/.env.local
