@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import com.sportvision.training.dto.ApiResponse;
@@ -24,6 +25,10 @@ public class ApiExceptionHandler {
     }
     @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
     public ResponseEntity<?> malformed(Exception ex) { return error(400, "Format ou valeur invalide. Utilisez les valeurs proposées.", Map.of()); }
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<?> missingParameter(MissingServletRequestParameterException ex) {
+        return error(400, "Un paramètre obligatoire est manquant.", Map.of(ex.getParameterName(), "Ce paramètre est obligatoire."));
+    }
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> invalid(IllegalArgumentException ex) { return error(400, ex.getMessage(), Map.of()); }
     @ExceptionHandler(ExerciseNotFoundException.class)
