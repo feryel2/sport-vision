@@ -165,14 +165,15 @@ sera ajoutée par `ddl-auto=update` au prochain démarrage ; ne pas réinitialis
 Page : http://127.0.0.1:4201/entrainement/programmes/generer (bouton dans Mes programmes).
 Gemini 2.5 Flash configurable, appel HTTP direct côté serveur, aperçu validé sans écriture,
 puis confirmation via le service métier. Aucun historique transmis, aucune charge prescrite.
-Configurer soi-même `backend/.env.local` à partir de `backend/.env.local.example`, puis
+Créer soi-même `backend/.env.local` selon le guide [IA-SIMPLE](docs/IA-SIMPLE.md), puis
 lancer `backend/start-local.ps1` après compilation. Ne pas partager la clé.
 Guide court, fichiers, exemples et commandes : [IA-SIMPLE](docs/IA-SIMPLE.md).
 Sans clé : métier opérationnel et « Service IA non configuré ».
-Deux tests Gemini simulés : `mvn "-Dtest=TrainingAiApiTest" test`.
+Tests de génération avec Gemini simulé : `mvn "-Dtest=TrainingAiApiTest" test`.
 Schéma fournisseur simplifié, contrôles Java conservés : appel réel Gemini HTTP 200 le 05/10/2026,
 aperçu validé puis programme 33 enregistré une seule fois (révision 1), programmes existants préservés.
-Backend compilé ; cinq tests IA ciblés réussis, sans suite complète (voir docs/IA-SIMPLE.md).
+Lors du diagnostic historique du 05/10/2026 : backend compilé et cinq tests IA ciblés
+réussis, sans suite complète à cette étape (voir docs/IA-SIMPLE.md).
 
 ## Bilan et adaptation IA
 

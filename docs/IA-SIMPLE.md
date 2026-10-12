@@ -102,15 +102,24 @@ Exemple de texte JSON produit par Gemini, si les trois identifiants sont autoris
 ```
 
 L’API enveloppe cet objet dans `{success,message,data:{proposal,catalogue}}`.
-POST `/ai/programs` reçoit `{preferences,proposal}` et renvoie le programme créé.
+POST `/ai/programs` reçoit `{idempotencyKey,preferences,proposal}` et renvoie le programme créé.
+`idempotencyKey` est un UUID généré par Angular pour chaque nouvel aperçu et conservé
+pendant les tentatives de confirmation de cet aperçu. La même clé et le même contenu,
+pour le même propriétaire serveur, retrouvent le même programme. Une réutilisation
+avec un contenu différent renvoie HTTP 409. Une clé absente ou invalide renvoie HTTP 400.
+La clé et l'aperçu ne sont pas restaurés après rechargement de la page.
 GET `/ai/options` fournit les valeurs et libellés du formulaire.
 
 ## Windows : configurer soi-même la clé
 
-Depuis la racine de sport-vision-training, **copier une seule fois** l’exemple
-(la condition préserve un fichier déjà présent), puis ouvrir le fichier local :
+Depuis la racine du dépôt, créer le fichier local seulement s'il n'existe pas,
+puis y renseigner la clé soi-même. Aucun fichier `.env.local.example` n'est nécessaire :
 ```powershell
-if (-not (Test-Path backend/.env.local)) { Copy-Item backend/.env.local.example backend/.env.local }
+if (-not (Test-Path -LiteralPath backend/.env.local)) {
+    @('GEMINI_API_KEY=COLLEZ_VOTRE_CLE_ICI',
+      'GEMINI_MODEL=gemini-2.5-flash',
+      'GEMINI_TIMEOUT_SECONDS=45') | Set-Content -LiteralPath backend/.env.local -Encoding utf8
+}
 notepad backend/.env.local
 ```
 
@@ -118,7 +127,7 @@ Remplacer soi-même `COLLEZ_VOTRE_CLE_ICI` après `GEMINI_API_KEY=`.
 Conserver `GEMINI_MODEL=gemini-2.5-flash` et `GEMINI_TIMEOUT_SECONDS=45`
 (délai autorisé : 5–120 secondes). Format NOM=VALEUR, sans guillemets ni `export`.
 Ne jamais copier la clé dans Angular, une conversation ou un fichier versionné.
-`.gitignore` exclut `.env.local` ; aucun dépôt Git n’a été initialisé.
+`.gitignore` exclut `.env.local` ; ce fichier doit rester hors des commits.
 Arrêter le backend précédent sur 8082, puis :
 ```powershell
 Set-Location backend
@@ -132,14 +141,19 @@ Sans fichier/clé, le métier démarre ; générer renvoie « Service IA non con
 
 ## Vérification et limites
 
-Deux tests isolés avec Gemini simulé : `mvn "-Dtest=TrainingAiApiTest" test`.
-Ils couvrent acceptation/confirmation et rejet d’un identifiant non autorisé sans écriture.
+Tests isolés avec Gemini simulé : `mvn "-Dtest=TrainingAiApiTest,GeminiSchemaTest,TrainingAlternativeApiTest,TrainingAdaptationApiTest" test`.
+Ils couvrent notamment validation, confidentialité, confirmation idempotente,
+concurrence, rollback, remplacement et adaptation versionnée.
 La simulation vérifie la logique de l’application, pas l’accès réel au fournisseur.
 **Validation réelle réussie après simplification du schéma : voir le résultat ci-dessous.**
 Seules les préférences structurées et les cinq champs autorisés du catalogue sont envoyés.
 Aucun nom d’utilisateur, email, historique ou donnée médicale. L’offre gratuite peut utiliser
 le contenu transmis pour améliorer les produits Google (voir tarification officielle).
-Pas de durée cible, charge prescrite, remplacement, adaptation, RAG, streaming ni agent.
+La génération accepte des prescriptions en répétitions ou en durée ; elle n'invente
+pas de charge cible. Le remplacement d'exercice est décrit au début de ce guide ;
+le bilan et l'adaptation sont décrits dans [ADAPTATION-IA](ADAPTATION-IA.md).
+Pas de RAG, streaming ni agent. Les résultats datés ci-dessous sont historiques
+et ne constituent pas de nouvelles vérifications du fournisseur.
 Le mode local conserve son propriétaire commun de démonstration : ajouter authentification,
 autorisations et limitation des appels avant exposition publique.
 
