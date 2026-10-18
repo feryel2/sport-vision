@@ -1,0 +1,27 @@
+<section class="program-shell">
+  <a class="back-link" [routerLink]="['/entrainement/programmes',id]">← Revenir au programme</a>
+  <p class="eyebrow">ENTRAÎNEMENT · {{name}}</p><h1>Bilan et adaptation IA</h1>
+  <p>Aucun changement sans votre confirmation. Les séances réalisées et les anciennes révisions restent conservées.</p>
+  <p *ngIf="busy" class="notice" role="status" aria-live="polite">Traitement en cours…</p>
+  <div *ngIf="error" class="notice error" role="alert">{{error}} <button class="btn-sv btn-sv-outline" [disabled]="busy" (click)="load()">Recharger le bilan</button></div>
+  <ng-container *ngIf="report as r">
+    <section class="sv-card section-space"><h2>Bilan · révision {{r.revision}}</h2><p>{{r.message}}</p><p>{{r.completedWorkouts}} séance(s) terminée(s) analysée(s).</p>
+      <article class="prescription" *ngFor="let item of r.items"><h3>{{item.session}} · {{item.exercise}}</h3>
+        <p>{{item.metrics.workouts}} séance(s) avec résultats · {{item.metrics.done}} séries réalisées · {{item.metrics.skipped}} ignorées.</p>
+        <p>Sur les séries réalisées : {{item.metrics.actual}} / {{item.metrics.prescribed}} {{item.measurementType==='REPETITIONS'?'répétitions':'secondes'}} prescrites (écart {{item.metrics.difference>0?'+':''}}{{item.metrics.difference}}).</p>
+        <p *ngIf="item.metrics.loadSamples">Charge renseignée sur {{item.metrics.loadSamples}} séries : moyenne {{item.metrics.averageLoadKg}} kg, minimum {{item.metrics.minimumLoadKg}} kg.</p>
+        <p *ngIf="!item.metrics.loadSamples">Aucune charge réalisée renseignée.</p>
+      </article>
+    </section>
+    <p class="demo-note">Seuls les indicateurs numériques et les options autorisées sont transmis à Gemini. Les noms, objectifs et commentaires restent sur le serveur.</p>
+    <button *ngIf="!preview" class="btn-sv btn-sv-primary" [disabled]="busy||!r.eligible||conflict" (click)="propose()">Proposer une adaptation</button>
+    <section *ngIf="preview as p" class="sv-card section-space"><h2>Proposition à vérifier</h2>
+      <p *ngIf="!p.changes.length" role="status">Aucun ajustement proposé. Le programme reste inchangé.</p>
+      <article class="prescription" *ngFor="let change of p.changes"><h3>{{change.session}} · {{change.exercise}}</h3><p>{{change.reason}}</p>
+        <dl><dt><strong>Avant</strong></dt><dd>{{values(change.before)}}</dd><dt><strong>Après</strong></dt><dd>{{values(change.after)}}</dd></dl>
+      </article>
+      <p *ngIf="p.proposalId">Cette proposition expire après 30 minutes. Toute nouvelle révision ou modification du bilan nécessite une nouvelle proposition.</p>
+      <div class="actions"><button *ngIf="p.proposalId" class="btn-sv btn-sv-primary" [disabled]="busy||conflict" (click)="confirm()">Accepter et créer une révision</button><button class="btn-sv btn-sv-outline" [disabled]="busy" (click)="preview=undefined">Annuler</button></div>
+    </section>
+  </ng-container>
+</section>

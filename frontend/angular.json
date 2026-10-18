@@ -42,7 +42,12 @@
                   "maximumError": "20kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": false
+              }
             },
             "development": {
               "buildOptimizer": false,
@@ -65,9 +70,17 @@
               "buildTarget": "sport-vision-frontend:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "host": "127.0.0.1",
+            "port": 4200,
+            "proxyConfig": "proxy.conf.json"
+          }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

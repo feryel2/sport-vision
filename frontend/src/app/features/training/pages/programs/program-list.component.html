@@ -1,0 +1,26 @@
+<section class="program-shell">
+  <div class="heading-row"><div><p class="eyebrow">VOTRE ESPACE ENTRAÎNEMENT</p><h1>Mes programmes</h1><p class="intro">Organisez vos séances prévues et leurs exercices, à votre rythme.</p></div><div class="actions"><a class="btn-sv btn-sv-primary" routerLink="/entrainement/programmes/nouveau">+ Créer un programme</a><a class="btn-sv btn-sv-outline" routerLink="/entrainement/programmes/generer">Générer avec l’IA</a></div></div>
+  <p class="demo-note">Démonstration locale · Propriétaire commun fourni par le serveur, sans authentification.</p>
+  <p *ngIf="message" class="notice success" role="status">{{message}}</p>
+  <div *ngIf="error" class="notice error" role="alert">{{error}} <button class="btn-sv btn-sv-outline" (click)="refresh.next();error=''" [disabled]="busy">Actualiser la liste</button></div>
+  <form class="sv-card filters" [formGroup]="filters" (submit)="$event.preventDefault()"><div><label class="form-label-sv" for="program-search">Rechercher par nom</label><input id="program-search" type="search" maxlength="120" formControlName="search" class="form-control-sv" placeholder="Rechercher un programme…"></div><div><label class="form-label-sv" for="program-status">Statut</label><select id="program-status" class="form-control-sv" formControlName="status"><option value="ACTIVE">Actifs</option><option value="ARCHIVED">Archivés</option><option value="ALL">Tous les statuts</option></select></div></form>
+  <ng-container *ngIf="state$|async as state">
+    <p *ngIf="state.loading" class="sv-card state-panel" role="status">Chargement des programmes…</p>
+    <div *ngIf="state.error" class="sv-card state-panel" role="alert"><p>{{state.error}}</p><button class="btn-sv btn-sv-primary" (click)="refresh.next()">Réessayer</button></div>
+    <ng-container *ngIf="state.result as result">
+      <p class="result-count">{{result.totalElements}} programme{{result.totalElements>1?'s':''}}</p>
+      <div *ngIf="!result.items.length" class="sv-card state-panel"><h2>Aucun programme trouvé</h2><p>Créez votre premier programme ou changez les filtres.</p></div>
+      <div class="program-grid"><article *ngFor="let p of result.items" class="sv-card program-card">
+        <div class="heading-row"><span class="badge-sv" [class.badge-warning]="p.archived" [class.badge-success]="!p.archived">{{p.archived?'Archivé':'Actif'}}</span><small>Révision {{p.currentRevision}}</small></div>
+        <h2><a [routerLink]="['/entrainement/programmes',p.id]">{{p.name}}</a></h2><p class="objective">{{p.objective}}</p><p class="text-muted">{{p.sessionCount}} séance{{p.sessionCount>1?'s':''}} prévue{{p.sessionCount>1?'s':''}}</p>
+        <div class="actions"><a class="btn-sv btn-sv-outline btn-sv-sm" [routerLink]="['/entrainement/programmes',p.id]">Consulter</a><a *ngIf="!p.archived" class="btn-sv btn-sv-secondary btn-sv-sm" [routerLink]="['/entrainement/programmes',p.id,'modifier']">Modifier</a>
+          <button class="btn-sv btn-sv-secondary btn-sv-sm" [disabled]="busy" (click)="duplicate(p)" [attr.aria-label]="'Dupliquer '+p.name">Dupliquer</button>
+          <button *ngIf="p.archived" class="btn-sv btn-sv-outline btn-sv-sm" [disabled]="busy" (click)="changeStatus(p)" [attr.aria-label]="'Réactiver '+p.name">Réactiver</button>
+          <button *ngIf="!p.archived" class="btn-sv btn-sv-danger btn-sv-sm" [disabled]="busy" (click)="confirmArchive=p" [attr.aria-label]="'Archiver '+p.name">Archiver</button></div>
+        <div *ngIf="confirmArchive?.id===p.id" class="notice warning"><p>Archiver ce programme ? Il restera consultable et pourra être réactivé.</p><div class="actions"><button class="btn-sv btn-sv-danger btn-sv-sm" [disabled]="busy" (click)="changeStatus(p)">Confirmer l’archivage</button><button class="btn-sv btn-sv-secondary btn-sv-sm" [disabled]="busy" (click)="confirmArchive=null">Annuler</button></div></div>
+      </article></div>
+      <nav *ngIf="result.totalPages>1" class="pagination" aria-label="Pages des programmes"><button class="btn-sv btn-sv-outline" [disabled]="result.page===0" (click)="go(result.page-1)">Précédent</button><span>Page {{result.page+1}} sur {{result.totalPages}}</span><button class="btn-sv btn-sv-outline" [disabled]="result.page+1>=result.totalPages" (click)="go(result.page+1)">Suivant</button></nav>
+    </ng-container>
+  </ng-container>
+</section>
+

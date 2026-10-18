@@ -1,0 +1,73 @@
+<section class="page-shell">
+  <div class="heading-row"><div><p class="eyebrow">SPORT VISION · ENTRAÎNEMENT</p>
+    <h1>{{ admin ? 'Gérer les exercices' : 'Le catalogue d’exercices' }}</h1>
+    <p class="intro">{{ admin ? 'Créez, enrichissez et organisez votre catalogue.' : 'Trouvez un mouvement adapté à votre pratique et consultez ses consignes.' }}</p></div>
+    <button *ngIf="admin" class="btn-sv btn-sv-primary" (click)="openEditor()" [disabled]="!options || busy || editorOpen">+ Ajouter un exercice</button>
+  </div>
+  <p *ngIf="admin" class="demo-note">Mode démonstration · Administration sans authentification, réservée à un usage local.</p>
+  <p *ngIf="message" class="notice success" role="status">{{ message }}</p>
+  <p *ngIf="actionError" class="notice error" role="alert">{{ actionError }}</p>
+  <app-exercise-editor *ngIf="editorOpen && options" [options]="options" [exercise]="editing" (closed)="editorOpen = false" (saved)="saved($event)"></app-exercise-editor>
+  <section #archivePanel tabindex="-1" *ngIf="pendingArchive" class="notice archive-confirm" aria-labelledby="archive-title">
+    <h2 id="archive-title">Archiver « {{ pendingArchive.name }} » ?</h2>
+    <p>L’exercice sera masqué du catalogue. Sa fiche restera consultable et vous pourrez le réactiver.</p>
+    <div class="actions"><button class="btn-sv btn-sv-danger" [disabled]="busy" (click)="changeStatus(pendingArchive)">{{ busy ? 'Archivage…' : 'Confirmer l’archivage' }}</button>
+      <button class="btn-sv btn-sv-outline" [disabled]="busy" (click)="pendingArchive = null">Annuler</button></div>
+  </section>
+  <form class="sv-card filters" [formGroup]="filters" aria-label="Filtrer les exercices" (submit)="$event.preventDefault()">
+    <div class="search-field"><label class="form-label-sv" for="search">Rechercher par nom</label>
+      <input id="search" type="search" class="form-control-sv" formControlName="search" maxlength="120" placeholder="Ex. : squat, gainage…"></div>
+    <div *ngFor="let field of selectFilters"><label class="form-label-sv" [for]="'filter-' + field.control">{{ field.label }}</label>
+      <select class="form-control-sv" [id]="'filter-' + field.control" [formControlName]="field.control">
+        <option value="">Tous</option><option *ngFor="let option of options?.[field.key]" [value]="option.value">{{ option.label }}</option>
+      </select></div>
+    <div *ngIf="admin"><label class="form-label-sv" for="status">Statut</label><select id="status" class="form-control-sv" formControlName="status">
+      <option value="ACTIVE">Actifs</option><option value="ARCHIVED">Archivés</option><option value="ALL">Tous les statuts</option></select></div>
+    <div><label class="form-label-sv" for="order">Trier par</label><select id="order" class="form-control-sv" formControlName="order">
+      <option value="name,asc">Nom : A → Z</option><option value="name,desc">Nom : Z → A</option>
+      <option value="createdAt,desc">Plus récents</option><option value="updatedAt,desc">Dernières modifications</option></select></div>
+    <button type="button" class="btn-sv btn-sv-secondary reset" (click)="reset()">Réinitialiser</button>
+  </form>
+  <ng-container *ngIf="state$ | async as state">
+    <div *ngIf="state.loading" class="state-panel sv-card" role="status" aria-live="polite">Chargement des exercices…</div>
+    <div *ngIf="state.error" class="state-panel sv-card" role="alert"><h2>Le catalogue est indisponible</h2><p>{{ state.error }}</p>
+      <button class="btn-sv btn-sv-primary" (click)="reload.next()">Réessayer</button></div>
+    <ng-container *ngIf="state.result as result">
+      <p class="result-count" aria-live="polite">{{ result.totalElements }} exercice{{ result.totalElements > 1 ? 's' : '' }}</p>
+      <div *ngIf="!result.items.length" class="state-panel sv-card"><h2>Aucun exercice trouvé</h2><p>Essayez un autre nom ou élargissez les filtres.</p>
+        <button class="btn-sv btn-sv-outline" (click)="reset()">Réinitialiser les filtres</button></div>
+      <ng-container *ngIf="state.options as opts">
+        <div class="exercise-grid" *ngIf="!admin">
+          <article class="sv-card exercise-card" *ngFor="let exercise of result.items">
+            <div class="card-top"><span class="badge-sv badge-blue">{{ label(opts, 'muscleGroups', exercise.muscleGroup) }}</span>
+              <span class="movement-icon" aria-hidden="true">↗</span></div>
+            <h2><a [routerLink]="['/entrainement/exercices', exercise.id]">{{ exercise.name }}</a></h2>
+            <p class="card-description">{{ exercise.description }}</p>
+            <dl class="card-facts"><div><dt>Niveau</dt><dd>{{ label(opts, 'difficulties', exercise.difficulty) }}</dd></div>
+              <div><dt>Matériel</dt><dd>{{ label(opts, 'equipment', exercise.equipment) }}</dd></div>
+              <div><dt>Mesure</dt><dd>{{ label(opts, 'measurementTypes', exercise.measurementType) }}</dd></div></dl>
+            <a [routerLink]="['/entrainement/exercices', exercise.id]" class="btn-sv btn-sv-outline">Voir l’exercice <span aria-hidden="true">→</span></a>
+          </article>
+        </div>
+        <div class="sv-table-container" *ngIf="admin && result.items.length">
+          <table class="sv-table"><caption class="sr-only">Gestion du catalogue d’exercices</caption>
+            <thead><tr><th scope="col">Exercice</th><th scope="col">Groupe / niveau</th><th scope="col">Matériel</th><th scope="col">Statut</th><th scope="col">Actions</th></tr></thead>
+            <tbody><tr *ngFor="let exercise of result.items">
+              <td><a [routerLink]="['/entrainement/exercices', exercise.id]">{{ exercise.name }}</a><small class="table-sub">{{ label(opts, 'measurementTypes', exercise.measurementType) }}</small></td>
+              <td>{{ label(opts, 'muscleGroups', exercise.muscleGroup) }}<small class="table-sub">{{ label(opts, 'difficulties', exercise.difficulty) }}</small></td>
+              <td>{{ label(opts, 'equipment', exercise.equipment) }}</td><td><span class="badge-sv" [class.badge-warning]="exercise.archived" [class.badge-success]="!exercise.archived">{{ exercise.archived ? 'Archivé' : 'Actif' }}</span></td>
+              <td><div class="actions"><button class="btn-sv btn-sv-secondary btn-sv-sm" [disabled]="busy || editorOpen" (click)="openEditor(exercise)" [attr.aria-label]="'Modifier ' + exercise.name">Modifier</button>
+                <button *ngIf="!exercise.archived" class="btn-sv btn-sv-danger btn-sv-sm" [disabled]="busy || editorOpen" (click)="askArchive(exercise)" [attr.aria-label]="'Archiver ' + exercise.name">Archiver</button>
+                <button *ngIf="exercise.archived" class="btn-sv btn-sv-outline btn-sv-sm" [disabled]="busy || editorOpen" (click)="changeStatus(exercise)" [attr.aria-label]="'Réactiver ' + exercise.name">Réactiver</button></div></td>
+            </tr></tbody></table>
+        </div>
+      </ng-container>
+      <nav *ngIf="result.totalPages > 1" class="pagination" aria-label="Pagination du catalogue">
+        <button class="btn-sv btn-sv-outline" [disabled]="result.page === 0" (click)="go(result.page - 1)">← Précédent</button>
+        <span>Page {{ result.page + 1 }} sur {{ result.totalPages }}</span>
+        <button class="btn-sv btn-sv-outline" [disabled]="result.page + 1 >= result.totalPages" (click)="go(result.page + 1)">Suivant →</button>
+      </nav>
+    </ng-container>
+  </ng-container>
+</section>
+

@@ -8,7 +8,7 @@ import { Product } from '../models/product.model';
   providedIn: 'root'
 })
 export class OrderService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = '/api';
 
   private defaultOrders: Order[] = [
     {

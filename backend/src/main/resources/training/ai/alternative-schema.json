@@ -1,0 +1,1 @@
+{"type":"object","properties":{"exerciseId":{"type":"integer"},"reason":{"type":"string"}},"required":["exerciseId","reason"]}

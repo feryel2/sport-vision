@@ -1,0 +1,50 @@
+<section class="program-shell">
+  <a class="back-link" routerLink="/entrainement/programmes">← Mes programmes</a>
+  <div class="heading-row"><div><p class="eyebrow">SÉANCES PRÉVUES</p><h1>{{id?'Modifier le programme':'Créer un programme'}}</h1><p class="intro">Construisez vos séances. Les changements restent en mémoire jusqu’à l’enregistrement.</p></div></div>
+  <p *ngIf="loading" class="sv-card state-panel" role="status">Chargement de l’éditeur…</p>
+  <div *ngIf="loadError" class="notice error" role="alert">{{loadError}} <button class="btn-sv btn-sv-primary" (click)="load()">Réessayer</button></div>
+  <div *ngIf="!loading && program?.archived" class="notice warning">Ce programme est archivé. Réactivez-le depuis sa fiche avant de le modifier. <a [routerLink]="['/entrainement/programmes',program!.id]">Consulter la fiche</a></div>
+  <ng-container *ngIf="!loading && !loadError && !program?.archived && options">
+    <p class="demo-note">Tous les champs sont obligatoires, sauf la charge. {{program?'Révision de départ : '+program.currentRevision+'.':''}}</p>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <fieldset [disabled]="saving"><section class="sv-card section-space"><h2>Informations du programme</h2>
+        <div class="form-group-sv"><label class="form-label-sv" for="program-name">Nom du programme</label><input id="program-name" class="form-control-sv" formControlName="name" maxlength="120" aria-describedby="name-error"><small id="name-error" class="field-error">{{validation(form.controls.name)}}</small></div>
+        <div class="form-group-sv"><label class="form-label-sv" for="program-objective">Objectif</label><textarea id="program-objective" class="form-control-sv" formControlName="objective" maxlength="500" rows="2" aria-describedby="objective-error"></textarea><small id="objective-error" class="field-error">{{validation(form.controls.objective)}}</small></div>
+        <div class="form-group-sv"><label class="form-label-sv" for="program-description">Description du programme</label><textarea id="program-description" class="form-control-sv" formControlName="description" maxlength="2000" rows="3" aria-describedby="description-error"></textarea><small id="description-error" class="field-error">{{validation(form.controls.description)}}</small></div>
+      </section>
+      <div class="heading-row"><h2>Les séances ({{sessions.length}} / 20)</h2><button type="button" class="btn-sv btn-sv-outline" (click)="addSession()" [disabled]="sessions.length>=20">+ Ajouter une séance</button></div>
+      <p *ngIf="!sessions.length" class="notice warning">Ajoutez au moins une séance pour enregistrer ce programme.</p>
+      <div formArrayName="sessions"><section *ngFor="let session of sessions.controls;let i=index" class="sv-card session-editor section-space" [formGroupName]="i">
+        <div class="heading-row"><h3>Séance {{i+1}}</h3><div class="actions"><button type="button" class="btn-sv btn-sv-secondary btn-sv-sm" [disabled]="i===0" (click)="move(sessions,i,-1)" [attr.aria-label]="'Monter la séance '+(i+1)">↑ Monter</button><button type="button" class="btn-sv btn-sv-secondary btn-sv-sm" [disabled]="i===sessions.length-1" (click)="move(sessions,i,1)" [attr.aria-label]="'Descendre la séance '+(i+1)">↓ Descendre</button><button type="button" class="btn-sv btn-sv-danger btn-sv-sm" (click)="removeSession(i)" [attr.aria-label]="'Retirer la séance '+(i+1)">Retirer la séance</button></div></div>
+        <label class="form-label-sv" [for]="'session-name-'+i">Nom de la séance {{i+1}}</label><input [id]="'session-name-'+i" class="form-control-sv" formControlName="name" maxlength="120"><small class="field-error">{{validation(session.controls.name)}}</small>
+        <div formArrayName="prescriptions"><article *ngFor="let p of session.controls.prescriptions.controls;let j=index" class="prescription" [formGroupName]="j">
+          <div class="heading-row"><div><h4>{{j+1}}. {{p.controls.exerciseName.value}}</h4><small>{{label(options,'equipment',p.controls.equipment.value)}} · {{label(options,'measurementTypes',p.controls.measurementType.value)}}</small><p *ngIf="p.controls.exerciseArchived.value" class="archive-note">Exercice archivé · Peut être conservé ou retiré.</p></div><div class="actions"><button type="button" class="btn-sv btn-sv-secondary btn-sv-sm" [disabled]="j===0" (click)="move(session.controls.prescriptions,j,-1)" [attr.aria-label]="'Monter exercice '+(j+1)+' séance '+(i+1)">↑</button><button type="button" class="btn-sv btn-sv-secondary btn-sv-sm" [disabled]="j===session.controls.prescriptions.length-1" (click)="move(session.controls.prescriptions,j,1)" [attr.aria-label]="'Descendre exercice '+(j+1)+' séance '+(i+1)">↓</button><button type="button" class="btn-sv btn-sv-danger btn-sv-sm" (click)="removeExercise(i,j)" [attr.aria-label]="'Retirer '+p.controls.exerciseName.value+' de la séance '+(i+1)">Retirer</button></div></div>
+          <div class="prescription-fields">
+            <div><label class="form-label-sv" [for]="'sets-'+i+'-'+j">Séries</label><input [id]="'sets-'+i+'-'+j" class="form-control-sv" type="number" formControlName="sets" min="1" max="100" step="1"><small class="field-error">{{validation(p.controls.sets)}}</small></div>
+            <div *ngIf="p.controls.measurementType.value==='REPETITIONS'"><label class="form-label-sv" [for]="'reps-'+i+'-'+j">Répétitions / série</label><input [id]="'reps-'+i+'-'+j" class="form-control-sv" type="number" formControlName="repetitions" min="1" max="10000" step="1"><small class="field-error">{{validation(p.controls.repetitions)}}</small></div>
+            <div *ngIf="p.controls.measurementType.value==='DURATION'"><label class="form-label-sv" [for]="'duration-'+i+'-'+j">Durée / série (s)</label><input [id]="'duration-'+i+'-'+j" class="form-control-sv" type="number" formControlName="durationSeconds" min="1" max="86400" step="1"><small class="field-error">{{validation(p.controls.durationSeconds)}}</small></div>
+            <div><label class="form-label-sv" [for]="'rest-'+i+'-'+j">Repos (s)</label><input [id]="'rest-'+i+'-'+j" class="form-control-sv" type="number" formControlName="restSeconds" min="0" max="86400" step="1"><small class="field-error">{{validation(p.controls.restSeconds)}}</small></div>
+            <div><label class="form-label-sv" [for]="'load-'+i+'-'+j">Charge (kg, facultative)</label><input [id]="'load-'+i+'-'+j" class="form-control-sv" type="number" formControlName="targetLoadKg" min="0" max="10000" step="0.01"><small class="field-error">{{validation(p.controls.targetLoadKg)}}</small></div>
+          </div>
+        </article></div>
+        <p *ngIf="!session.controls.prescriptions.length" [class.field-error]="submitted" class="empty-session">Cette séance doit contenir au moins un exercice.</p>
+        <button type="button" class="btn-sv btn-sv-outline" [disabled]="session.controls.prescriptions.length>=30" (click)="pickerSession=i" [attr.aria-label]="'Ajouter un exercice à la séance '+(i+1)">+ Ajouter un exercice</button>
+        <app-program-exercise-picker *ngIf="pickerSession===i" (selected)="addExercise(i,$event)" (closed)="pickerSession=null"></app-program-exercise-picker>
+      </section></div>
+      <p class="demo-note">Limites techniques : 20 séances, 30 exercices par séance, 100 séries, 10 000 répétitions, 86 400 s de durée/repos, 10 000 kg (2 décimales). Ces plafonds ne sont pas des recommandations sportives.</p>
+      <div *ngIf="error" class="notice error" role="alert"><p>{{error}}</p><ul *ngIf="serverErrors.length"><li *ngFor="let message of serverErrors">{{message}}</li></ul>
+        <div *ngIf="conflict && program" class="actions"><a [routerLink]="['/entrainement/programmes',program.id]" target="_blank" rel="noopener">Consulter la version courante dans un autre onglet</a><button class="btn-sv btn-sv-outline" type="button" (click)="reloadCurrent()">Recharger la version courante</button></div>
+        <p *ngIf="conflict">Vos modifications restent dans ce formulaire. Copiez les informations utiles avant de recharger.</p>
+      </div>
+      <div class="save-bar actions"><button type="submit" class="btn-sv btn-sv-primary" [disabled]="saving">{{saving?'Enregistrement…':'Enregistrer le programme'}}</button><a class="btn-sv btn-sv-outline" routerLink="/entrainement/programmes">Annuler</a><span *ngIf="form.dirty" class="text-muted">Modifications non enregistrées</span></div>
+      </fieldset>
+    </form>
+  </ng-container>
+</section>
+<div *ngIf="leavePrompt||reloadPrompt" class="sv-modal-backdrop" (keydown)="dialogKeys($event)">
+  <section class="sv-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="leave-title" aria-describedby="leave-description">
+    <div class="sv-modal-header"><h2 id="leave-title">Modifications non enregistrées</h2></div>
+    <div class="sv-modal-body"><p id="leave-description">{{leavePrompt?'Quitter ce formulaire sans enregistrer ?':'Recharger la version courante et abandonner vos modifications ?'}} Les changements en mémoire seront perdus.</p></div>
+    <div class="sv-modal-footer"><button #stayButton type="button" class="btn-sv btn-sv-primary" (click)="leavePrompt?resolveLeave(false):resolveReload(false)">Continuer l’édition</button><button type="button" class="btn-sv btn-sv-danger" (click)="leavePrompt?resolveLeave(true):resolveReload(true)">{{leavePrompt?'Quitter sans enregistrer':'Abandonner et recharger'}}</button></div>
+  </section>
+</div>

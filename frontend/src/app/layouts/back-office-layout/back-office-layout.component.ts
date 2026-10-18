@@ -57,6 +57,12 @@ import { AuthService } from '../../core/services/auth.service';
             <span class="nav-icon">👥</span>
             <span class="nav-text" *ngIf="!isCollapsed">Utilisateurs & rôles</span>
           </a>
+          <div class="menu-section-label" *ngIf="!isCollapsed">ENTRAÎNEMENT</div>
+          <a routerLink="/admin/entrainement/exercices" routerLinkActive="active" class="nav-item"
+             aria-label="Gérer les exercices" title="Gérer les exercices">
+            <span class="nav-icon" aria-hidden="true">🏋️</span>
+            <span class="nav-text" *ngIf="!isCollapsed">Exercices & Entraînement</span>
+          </a>
         </nav>
 
         <!-- Bas de sidebar : Profil & Switch Front-Office -->

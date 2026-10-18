@@ -7,7 +7,7 @@ import { Food } from '../models/food.model';
   providedIn: 'root'
 })
 export class FoodService {
-  private apiUrl = 'http://localhost:8080/api/foods';
+  private apiUrl = '/api/foods';
 
   private defaultFoods: Food[] = [
     { id: 1, name: 'Blanc de poulet fermier grillé', category: 'Protéines maigres', calories: 165, proteins: 31.0, carbs: 0.0, fats: 3.6, portion: '100g', benefits: 'Idéal pour la prise de masse sèche et la réparation tissulaire.' },

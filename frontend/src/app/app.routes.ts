@@ -14,6 +14,17 @@ export const routes: Routes = [
         loadComponent: () => import('./features/front-office/home/home.component').then(m => m.HomeComponent)
       },
       {
+        path: 'entrainement',
+        loadChildren: () => import('./features/training/training.routes').then(m => {
+          // Preserve the existing training group and its guards unchanged.
+          const trainingRoutes: Routes = [
+            ...m.TRAINING_ROUTES,
+            { path: '**', redirectTo: '/entrainement' }
+          ];
+          return trainingRoutes;
+        })
+      },
+      {
         path: 'catalogue',
         loadComponent: () => import('./features/front-office/catalog/catalog.component').then(m => m.CatalogComponent)
       },
@@ -74,6 +85,19 @@ export const routes: Routes = [
       {
         path: 'utilisateurs',
         loadComponent: () => import('./features/back-office/users-admin/users-admin.component').then(m => m.UsersAdminComponent)
+      },
+      {
+        path: 'entrainement',
+        children: [
+          { path: '', pathMatch: 'full', redirectTo: 'exercices' },
+          {
+            path: 'exercices',
+            title: 'Administration des exercices • Sport Vision',
+            data: { admin: true },
+            loadComponent: () => import('./features/training/pages/exercises/exercise-list.component')
+              .then(m => m.ExerciseListComponent)
+          }
+        ]
       },
       {
         path: 'parametres',

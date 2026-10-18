@@ -8,7 +8,7 @@ import { Product } from '../models/product.model';
   providedIn: 'root'
 })
 export class FavoriteService {
-  private apiUrl = 'http://localhost:8080/api/favorites';
+  private apiUrl = '/api/favorites';
   private defaultEmail = 'user@sportvision.com';
 
   private favoritesSubject = new BehaviorSubject<Favorite[]>(this.loadFavorites());
