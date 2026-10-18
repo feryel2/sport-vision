@@ -23,9 +23,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -69,6 +66,20 @@ public class SecurityConfig {
             .addFilterBefore(new JwtAuthFilter(jwtService, userRepository), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    @Profile("!integration & !test & !local-demo")
+    public SecurityFilterChain closedFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(auth -> auth.anyRequest().denyAll());
+        return http.build();
+    }
+
+    @Bean
+    @Profile({"integration", "test", "local-demo"})
+    public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> demoLoopbackBinding() throws java.net.UnknownHostException {
+        InetAddress loopback = InetAddress.getByName("127.0.0.1");
+        return factory -> factory.setAddress(loopback);
     }
 
     private void writeError(ObjectMapper mapper, jakarta.servlet.http.HttpServletResponse res, int status, String msg)

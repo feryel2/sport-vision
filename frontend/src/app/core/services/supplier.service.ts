@@ -7,7 +7,7 @@ import { Supplier } from '../models/supplier.model';
   providedIn: 'root'
 })
 export class SupplierService {
-  private apiUrl = 'http://localhost:8080/api/suppliers';
+  private apiUrl = '/api/suppliers';
 
   private defaultSuppliers: Supplier[] = [
     { id: 1, name: 'SportEquip Pro', contactPerson: 'Lucas Martin', email: 'contact@sportequip-pro.fr', phone: '+33 1 45 78 90 12', address: '75017 Paris', supplyCategory: 'Musculation, Haltérophilie & Fitness' },

@@ -8,7 +8,7 @@ import { Coach } from '../models/coach.model';
   providedIn: 'root'
 })
 export class AiService {
-  private apiUrl = 'http://localhost:8080/api/ai';
+  private apiUrl = '/api/ai';
 
   private fallbackCoaches: Coach[] = [
     {

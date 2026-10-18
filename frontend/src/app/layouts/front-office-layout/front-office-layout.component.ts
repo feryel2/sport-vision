@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DestroyRef, ElementRef, ViewChild, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../core/services/cart.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -16,7 +18,6 @@ import { FavoriteService } from '../../core/services/favorite.service';
       <div class="container banner-content">
         <div class="banner-text">
           <span class="badge-pulse">SPORT VISION</span>
-          <span>Boutique & Produits Sportifs &bull; Responsable : <strong>Feryel Mansouri</strong> &bull; Charte Bleu & Blanc</span>
         </div>
         <div class="banner-actions">
           <a *ngIf="authService.isAdmin" routerLink="/admin" class="admin-quick-link">
@@ -27,7 +28,7 @@ import { FavoriteService } from '../../core/services/favorite.service';
     </div>
 
     <!-- Navigation Principale -->
-    <header class="main-header">
+    <header class="main-header" (keydown.escape)="closeMobileMenu(true)">
       <div class="container navbar-container">
         <!-- Logo Sport Vision -->
         <a routerLink="/" class="logo">
@@ -44,9 +45,15 @@ import { FavoriteService } from '../../core/services/favorite.service';
         </a>
 
         <!-- Menu de Navigation -->
-        <nav class="nav-links">
+        <button #menuToggle type="button" class="mobile-menu-toggle"
+          [attr.aria-expanded]="mobileMenuOpen" aria-controls="public-navigation"
+          [attr.aria-label]="mobileMenuOpen ? 'Fermer le menu principal' : 'Ouvrir le menu principal'"
+          (click)="mobileMenuOpen = !mobileMenuOpen">Menu</button>
+        <nav id="public-navigation" class="nav-links" [class.is-open]="mobileMenuOpen"
+          aria-label="Navigation principale" (click)="closeMobileMenu(true)">
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Accueil</a>
           <a routerLink="/catalogue" routerLinkActive="active">Boutique & Produits</a>
+          <a routerLink="/entrainement" routerLinkActive="active">Entraînement</a>
           <a routerLink="/coach-matching" routerLinkActive="active">Trouver un Coach</a>
           <a routerLink="/aliments" routerLinkActive="active">Aliments & Nutrition</a>
           <a routerLink="/contact" routerLinkActive="active">Contact & Support</a>
@@ -120,14 +127,7 @@ import { FavoriteService } from '../../core/services/favorite.service';
               </div>
               <span class="logo-brand text-white">SPORT<span class="text-accent">VISION</span></span>
             </div>
-            <p class="footer-desc">
-              Plateforme sportive haute précision. <strong>Gestion 3 — Boutique & produits sportifs</strong>. Module piloté par <strong>Feryel Mansouri</strong>.
-            </p>
-            <div class="resp-badge-card">
-              <span class="resp-badge-title">Responsable du Module</span>
-              <strong class="resp-badge-name">Feryel Mansouri</strong>
-              <span class="resp-badge-sub">Gestion 3 &bull; Boutique & Produits</span>
-            </div>
+            <p class="footer-desc">Plateforme sportive haute pr&eacute;cision.</p>
           </div>
 
           <!-- Col 2 : Rayons -->
@@ -146,6 +146,7 @@ import { FavoriteService } from '../../core/services/favorite.service';
           <div class="footer-col">
             <h4 class="footer-title">Coaching & Nutrition</h4>
             <ul class="footer-links">
+              <li><a routerLink="/entrainement">Entraînement</a></li>
               <li><a routerLink="/coach-matching">Matching Sportif & Coachs</a></li>
               <li><a routerLink="/aliments">Base Aliments & Macro-Nutriments</a></li>
               <li><a routerLink="/favoris">Ma Liste de Favoris</a></li>
@@ -153,24 +154,12 @@ import { FavoriteService } from '../../core/services/favorite.service';
               <li><a routerLink="/admin">Console d'Administration</a></li>
             </ul>
           </div>
-
-          <!-- Col 4 : Charte & Engagements -->
-          <div class="footer-col">
-            <h4 class="footer-title">Engagements Sport Vision</h4>
-            <p class="footer-desc">Charte graphique Bleu & Blanc, paiements sécurisés et livraison offerte dès 80€ d'achats.</p>
-            <div class="chart-colors">
-              <span class="color-dot c-blue" title="Bleu Royal #1D4ED8"></span>
-              <span class="color-dot c-sky" title="Bleu Ciel #0284C7"></span>
-              <span class="color-dot c-dark" title="Bleu Nuit #0F172A"></span>
-              <span class="color-dot c-white" title="Blanc Pur #FFFFFF"></span>
-            </div>
-          </div>
         </div>
       </div>
 
       <div class="footer-bottom">
         <div class="container bottom-content">
-          <p>&copy; 2026 Sport Vision &bull; <strong>Gestion 3 — Boutique & produits sportifs</strong> &bull; Responsable : <strong>Feryel Mansouri</strong></p>
+          <p>&copy; 2026 Sport Vision</p>
           <div class="bottom-links">
             <a routerLink="/contact">Conditions Générales</a>
             <a routerLink="/admin" class="text-accent">Accès Staff Back-Office</a>
@@ -249,7 +238,11 @@ import { FavoriteService } from '../../core/services/favorite.service';
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 75px;
+      min-height: 75px;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 12px;
+      padding-bottom: 12px;
     }
     .logo {
       display: flex;
@@ -284,7 +277,10 @@ import { FavoriteService } from '../../core/services/favorite.service';
 
     .nav-links {
       display: flex;
-      gap: 20px;
+      flex: 1 1 480px;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
     }
     .nav-links a {
       color: #334155;
@@ -378,7 +374,7 @@ import { FavoriteService } from '../../core/services/favorite.service';
     }
     .footer-grid {
       display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      grid-template-columns: 1.5fr 1fr 1fr;
       gap: 35px;
     }
     .footer-logo-icon {
@@ -476,13 +472,30 @@ import { FavoriteService } from '../../core/services/favorite.service';
       text-decoration: none;
     }
 
+    .mobile-menu-toggle { display: none; }
+    .mobile-menu-toggle:focus-visible, .nav-links a:focus-visible {
+      outline: 3px solid #0284c7;
+      outline-offset: 3px;
+    }
     @media (max-width: 992px) {
       .footer-grid {
         grid-template-columns: 1fr 1fr;
       }
-      .nav-links {
-        display: none;
+      .logo { flex: 1; }
+      .mobile-menu-toggle {
+        display: block;
+        padding: 8px 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        background: white;
+        color: #1d4ed8;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
       }
+      .nav-links { display: none; order: 2; flex-basis: 100%; }
+      .nav-links.is-open { display: flex; flex-direction: column; align-items: stretch; }
+      .nav-actions { order: 3; flex-basis: 100%; justify-content: flex-end; flex-wrap: wrap; }
     }
     @media (max-width: 576px) {
       .footer-grid {
@@ -495,6 +508,9 @@ import { FavoriteService } from '../../core/services/favorite.service';
   `]
 })
 export class FrontOfficeLayoutComponent implements OnInit {
+  mobileMenuOpen = false;
+  @ViewChild('menuToggle') private menuToggle?: ElementRef<HTMLButtonElement>;
+  private readonly destroyRef = inject(DestroyRef);
   searchQuery: string = '';
   favCount: number = 0;
 
@@ -506,10 +522,20 @@ export class FrontOfficeLayoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => this.closeMobileMenu());
     this.favoriteService.favorites$.subscribe(favs => {
       this.favCount = favs.length;
     });
   }
+
+    closeMobileMenu(restoreFocus = false): void {
+        if (!this.mobileMenuOpen) return;
+        this.mobileMenuOpen = false;
+        if (restoreFocus) this.menuToggle?.nativeElement.focus();
+    }
 
   logout(): void {
     this.authService.logout().subscribe(() => this.router.navigate(['/']));

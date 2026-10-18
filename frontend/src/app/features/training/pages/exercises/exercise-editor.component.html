@@ -1,0 +1,36 @@
+<section class="sv-card editor" aria-labelledby="editor-title">
+  <div class="heading-row"><h2 id="editor-title">{{ exercise ? 'Modifier l’exercice' : 'Ajouter un exercice' }}</h2>
+    <button type="button" class="btn-sv btn-sv-secondary" (click)="closed.emit()" [disabled]="busy">Fermer</button></div>
+  <p class="text-muted">Tous les champs sont obligatoires.</p>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <fieldset [disabled]="busy">
+      <div class="form-group-sv">
+        <label class="form-label-sv" for="exercise-name">Nom</label>
+        <input #nameInput id="exercise-name" class="form-control-sv" formControlName="name" maxlength="120" aria-describedby="name-error" [attr.aria-invalid]="!!validation('name')">
+        <small id="name-error" class="field-error">{{ validation('name') }}</small>
+      </div>
+      <div class="form-group-sv">
+        <label class="form-label-sv" for="exercise-description">Description</label>
+        <textarea id="exercise-description" class="form-control-sv" formControlName="description" maxlength="2000" rows="3" aria-describedby="description-error" [attr.aria-invalid]="!!validation('description')"></textarea>
+        <small id="description-error" class="field-error">{{ validation('description') }}</small>
+      </div>
+      <div class="form-group-sv">
+        <label class="form-label-sv" for="exercise-instructions">Consignes d’exécution</label>
+        <textarea id="exercise-instructions" class="form-control-sv" formControlName="instructions" maxlength="5000" rows="5" aria-describedby="instructions-error" [attr.aria-invalid]="!!validation('instructions')"></textarea>
+        <small id="instructions-error" class="field-error">{{ validation('instructions') }}</small>
+      </div>
+      <div class="form-grid">
+        <div class="form-group-sv" *ngFor="let field of selects">
+          <label class="form-label-sv" [for]="'edit-' + field.control">{{ field.label }}</label>
+          <select class="form-control-sv" [id]="'edit-' + field.control" [formControlName]="field.control" [attr.aria-describedby]="field.control + '-error'" [attr.aria-invalid]="!!validation(field.control)">
+            <option value="">Choisir…</option><option *ngFor="let option of options[field.key]" [value]="option.value">{{ option.label }}</option>
+          </select><small class="field-error" [id]="field.control + '-error'">{{ validation(field.control) }}</small>
+        </div>
+      </div>
+      <p *ngIf="error" class="notice error" role="alert">{{ error }}</p>
+      <div class="actions"><button class="btn-sv btn-sv-primary" type="submit" [disabled]="busy">{{ busy ? 'Enregistrement…' : 'Enregistrer' }}</button>
+        <button class="btn-sv btn-sv-outline" type="button" (click)="closed.emit()" [disabled]="busy">Annuler</button></div>
+    </fieldset>
+  </form>
+</section>
+

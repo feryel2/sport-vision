@@ -17,7 +17,6 @@ import { Order } from '../../../core/models/order.model';
         <div class="container">
           <div class="badge-group">
             <span class="badge-sv badge-white">PANIER & COMMANDES</span>
-            <span class="badge-sv badge-outline-white">Gestion 3 — Responsable : Feryel Mansouri</span>
           </div>
           <h1 class="cart-title">Boutique : Panier, Paiement & Historique</h1>
           <p class="cart-subtitle">Gérez vos articles, validez votre commande en toute sécurité et consultez l'historique de vos achats passés.</p>

@@ -1,0 +1,26 @@
+<dialog #dialog aria-labelledby="alternative-title" aria-describedby="alternative-description" (cancel)="cancel($event)">
+  <h2 id="alternative-title">Proposer une alternative</h2>
+  <p id="alternative-description" class="demo-note">Seule cette prescription du programme sera remplacée après votre confirmation. Les séances déjà démarrées et l’historique restent inchangés.</p>
+  <p class="current-exercise"><strong>Exercice actuel :</strong> {{prescription.exerciseName}}</p>
+  <p *ngIf="loading" role="status">Chargement des préférences…</p>
+  <div *ngIf="optionsError" class="notice error" role="alert">{{optionsError}} <button class="btn-sv btn-sv-outline" (click)="loadOptions()">Réessayer</button></div>
+  <div *ngIf="error" class="notice error" role="alert">{{error}}</div>
+  <button *ngIf="stale" class="btn-sv btn-sv-outline" (click)="reload.emit()">Recharger la version courante</button>
+  <form *ngIf="options&&!preview&&!stale" [formGroup]="form" (ngSubmit)="generate()">
+    <fieldset [disabled]="busy">
+      <div class="alternative-fields"><div><label class="form-label-sv" for="alternative-motive">Motif</label><select id="alternative-motive" class="form-control-sv" formControlName="motive"><option value="EQUIPMENT_UNAVAILABLE">Matériel indisponible</option><option value="PERSONAL_PREFERENCE">Préférence personnelle</option></select></div>
+      <div><label class="form-label-sv" for="alternative-level">Niveau du sportif</label><select id="alternative-level" class="form-control-sv" formControlName="level"><option *ngFor="let item of options.levels" [value]="item.value">{{item.label}}</option></select></div></div>
+      <fieldset class="equipment-picker"><legend>Matériel actuellement disponible</legend><div class="equipment-grid"><label *ngFor="let item of options.equipment"><input type="checkbox" [checked]="form.controls.equipment.value.includes(item.value)" [disabled]="busy||(item.value==='NONE'&&form.controls.equipment.value.includes('NONE'))" (change)="toggle(item.value,$event)">{{item.label}}</label></div></fieldset>
+      <p class="demo-note">Les exercices sans matériel restent disponibles. Même groupe musculaire, même mesure, aucun doublon dans la séance.</p>
+      <p *ngIf="form.invalid&&form.touched" class="field-error">Renseignez le motif, le niveau et le matériel disponible.</p>
+      <button class="btn-sv btn-sv-primary" type="submit" [disabled]="busy">{{busy?'Recherche en cours…':'Demander une alternative'}}</button>
+    </fieldset>
+  </form>
+  <section *ngIf="preview as p" aria-label="Aperçu du remplacement" class="alternative-preview">
+    <h3>Alternative proposée : {{p.alternative.name}}</h3><p>{{equipmentLabel(p.alternative.equipment)}} · {{p.alternative.measurementType==='REPETITIONS'?'Répétitions':'Durée'}}</p>
+    <p class="preserve-lines">{{p.reason}}</p>
+    <div class="notice warning"><strong>À la confirmation</strong><p>{{p.current.sets}} séries · {{p.current.measurementType==='REPETITIONS'?p.current.repetitions+' répétitions par série':p.current.durationSeconds+' s par série'}} · repos {{p.current.restSeconds}} s : conservés.</p><p>Charge cible : remise à vide. Une seule nouvelle révision sera créée ; les anciennes révisions et séances seront conservées.</p></div>
+    <button class="btn-sv btn-sv-primary" [disabled]="busy||stale" (click)="confirm()">{{busy?'Enregistrement…':'Confirmer le remplacement'}}</button>
+  </section>
+  <div class="actions cancel-row"><button class="btn-sv btn-sv-outline" [disabled]="busy" (click)="cancel()">Annuler</button></div>
+</dialog>

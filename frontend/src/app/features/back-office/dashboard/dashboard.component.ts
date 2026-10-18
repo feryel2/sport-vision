@@ -22,7 +22,6 @@ import { SalesForecast } from '../../../core/models/ai.model';
         <div>
           <div class="header-badge-row">
             <span class="badge-sv badge-blue">GESTION 3 &bull; BOUTIQUE & PRODUITS</span>
-            <span class="badge-sv badge-outline">Responsable : Feryel Mansouri</span>
           </div>
           <h1 class="dash-title">Tableau de Bord &bull; Boutique Sport Vision</h1>
           <p class="dash-subtitle">Pilotage des stocks, des ventes et projections prédictives de la demande.</p>

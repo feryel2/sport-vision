@@ -7,7 +7,7 @@ import { Review } from '../models/review.model';
   providedIn: 'root'
 })
 export class ReviewService {
-  private apiUrl = 'http://localhost:8080/api/reviews';
+  private apiUrl = '/api/reviews';
 
   private defaultReviews: Review[] = [
     { id: 1, productId: 1, authorName: 'Maxime Dupont', authorEmail: 'maxime@gmail.com', rating: 5, comment: 'Ces bandes élastiques sont excellentes pour chauffer les épaules avant mes séances de bench ! Très résistantes.', createdAt: '2026-09-28T10:00:00' },

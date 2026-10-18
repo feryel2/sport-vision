@@ -21,6 +21,8 @@ public class Category {
 
     private String icon;
 
+    @Lob
+    @Column(name = "image_url")
     private String imageUrl;
 
     public Category() {}
