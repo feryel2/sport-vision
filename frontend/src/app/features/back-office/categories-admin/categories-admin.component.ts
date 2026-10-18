@@ -7,6 +7,7 @@ import { SupplierService } from '../../../core/services/supplier.service';
 import { Category } from '../../../core/models/category.model';
 import { Brand } from '../../../core/models/brand.model';
 import { Supplier } from '../../../core/models/supplier.model';
+import { ImageUploadService } from '../../../core/services/image-upload.service';
 
 @Component({
   selector: 'app-categories-admin',
@@ -154,8 +155,10 @@ import { Supplier } from '../../../core/models/supplier.model';
                 <textarea [(ngModel)]="currentCat.description" name="description" rows="3" class="form-control-sv"></textarea>
               </div>
               <div class="form-group-sv">
-                <label class="form-label-sv">URL de l'image de couverture</label>
-                <input type="text" [(ngModel)]="currentCat.imageUrl" name="imageUrl" class="form-control-sv">
+                <label class="form-label-sv">Image de couverture</label>
+                <input type="file" accept="image/*" name="categoryImage" class="form-control-sv" (change)="onImageSelected($event, 'category')">
+                <small *ngIf="imageError" class="image-upload-error">{{ imageError }}</small>
+                <img *ngIf="currentCat.imageUrl" [src]="currentCat.imageUrl" alt="Aperçu de la catégorie" class="image-upload-preview">
               </div>
             </div>
             <div class="sv-modal-footer">
@@ -184,8 +187,10 @@ import { Supplier } from '../../../core/models/supplier.model';
                 <input type="text" [(ngModel)]="currentBrand.country" name="brandCountry" class="form-control-sv" placeholder="Ex: USA, France, Allemagne">
               </div>
               <div class="form-group-sv">
-                <label class="form-label-sv">Logo (URL)</label>
-                <input type="text" [(ngModel)]="currentBrand.logoUrl" name="brandLogo" class="form-control-sv" placeholder="https://logo.clearbit.com/...">
+                <label class="form-label-sv">Logo de la marque</label>
+                <input type="file" accept="image/*" name="brandLogo" class="form-control-sv" (change)="onImageSelected($event, 'brand')">
+                <small *ngIf="imageError" class="image-upload-error">{{ imageError }}</small>
+                <img *ngIf="currentBrand.logoUrl" [src]="currentBrand.logoUrl" [alt]="'Aperçu du logo ' + currentBrand.name" class="image-upload-preview brand-image-preview">
               </div>
               <div class="form-group-sv">
                 <label class="form-label-sv">Description</label>
@@ -248,6 +253,9 @@ import { Supplier } from '../../../core/models/supplier.model';
     </div>
   `,
   styles: [`
+    .image-upload-preview { display: block; width: 96px; height: 76px; margin-top: 10px; object-fit: contain; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; }
+    .brand-image-preview { border-radius: 50%; }
+    .image-upload-error { display: block; color: #dc2626; margin-top: 6px; }
     .admin-catalog-page {
       max-width: 1350px;
       margin: 0 auto;
@@ -514,6 +522,7 @@ export class CategoriesAdminComponent implements OnInit {
   showBrandModal = false;
   showSupModal = false;
   isEditing = false;
+  imageError = '';
 
   currentCat: Category = { id: 0, name: '', slug: '', description: '', icon: '', imageUrl: '' };
   currentBrand: Brand = { name: '', country: '', logoUrl: '', description: '' };
@@ -522,13 +531,31 @@ export class CategoriesAdminComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private brandService: BrandService,
-    private supplierService: SupplierService
+    private supplierService: SupplierService,
+    private imageUploadService: ImageUploadService
   ) {}
 
   ngOnInit(): void {
     this.productService.getCategories().subscribe(c => this.categories = c);
     this.brandService.brands$.subscribe(b => this.brands = b);
     this.supplierService.suppliers$.subscribe(s => this.suppliers = s);
+  }
+
+  async onImageSelected(event: Event, target: 'category' | 'brand'): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    this.imageError = '';
+    try {
+      const image = await this.imageUploadService.convert(file);
+      if (target === 'category') this.currentCat.imageUrl = image;
+      else this.currentBrand.logoUrl = image;
+    } catch (error) {
+      this.imageError = error instanceof Error ? error.message : 'Impossible de charger cette image.';
+    } finally {
+      input.value = '';
+    }
   }
 
   openAddModal(): void {

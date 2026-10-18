@@ -39,7 +39,8 @@ public class Product {
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
-    @Column(name = "image_url", length = 1000)
+    @Lob
+    @Column(name = "image_url")
     private String imageUrl;
 
     private Boolean featured = false;

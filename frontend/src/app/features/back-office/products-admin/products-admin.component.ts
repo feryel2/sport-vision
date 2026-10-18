@@ -8,6 +8,7 @@ import { Product, ProductFormData } from '../../../core/models/product.model';
 import { Category } from '../../../core/models/category.model';
 import { Brand } from '../../../core/models/brand.model';
 import { Supplier } from '../../../core/models/supplier.model';
+import { ImageUploadService } from '../../../core/services/image-upload.service';
 
 @Component({
   selector: 'app-products-admin',
@@ -201,8 +202,13 @@ import { Supplier } from '../../../core/models/supplier.model';
               </div>
 
               <div class="form-group-sv">
-                <label class="form-label-sv">URL de l'image</label>
-                <input type="text" [(ngModel)]="formData.imageUrl" name="imageUrl" class="form-control-sv" placeholder="https://...">
+                <label class="form-label-sv">Image du produit</label>
+                <input type="file" accept="image/*" name="productImage" class="form-control-sv" (change)="onImageSelected($event)">
+                <small *ngIf="imageError" class="image-upload-error">{{ imageError }}</small>
+                <div *ngIf="formData.imageUrl" class="image-upload-preview">
+                  <img [src]="formData.imageUrl" [alt]="formData.name || 'Aperçu du produit'">
+                  <span>Aperçu de l’image sélectionnée</span>
+                </div>
               </div>
 
               <div class="form-group-sv">
@@ -247,6 +253,9 @@ import { Supplier } from '../../../core/models/supplier.model';
     </div>
   `,
   styles: [`
+    .image-upload-preview { display: flex; align-items: center; gap: 12px; margin-top: 10px; color: #64748b; font-size: 0.82rem; }
+    .image-upload-preview img { width: 76px; height: 64px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0; }
+    .image-upload-error { display: block; color: #dc2626; margin-top: 6px; }
     .admin-products-page {
       max-width: 1350px;
       margin: 0 auto;
@@ -536,13 +545,15 @@ export class ProductsAdminComponent implements OnInit {
   isEditing = false;
   currentProductId: number | null = null;
   formData: ProductFormData = this.getEmptyFormData();
+  imageError = '';
 
   productToDelete: Product | null = null;
 
   constructor(
     private productService: ProductService,
     private brandService: BrandService,
-    private supplierService: SupplierService
+    private supplierService: SupplierService,
+    private imageUploadService: ImageUploadService
   ) {}
 
   ngOnInit(): void {
@@ -668,6 +679,21 @@ export class ProductsAdminComponent implements OnInit {
 
   closeModal(): void {
     this.showModal = false;
+  }
+
+  async onImageSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    this.imageError = '';
+    try {
+      this.formData.imageUrl = await this.imageUploadService.convert(file);
+    } catch (error) {
+      this.imageError = error instanceof Error ? error.message : 'Impossible de charger cette image.';
+    } finally {
+      input.value = '';
+    }
   }
 
   saveProduct(): void {

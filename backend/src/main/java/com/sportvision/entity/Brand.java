@@ -15,6 +15,8 @@ public class Brand {
 
     private String country;
 
+    @Lob
+    @Column(name = "logo_url")
     private String logoUrl;
 
     @Column(length = 1000)
