@@ -19,7 +19,6 @@ import { Supplier } from '../../../core/models/supplier.model';
         <div>
           <div class="header-badge-row">
             <span class="badge-sv badge-blue">CATALOGUE SPORT VISION</span>
-            <span class="badge-sv badge-outline">Responsable : Feryel Mansouri</span>
           </div>
           <h1 class="page-title">Gestion du Catalogue : Catégories, Marques & Fournisseurs</h1>
           <p class="page-subtitle">

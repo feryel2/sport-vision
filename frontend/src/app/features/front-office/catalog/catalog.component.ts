@@ -21,7 +21,6 @@ import { Review } from '../../../core/models/review.model';
         <div class="container">
           <div class="header-badge-row">
             <span class="badge-sv badge-white">BOUTIQUE OFFICIELLE</span>
-            <span class="badge-sv badge-outline-white">Gestion 3 — Responsable : Feryel Mansouri</span>
           </div>
           <h1 class="catalog-title">Boutique & Produits Sportifs</h1>
           <p class="catalog-subtitle">
@@ -98,7 +97,6 @@ import { Review } from '../../../core/models/review.model';
                 Réinitialiser les filtres
               </button>
 
-              <!-- Liens Rapides Gestion 3 -->
               <div class="sidebar-extra-links">
                 <a routerLink="/favoris" class="extra-link">❤️ Voir mes favoris ({{ favoriteCount }})</a>
                 <a routerLink="/coach-matching" class="extra-link">Trouver un coach sportif</a>

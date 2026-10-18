@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -28,7 +28,7 @@ import { AuthService } from '../../../core/services/auth.service';
           <span class="demo-box-title">COMPTES DE DÉMONSTRATION :</span>
           <div class="demo-btns-row">
             <button (click)="fillAdmin()" class="btn-demo btn-demo-admin">
-              Compte Administrateur (Feryel Mansouri)
+              Compte Administrateur
             </button>
             <button (click)="fillClient()" class="btn-demo btn-demo-client">
               Compte Client Démo
@@ -224,14 +224,20 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
+
+  private openAdminDestination(): void {
+    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+    this.router.navigateByUrl(returnUrl?.startsWith('/admin') ? returnUrl : '/admin');
+  }
 
   fillAdmin(): void {
     this.email = 'admin@sportvision.com';
     this.password = 'admin123';
     this.authService.loginAsAdmin();
-    this.router.navigate(['/admin']);
+    this.openAdminDestination();
   }
 
   fillClient(): void {
@@ -244,7 +250,7 @@ export class LoginComponent {
   submitLogin(): void {
     if (this.email.includes('admin')) {
       this.authService.loginAsAdmin();
-      this.router.navigate(['/admin']);
+      this.openAdminDestination();
     } else {
       this.authService.loginAsClient();
       this.router.navigate(['/catalogue']);

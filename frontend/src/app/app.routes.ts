@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { FrontOfficeLayoutComponent } from './layouts/front-office-layout/front-office-layout.component';
 import { BackOfficeLayoutComponent } from './layouts/back-office-layout/back-office-layout.component';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   // FRONT-OFFICE (Boutique & Athlètes)
@@ -43,10 +44,12 @@ export const routes: Routes = [
     ]
   },
 
-  // BACK-OFFICE (Gestion 3 — Responsable : Feryel Mansouri)
+  // BACK-OFFICE (Administration)
   {
     path: 'admin',
     component: BackOfficeLayoutComponent,
+    canActivate: [adminGuard],
+    canActivateChild: [adminGuard],
     children: [
       {
         path: '',

@@ -16,12 +16,11 @@ import { FavoriteService } from '../../core/services/favorite.service';
       <div class="container banner-content">
         <div class="banner-text">
           <span class="badge-pulse">SPORT VISION</span>
-          <span>Boutique & Produits Sportifs &bull; Responsable : <strong>Feryel Mansouri</strong> &bull; Charte Bleu & Blanc</span>
         </div>
         <div class="banner-actions">
           <span class="demo-tag">Profil Démo :</span>
           <button (click)="toggleRole()" class="btn-role-switch" [class.is-admin]="authService.isAdmin">
-            {{ authService.isAdmin ? '👑 Feryel Mansouri (Admin)' : '👤 Karim Benzema (Client)' }} &bull; Basculer
+            {{ authService.isAdmin ? '👑 Administrateur' : '👤 Client' }} &bull; Basculer
           </button>
           <a *ngIf="authService.isAdmin" routerLink="/admin" class="admin-quick-link">
             ⚙️ Console Back-Office
@@ -117,14 +116,7 @@ import { FavoriteService } from '../../core/services/favorite.service';
               </div>
               <span class="logo-brand text-white">SPORT<span class="text-accent">VISION</span></span>
             </div>
-            <p class="footer-desc">
-              Plateforme sportive haute précision. <strong>Gestion 3 — Boutique & produits sportifs</strong>. Module piloté par <strong>Feryel Mansouri</strong>.
-            </p>
-            <div class="resp-badge-card">
-              <span class="resp-badge-title">Responsable du Module</span>
-              <strong class="resp-badge-name">Feryel Mansouri</strong>
-              <span class="resp-badge-sub">Gestion 3 &bull; Boutique & Produits</span>
-            </div>
+            <p class="footer-desc">Plateforme sportive haute pr&eacute;cision.</p>
           </div>
 
           <!-- Col 2 : Rayons -->
@@ -150,24 +142,12 @@ import { FavoriteService } from '../../core/services/favorite.service';
               <li><a routerLink="/admin">Console d'Administration</a></li>
             </ul>
           </div>
-
-          <!-- Col 4 : Charte & Engagements -->
-          <div class="footer-col">
-            <h4 class="footer-title">Engagements Sport Vision</h4>
-            <p class="footer-desc">Charte graphique Bleu & Blanc, paiements sécurisés et livraison offerte dès 80€ d'achats.</p>
-            <div class="chart-colors">
-              <span class="color-dot c-blue" title="Bleu Royal #1D4ED8"></span>
-              <span class="color-dot c-sky" title="Bleu Ciel #0284C7"></span>
-              <span class="color-dot c-dark" title="Bleu Nuit #0F172A"></span>
-              <span class="color-dot c-white" title="Blanc Pur #FFFFFF"></span>
-            </div>
-          </div>
         </div>
       </div>
 
       <div class="footer-bottom">
         <div class="container bottom-content">
-          <p>&copy; 2026 Sport Vision &bull; <strong>Gestion 3 — Boutique & produits sportifs</strong> &bull; Responsable : <strong>Feryel Mansouri</strong></p>
+          <p>&copy; 2026 Sport Vision</p>
           <div class="bottom-links">
             <a routerLink="/contact">Conditions Générales</a>
             <a routerLink="/admin" class="text-accent">Accès Staff Back-Office</a>
@@ -375,7 +355,7 @@ import { FavoriteService } from '../../core/services/favorite.service';
     }
     .footer-grid {
       display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      grid-template-columns: 1.5fr 1fr 1fr;
       gap: 35px;
     }
     .footer-logo-icon {

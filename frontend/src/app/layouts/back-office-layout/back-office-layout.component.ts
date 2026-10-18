@@ -53,6 +53,10 @@ import { AuthService } from '../../core/services/auth.service';
             <span class="nav-icon">🥗</span>
             <span class="nav-text" *ngIf="!isCollapsed">Aliments & Nutrition</span>
           </a>
+          <a routerLink="/admin/utilisateurs" routerLinkActive="active" class="nav-item">
+            <span class="nav-icon">👥</span>
+            <span class="nav-text" *ngIf="!isCollapsed">Utilisateurs & rôles</span>
+          </a>
         </nav>
 
         <!-- Bas de sidebar : Profil & Switch Front-Office -->
@@ -65,8 +69,8 @@ import { AuthService } from '../../core/services/auth.service';
           <div class="admin-profile-card" *ngIf="!isCollapsed">
             <div class="profile-avatar">FM</div>
             <div class="profile-info">
-              <span class="profile-name">Feryel Mansouri</span>
-              <span class="profile-badge">Responsable Gestion 3</span>
+              <span class="profile-name">{{ authService.currentUserValue?.fullName || 'Administrateur' }}</span>
+              <span class="profile-badge">Administrateur</span>
             </div>
           </div>
         </div>
@@ -85,8 +89,7 @@ import { AuthService } from '../../core/services/auth.service';
               </svg>
             </button>
             <div class="breadcrumb-trail">
-              <span class="badge-sv badge-blue">Gestion 3 — Boutique & Produits Sportifs</span>
-              <span class="badge-sv badge-outline-blue">Responsable : Feryel Mansouri</span>
+              <span class="badge-sv badge-blue">Administration Sport Vision</span>
             </div>
           </div>
 

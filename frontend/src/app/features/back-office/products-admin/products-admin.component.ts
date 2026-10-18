@@ -20,7 +20,6 @@ import { Supplier } from '../../../core/models/supplier.model';
         <div>
           <div class="header-badge-row">
             <span class="badge-sv badge-blue">GESTION 3</span>
-            <span class="badge-sv badge-outline">Responsable : Feryel Mansouri</span>
           </div>
           <h1 class="page-title">Boutique & Produits Sportifs</h1>
           <p class="page-subtitle">

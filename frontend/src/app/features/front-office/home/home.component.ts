@@ -21,8 +21,6 @@ import { ProductRecommendation } from '../../../core/models/ai.model';
       <div class="container hero-container">
         <div class="hero-content">
           <div class="hero-badge-group">
-            <span class="badge-resp">👤 Responsable : <strong>Feryel Mansouri</strong></span>
-            <span class="badge-theme">Gestion 3 — Boutique & Produits Sportifs</span>
           </div>
 
           <h1 class="hero-title">
