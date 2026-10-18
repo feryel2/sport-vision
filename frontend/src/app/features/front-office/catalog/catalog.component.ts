@@ -9,6 +9,8 @@ import { ReviewService } from '../../../core/services/review.service';
 import { Product } from '../../../core/models/product.model';
 import { Category } from '../../../core/models/category.model';
 import { Review } from '../../../core/models/review.model';
+import { AiService } from '../../../core/services/ai.service';
+import { ProductRecommendation } from '../../../core/models/ai.model';
 
 @Component({
   selector: 'app-catalog',
@@ -32,8 +34,8 @@ import { Review } from '../../../core/models/review.model';
             <div class="ai-banner-left">
               <span class="ai-robot-icon">🎯</span>
               <div>
-                <strong>Sélection par Programme Sportif</strong>
-                <p>Filtrer selon votre discipline d'entraînement :</p>
+                <strong>Filtrer le catalogue par discipline</strong>
+                <p>Choisissez les produits à afficher :</p>
               </div>
             </div>
             <div class="ai-goal-pills">
@@ -44,6 +46,75 @@ import { Review } from '../../../core/models/review.model';
           </div>
         </div>
       </section>
+
+    <!-- SECTION RECOMMANDATIONS DE PRODUITS -->
+    <section class="ai-recs-section">
+      <div class="container">
+        <div class="ai-box sv-card">
+          <div class="ai-box-header">
+            <div>
+              <div class="ai-header-badge">
+                CONSEILS & SÉLECTIONS SPORTIVES
+              </div>
+              <h2 class="ai-section-title">Recommandations selon votre Programme Sportif</h2>
+              <p class="ai-section-subtitle">
+                Notre moteur de sélection analyse vos objectifs pour vous proposer le pack d'équipements le plus adapté.
+              </p>
+            </div>
+            <!-- Sélecteur d'objectif -->
+            <div class="ai-goal-selector">
+              <button *ngFor="let g of availableGoals" (click)="setGoal(g.key)" class="btn-goal-tab" [class.active]="currentGoal === g.key">
+                {{ g.label }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Règle d'exemple du sujet mise en avant -->
+          <div class="ai-example-banner" *ngIf="currentGoal === 'Musculation'">
+            <span class="lamp-icon">💡</span>
+            <div>
+              <strong>Exemple du Sujet : Programme Musculation &rarr; Bandes élastiques, Gants et Ceinture de musculation</strong>
+              <p>Le système regroupe les accessoires de protection lombaire, d'échauffement articulaire et de grip pour maximiser la sécurité et l'hypertrophie.</p>
+            </div>
+          </div>
+
+          <!-- Grille des recommandations IA -->
+          <div class="ai-cards-grid">
+            <div *ngFor="let rec of aiRecommendations" class="sv-card rec-card">
+              <div class="rec-media">
+                <img [src]="rec.product.imageUrl" [alt]="rec.product.name" class="rec-img">
+                <span class="match-score-badge">{{ rec.matchPercentage }}% d'affinité</span>
+                <button (click)="toggleFav(rec.product, $event)" class="btn-rec-fav" [title]="isFav(rec.product.id) ? 'Retirer' : 'Ajouter'">
+                  {{ isFav(rec.product.id) ? '❤️' : '🤍' }}
+                </button>
+              </div>
+
+              <div class="rec-content">
+                <div class="rec-meta">
+                  <span class="badge-sv badge-blue">{{ rec.badge }}</span>
+                  <span class="rec-rating">⭐ {{ rec.product.rating }}</span>
+                </div>
+
+                <h3 class="rec-title">{{ rec.product.name }}</h3>
+
+                <!-- Rationale -->
+                <div class="rec-reason-box">
+                  <span class="rec-reason-text">✓ {{ rec.recommendationReason }}</span>
+                </div>
+
+                <div class="rec-footer">
+                  <span class="rec-price">{{ rec.product.price | number:'1.2-2' }} €</span>
+                  <button (click)="addToCart(rec.product)" class="btn-sv btn-sv-primary btn-sv-sm" [disabled]="rec.product.stock === 0">
+                    Ajouter au panier
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p *ngIf="aiRecommendations.length === 0" class="recommendations-empty">Aucune recommandation disponible pour ce programme pour le moment.</p>
+        </div>
+      </div>
+    </section>
 
       <!-- Barre d'outils et filtres -->
       <div class="container catalog-body">
@@ -297,6 +368,209 @@ import { Review } from '../../../core/models/review.model';
       line-height: 1.5;
       margin-bottom: 25px;
     }
+
+    /* RECOMMANDATIONS IA */
+    .ai-recs-section {
+      padding: 0 0 28px;
+      margin-top: -18px;
+      position: relative;
+    }
+    .recommendations-empty {
+      margin: 20px 0 0;
+      padding: 18px;
+      border-radius: 10px;
+      background: #f8fafc;
+      color: #64748b;
+      text-align: center;
+    }
+    .ai-box {
+      background: white;
+      border: 2px solid #38bdf8;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px -5px rgba(2, 132, 199, 0.15);
+    }
+    .ai-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .ai-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e0f2fe;
+      color: #0284c7;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+    .ai-section-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0 0 6px;
+    }
+    .ai-section-subtitle {
+      font-size: 0.95rem;
+      color: #64748b;
+      margin: 0;
+      max-width: 600px;
+    }
+    .ai-goal-selector {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn-goal-tab {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 8px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-goal-tab.active, .btn-goal-tab:hover {
+      background: #1e3a8a;
+      color: white;
+      border-color: #1e3a8a;
+    }
+
+    .ai-example-banner {
+      background: #eff6ff;
+      border-left: 4px solid #0284c7;
+      padding: 12px 18px;
+      border-radius: 8px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    .lamp-icon {
+      font-size: 1.5rem;
+    }
+    .ai-example-banner strong {
+      display: block;
+      color: #1e3a8a;
+      font-size: 0.9rem;
+    }
+    .ai-example-banner p {
+      margin: 2px 0 0;
+      font-size: 0.82rem;
+      color: #475569;
+    }
+
+    .ai-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .rec-card {
+      display: flex;
+      flex-direction: column;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .rec-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(30, 58, 138, 0.12);
+    }
+    .rec-media {
+      position: relative;
+      height: 180px;
+      background: #f8fafc;
+    }
+    .rec-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .match-score-badge {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: #0284c7;
+      color: white;
+      font-weight: 800;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .btn-rec-fav {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .rec-content {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .rec-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .rec-rating {
+      font-size: 0.8rem;
+      color: #eab308;
+      font-weight: 700;
+    }
+    .rec-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 8px;
+      line-height: 1.35;
+    }
+    .rec-reason-box {
+      background: #f8fafc;
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-bottom: 12px;
+      flex-grow: 1;
+    }
+    .rec-reason-text {
+      font-size: 0.78rem;
+      color: #475569;
+      line-height: 1.4;
+      display: block;
+    }
+    .rec-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px solid #f1f5f9;
+    }
+    .rec-price {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #1e3a8a;
+    }
+
 
     /* BANNIERE IA OBJECTIF */
     .ai-goal-banner {
@@ -774,6 +1048,14 @@ export class CatalogComponent implements OnInit {
 
   selectedCategoryId: number | null = null;
   selectedGoal: string = 'Tous';
+  currentGoal = 'Musculation';
+  availableGoals = [
+    { key: 'Musculation', label: 'Musculation et Force' },
+    { key: 'Running', label: 'Running et Trail' },
+    { key: 'Fitness', label: 'Fitness et Minceur' },
+    { key: 'Cyclisme', label: 'Cyclisme' }
+  ];
+  aiRecommendations: ProductRecommendation[] = [];
   sportGoals: string[] = ['Tous', 'Musculation', 'Running', 'Trail', 'Fitness'];
 
   searchQuery = '';
@@ -795,10 +1077,12 @@ export class CatalogComponent implements OnInit {
     private cartService: CartService,
     private favoriteService: FavoriteService,
     private reviewService: ReviewService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private aiService: AiService
   ) {}
 
   ngOnInit(): void {
+    this.loadRecommendations();
     this.productService.products$.subscribe(products => {
       this.allProducts = products;
       this.applyFilters();
@@ -818,8 +1102,25 @@ export class CatalogComponent implements OnInit {
       }
       if (params['goal']) {
         this.selectedGoal = params['goal'];
+        if (this.availableGoals.some(option => option.key === params['goal'])) {
+          this.currentGoal = params['goal'];
+          this.loadRecommendations();
+        }
       }
       this.applyFilters();
+    });
+  }
+
+  setGoal(goal: string): void {
+    this.currentGoal = goal;
+    this.selectedGoal = goal;
+    this.applyFilters();
+    this.loadRecommendations();
+  }
+
+  loadRecommendations(): void {
+    this.aiService.getProductRecommendations(this.currentGoal).subscribe(recs => {
+      this.aiRecommendations = recs;
     });
   }
 
@@ -830,6 +1131,10 @@ export class CatalogComponent implements OnInit {
 
   selectGoal(goal: string): void {
     this.selectedGoal = goal;
+    if (goal !== 'Tous' && this.availableGoals.some(option => option.key === goal)) {
+      this.currentGoal = goal;
+      this.loadRecommendations();
+    }
     this.applyFilters();
   }
 
