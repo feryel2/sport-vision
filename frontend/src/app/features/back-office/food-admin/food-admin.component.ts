@@ -84,7 +84,7 @@ import { Food } from '../../../core/models/food.model';
       <div class="sv-modal-backdrop" *ngIf="showModal" (click)="showModal = false">
         <div class="sv-modal-dialog" (click)="$event.stopPropagation()">
           <div class="sv-modal-header">
-            <h3>{{ isEditing ? 'Modifier l\'aliment' : 'Ajouter un aliment' }}</h3>
+            <h3>{{ isEditing ? "Modifier l'aliment" : "Ajouter un aliment" }}</h3>
             <button (click)="showModal = false" class="btn-close-modal">✕</button>
           </div>
           <form (ngSubmit)="saveFood()">
