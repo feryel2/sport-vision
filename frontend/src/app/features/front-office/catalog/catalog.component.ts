@@ -11,6 +11,7 @@ import { Category } from '../../../core/models/category.model';
 import { Review } from '../../../core/models/review.model';
 import { AiService } from '../../../core/services/ai.service';
 import { ProductRecommendation } from '../../../core/models/ai.model';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-catalog',
@@ -58,7 +59,7 @@ import { ProductRecommendation } from '../../../core/models/ai.model';
               </div>
               <h2 class="ai-section-title">Recommandations selon votre Programme Sportif</h2>
               <p class="ai-section-subtitle">
-                Notre moteur de sélection analyse vos objectifs pour vous proposer le pack d'équipements le plus adapté.
+                Le modele apprend des favoris et achats et compare les produits au programme sportif choisi.
               </p>
             </div>
             <!-- Sélecteur d'objectif -->
@@ -83,7 +84,7 @@ import { ProductRecommendation } from '../../../core/models/ai.model';
             <div *ngFor="let rec of aiRecommendations" class="sv-card rec-card">
               <div class="rec-media">
                 <img [src]="rec.product.imageUrl" [alt]="rec.product.name" class="rec-img">
-                <span class="match-score-badge">{{ rec.matchPercentage }}% d'affinité</span>
+                <span class="match-score-badge">{{ rec.matchPercentage }}% de pertinence</span>
                 <button (click)="toggleFav(rec.product, $event)" class="btn-rec-fav" [title]="isFav(rec.product.id) ? 'Retirer' : 'Ajouter'">
                   {{ isFav(rec.product.id) ? '❤️' : '🤍' }}
                 </button>
@@ -496,7 +497,7 @@ import { ProductRecommendation } from '../../../core/models/ai.model';
       height: 100%;
       object-fit: cover;
     }
-    .match-score-badge {
+                <span class="match-score-badge">{{ rec.matchPercentage }}% de pertinence</span>
       position: absolute;
       bottom: 8px;
       left: 8px;
@@ -1078,7 +1079,8 @@ export class CatalogComponent implements OnInit {
     private favoriteService: FavoriteService,
     private reviewService: ReviewService,
     private route: ActivatedRoute,
-    private aiService: AiService
+    private aiService: AiService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -1119,7 +1121,8 @@ export class CatalogComponent implements OnInit {
   }
 
   loadRecommendations(): void {
-    this.aiService.getProductRecommendations(this.currentGoal).subscribe(recs => {
+    const userEmail = this.authService.currentUserValue?.email;
+    this.aiService.getProductRecommendations(this.currentGoal, userEmail || '').subscribe(recs => {
       this.aiRecommendations = recs;
     });
   }

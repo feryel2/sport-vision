@@ -5,19 +5,13 @@ import com.sportvision.dto.CoachMatchingResult;
 import com.sportvision.dto.ProductRecommendationDto;
 import com.sportvision.dto.SalesForecastDto;
 import com.sportvision.entity.Coach;
-import com.sportvision.entity.Favorite;
-import com.sportvision.entity.Order;
-import com.sportvision.entity.OrderItem;
 import com.sportvision.entity.Product;
 import com.sportvision.repository.CoachRepository;
-import com.sportvision.repository.FavoriteRepository;
-import com.sportvision.repository.OrderRepository;
 import com.sportvision.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,137 +19,18 @@ public class AiSportService {
 
     private final ProductRepository productRepository;
     private final CoachRepository coachRepository;
-    private final FavoriteRepository favoriteRepository;
-    private final OrderRepository orderRepository;
+    private final ImplicitFeedbackRecommendationEngine recommendationEngine;
 
     public AiSportService(ProductRepository productRepository,
                            CoachRepository coachRepository,
-                           FavoriteRepository favoriteRepository,
-                           OrderRepository orderRepository) {
+                           ImplicitFeedbackRecommendationEngine recommendationEngine) {
         this.productRepository = productRepository;
         this.coachRepository = coachRepository;
-        this.favoriteRepository = favoriteRepository;
-        this.orderRepository = orderRepository;
+        this.recommendationEngine = recommendationEngine;
     }
 
-    /**
-     * AI Product Recommendation based on:
-     * - Sport Goal (ex: Musculation -> bandes élastiques, gants, ceinture de musculation, shaker)
-     * - User Wishlist / Favorites
-     * - Previous Purchases / Orders
-     */
     public List<ProductRecommendationDto> recommendProducts(String goal, String userEmail) {
-        List<Product> allProducts = productRepository.findAll();
-        if (allProducts.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        // Collect favorite product IDs for this user
-        Set<Long> favoriteProductIds = new HashSet<>();
-        if (userEmail != null && !userEmail.isBlank()) {
-            List<Favorite> favs = favoriteRepository.findByUserEmailOrderByCreatedAtDesc(userEmail);
-            for (Favorite f : favs) {
-                favoriteProductIds.add(f.getProduct().getId());
-            }
-        }
-
-        // Collect ordered product IDs for this user
-        Set<Long> orderedProductIds = new HashSet<>();
-        if (userEmail != null && !userEmail.isBlank()) {
-            List<Order> orders = orderRepository.findByCustomerEmailOrderByCreatedAtDesc(userEmail);
-            for (Order o : orders) {
-                for (OrderItem item : o.getItems()) {
-                    orderedProductIds.add(item.getProduct().getId());
-                }
-            }
-        }
-
-        String targetGoal = (goal != null && !goal.isBlank()) ? goal.toLowerCase().trim() : "musculation";
-
-        List<ProductRecommendationDto> recommendations = new ArrayList<>();
-
-        for (Product product : allProducts) {
-            int score = 50; // base score
-            List<String> reasons = new ArrayList<>();
-            String badge = "Recommandé";
-
-            String prodName = product.getName() != null ? product.getName().toLowerCase() : "";
-            String prodDesc = product.getDescription() != null ? product.getDescription().toLowerCase() : "";
-            String prodGoal = product.getSportGoal() != null ? product.getSportGoal().toLowerCase() : "";
-            String catName = product.getCategory() != null ? product.getCategory().getName().toLowerCase() : "";
-
-            // Goal matching
-            if (prodGoal.contains(targetGoal)) {
-                score += 35;
-                reasons.add("Conçu spécifiquement pour le programme " + capitalize(targetGoal));
-                badge = "Programme " + capitalize(targetGoal);
-            } else if (prodName.contains(targetGoal) || prodDesc.contains(targetGoal) || catName.contains(targetGoal)) {
-                score += 25;
-                reasons.add("Hautement adapté à la pratique de : " + capitalize(targetGoal));
-            }
-
-            // Specific rules as requested: "Exemple : Suit un programme de musculation -> bandes élastiques, gants et ceinture de musculation."
-            if (targetGoal.contains("muscu")) {
-                if (prodName.contains("élastique") || prodName.contains("elastique") || prodName.contains("bande")) {
-                    score += 40;
-                    reasons.add("Essentiel pour l'échauffement et la résistance progressive en musculation");
-                    badge = "Indispensable Musculation";
-                } else if (prodName.contains("gant")) {
-                    score += 38;
-                    reasons.add("Protège les paumes et assure un grip optimal lors des charges lourdes");
-                    badge = "Protection & Grip";
-                } else if (prodName.contains("ceinture")) {
-                    score += 39;
-                    reasons.add("Maintien lombaire sécurisé pour squat et soulevé de terre lourd");
-                    badge = "Sécurité Force";
-                } else if (prodName.contains("whey") || prodName.contains("shaker") || prodName.contains("protéine")) {
-                    score += 30;
-                    reasons.add("Apport protéiné clé pour la récupération et la synthèse musculaire");
-                    badge = "Nutrition Musculaire";
-                }
-            } else if (targetGoal.contains("run") || targetGoal.contains("trail") || targetGoal.contains("course")) {
-                if (prodName.contains("chaussure") || prodName.contains("running") || prodName.contains("montre")) {
-                    score += 35;
-                    reasons.add("Optimisé pour l'amorti, la foulée et l'analyse de cadence");
-                    badge = "Performance Running";
-                }
-            }
-
-            // User history booster
-            if (favoriteProductIds.contains(product.getId())) {
-                score += 15;
-                reasons.add("Présent dans votre liste de souhaits");
-            }
-
-            if (orderedProductIds.contains(product.getId())) {
-                score += 10;
-                reasons.add("Correspond à vos achats sportifs précédents");
-            }
-
-            if (product.getFeatured() != null && product.getFeatured()) {
-                score += 5;
-            }
-
-            // Rating booster
-            if (product.getRating() != null && product.getRating() >= 4.7) {
-                score += 8;
-            }
-
-            // Cap score between 60 and 99%
-            int finalScore = Math.min(99, Math.max(60, score));
-
-            String primaryReason = reasons.isEmpty() ?
-                    "Produit phare sélectionné par notre algorithme IA Sport Vision" :
-                    String.join(" • ", reasons);
-
-            recommendations.add(new ProductRecommendationDto(product, finalScore, primaryReason, badge));
-        }
-
-        // Sort by match percentage descending
-        recommendations.sort((a, b) -> Integer.compare(b.getMatchPercentage(), a.getMatchPercentage()));
-
-        // Return top 8 recommendations
-        return recommendations.stream().limit(8).collect(Collectors.toList());
+        return recommendationEngine.recommend(goal, userEmail);
     }
 
     /**
@@ -328,8 +203,4 @@ public class AiSportService {
         return results;
     }
 
-    private String capitalize(String str) {
-        if (str == null || str.isEmpty()) return "";
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
-    }
 }
