@@ -399,3 +399,5 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println(">>> Initialisation Sport Vision terminée avec succès !");
     }
 }
+
+

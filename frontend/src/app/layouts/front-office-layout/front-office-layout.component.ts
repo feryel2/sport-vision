@@ -20,10 +20,6 @@ import { FavoriteService } from '../../core/services/favorite.service';
           <span class="badge-pulse">SPORT VISION</span>
         </div>
         <div class="banner-actions">
-          <span class="demo-tag">Profil Démo :</span>
-          <button (click)="toggleRole()" class="btn-role-switch" [class.is-admin]="authService.isAdmin">
-            {{ authService.isAdmin ? '👑 Administrateur' : '👤 Client' }} &bull; Basculer
-          </button>
           <a *ngIf="authService.isAdmin" routerLink="/admin" class="admin-quick-link">
             ⚙️ Console Back-Office
           </a>
@@ -93,13 +89,20 @@ import { FavoriteService } from '../../core/services/favorite.service';
           </a>
 
           <!-- Espace Client / Connexion -->
-          <a routerLink="/login" class="btn-sv btn-sv-primary btn-sv-sm">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <span>{{ authService.currentUserValue ? 'Mon Compte' : 'Connexion' }}</span>
-          </a>
+          <ng-container *ngIf="authService.currentUser$ | async as user; else guestActions">
+            <a routerLink="/profil" class="btn-sv btn-sv-primary btn-sv-sm">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <span>Mon Profil</span>
+            </a>
+            <button type="button" (click)="logout()" class="btn-sv btn-sv-outline btn-sv-sm">Déconnexion</button>
+          </ng-container>
+          <ng-template #guestActions>
+            <a routerLink="/login" class="btn-sv btn-sv-primary btn-sv-sm">Connexion</a>
+            <a routerLink="/register" class="btn-sv btn-sv-outline btn-sv-sm">S'inscrire</a>
+          </ng-template>
         </div>
       </div>
     </header>
@@ -528,18 +531,14 @@ export class FrontOfficeLayoutComponent implements OnInit {
     });
   }
 
-  closeMobileMenu(restoreFocus = false): void {
-    if (!this.mobileMenuOpen) return;
-    this.mobileMenuOpen = false;
-    if (restoreFocus) this.menuToggle?.nativeElement.focus();
-  }
-
-  toggleRole(): void {
-    if (this.authService.isAdmin) {
-      this.authService.loginAsClient();
-    } else {
-      this.authService.loginAsAdmin();
+    closeMobileMenu(restoreFocus = false): void {
+        if (!this.mobileMenuOpen) return;
+        this.mobileMenuOpen = false;
+        if (restoreFocus) this.menuToggle?.nativeElement.focus();
     }
+
+  logout(): void {
+    this.authService.logout().subscribe(() => this.router.navigate(['/']));
   }
 
   onSearch(): void {

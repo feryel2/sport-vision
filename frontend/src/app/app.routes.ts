@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { FrontOfficeLayoutComponent } from './layouts/front-office-layout/front-office-layout.component';
 import { BackOfficeLayoutComponent } from './layouts/back-office-layout/back-office-layout.component';
-import { adminGuard } from './core/guards/admin.guard';
+import { adminGuard, authGuard, guestGuard } from './core/guards/auth.guards';
 
 export const routes: Routes = [
   // FRONT-OFFICE (Boutique & Athlètes)
@@ -15,6 +15,7 @@ export const routes: Routes = [
       },
       {
         path: 'entrainement',
+          canActivate: [authGuard],
         loadChildren: () => import('./features/training/training.routes').then(m => {
           // Preserve the existing training group and its guards unchanged.
           const trainingRoutes: Routes = [
@@ -26,31 +27,57 @@ export const routes: Routes = [
       },
       {
         path: 'catalogue',
+        canActivate: [authGuard],
         loadComponent: () => import('./features/front-office/catalog/catalog.component').then(m => m.CatalogComponent)
       },
       {
         path: 'panier',
+        canActivate: [authGuard],
         loadComponent: () => import('./features/front-office/cart/cart.component').then(m => m.CartComponent)
       },
       {
         path: 'favoris',
+        canActivate: [authGuard],
         loadComponent: () => import('./features/front-office/favorites/favorites.component').then(m => m.FavoritesComponent)
       },
       {
         path: 'coach-matching',
+        canActivate: [authGuard],
         loadComponent: () => import('./features/front-office/coach-matching/coach-matching.component').then(m => m.CoachMatchingComponent)
       },
       {
         path: 'aliments',
+        canActivate: [authGuard],
         loadComponent: () => import('./features/front-office/food-nutrition/food-nutrition.component').then(m => m.FoodNutritionComponent)
       },
       {
         path: 'contact',
+        canActivate: [authGuard],
         loadComponent: () => import('./features/front-office/contact/contact.component').then(m => m.ContactComponent)
       },
       {
         path: 'login',
+        canActivate: [guestGuard],
         loadComponent: () => import('./features/front-office/login/login.component').then(m => m.LoginComponent)
+      },
+      {
+        path: 'register',
+        canActivate: [guestGuard],
+        loadComponent: () => import('./features/front-office/register/register.component').then(m => m.RegisterComponent)
+      },
+      {
+        path: 'forgot-password',
+        canActivate: [guestGuard],
+        loadComponent: () => import('./features/front-office/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
+      },
+      {
+        path: 'reset-password',
+        loadComponent: () => import('./features/front-office/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
+      },
+      {
+        path: 'profil',
+        canActivate: [authGuard],
+        loadComponent: () => import('./features/front-office/profile/profile.component').then(m => m.ProfileComponent)
       }
     ]
   },
