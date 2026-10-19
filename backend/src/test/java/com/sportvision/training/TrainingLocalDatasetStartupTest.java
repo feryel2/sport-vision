@@ -21,6 +21,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
  "training.ai.api-key=","training.dataset.enabled=true"})
 @ActiveProfiles({"test","local-demo"})
 class TrainingLocalDatasetStartupTest {
+ @org.junit.jupiter.api.BeforeEach void outsideHttpRequest() { org.springframework.web.context.request.RequestContextHolder.resetRequestAttributes(); }
  @Autowired JdbcTemplate sql;
  @Autowired TrainingLocalDatasetInitializer initializer;
  @Autowired TrainingExerciseService exercises;

@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 @SpringBootTest(classes = com.sportvision.SportVisionApplication.class, properties={"spring.datasource.url=jdbc:h2:mem:training_no_identity_tests;DB_CLOSE_DELAY=-1","spring.jpa.hibernate.ddl-auto=create-drop"})
 @ActiveProfiles("test") @AutoConfigureMockMvc
+@org.springframework.security.test.context.support.WithMockUser(username="training-test-user", roles="ADMIN")
 class TrainingIdentityUnavailableTest {
     @Autowired MockMvc mvc;
     @Test void refusesPrivateAccessOutsideLocalWithoutProvider() throws Exception {

@@ -1,3 +1,3 @@
 package com.sportvision.training.identity;
-/** À implémenter avec une identité authentifiée avant tout déploiement public. */
+/** Server-side Training owner: authenticated account ID, or explicit local startup fixtures. */
 public interface TrainingCurrentUserProvider { String ownerReference(); }

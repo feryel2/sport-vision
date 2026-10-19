@@ -203,3 +203,30 @@ Guides conservés : [IA-SIMPLE](docs/IA-SIMPLE.md) et [ADAPTATION-IA](docs/ADAPT
 Les ports temporaires8084/4204 ont été utilisés sur le poste de vérification parce que8080 est occupé et les instances existantes doivent rester intactes. Le proxy temporaire de vérification adapte l'origine du port4204 à l'origine locale4200 autorisée ; il ne fait pas partie de la configuration livrée. Le démarrage normal utilise8080/4200.
 
 Les résultats ne valident ni une authentification de production ni une requête Gemini réelle. Les défauts Boutique hérités et les avertissements d'espaces de l'ancien index ne sont pas corrigés ici. Ne pas finaliser la fusion avant revue et approbation.
+
+
+## Training : démonstration automatique et copies privées (modifications locales)
+
+Cette préparation est incluse dans les sources Java et les ressources `backend/src/main/resources/training/demo/`. Aucun fichier H2, script local, identifiant personnel ou secret Gemini n'est nécessaire. Les fichiers nouveaux doivent être inclus dans le futur commit après revue ; GitHub n'a pas été modifié.
+
+Utiliser explicitement le profil H2 local, depuis `backend`, avec Java 17 et Maven :
+
+```powershell
+mvn spring-boot:run "-Dspring-boot.run.profiles=local-demo"
+```
+
+Le profil lie le serveur à `127.0.0.1:8080`, utilise H2 persistante `./data/local-demo/sportvision` et le dialecte H2. Le premier démarrage prépare 80 exercices partagés, 12 programmes, 24 révisions, 90 séances terminées, 1 211 séries et 20 planifications. Les bases existantes ne sont pas réinitialisées. L'initialiseur existant conserve son marqueur `integration-populated-v1` et ignore les données Training non marquées déjà présentes.
+
+Après inscription/connexion normale, ouvrir **Entraînement → Programmes** (ou l'historique/progression/planification). Lors du premier GET Training personnel approprié, le domaine Training copie le modèle partagé pour le propriétaire JWT `training-user:<id>`. Aucune modification du code d'inscription ou de JWT n'est nécessaire. Les 80 exercices restent communs ; chaque propriétaire reçoit ses propres 12 programmes, 24 révisions, 90 historiques, 1 211 séries et 20 planifications. Les identifiants internes et les références des instantanés sont remappés ensemble.
+
+Une transaction et un marqueur durable `personal-demo-v1:<propriétaire>` empêchent les doublons ; le verrou du marqueur source protège les premiers accès concurrents. Les programmes, résultats et dates personnels existants ne sont jamais mis à jour. Si un créneau personnel est occupé, la nouvelle planification de démonstration est décalée à la minute suivante disponible. Les dates des nouvelles copies sont rapprochées de leur premier accès pour alimenter les graphiques 7/30/90 jours ; elles ne sont pas déplacées aux accès ou redémarrages suivants. Le modèle partagé n'est pas modifié par cette copie.
+
+Scénarios synthétiques conseillés en révision 2 : **Full Body Débutant** (cibles atteintes, hausse prudente possible) et **Force fondamentale** (difficultés répétées, réduction/repos possibles). Java exige au moins deux séances comparables avec au moins deux séries réalisées par prescription ; il ne considère que la révision courante, parmi les 20 dernières séances terminées au maximum. Une nouvelle révision après adaptation n'aura pas automatiquement d'historique comparable : réaliser de nouvelles séances avant un autre bilan. Les anciennes séances restent intactes.
+
+Les ajustements Gemini sont testés avec un client simulé. Le bilan Java et l'éligibilité sont disponibles sans appel IA ; la génération réelle de la proposition nécessite une clé serveur configurée séparément et une autorisation explicite pour les essais. Aucune clé ne figure dans les données ou dans Angular.
+
+L'initialisation partagée et personnelle est exclue si `mysql` ou `production` est actif, même si `local-demo` est également sélectionné. Ne pas utiliser ces démonstrations en production. Les comptes ne sont pas créés par les données Training ; s'inscrire avec l'interface existante. L'administration conserve les règles de rôle existantes.
+
+Une ancienne base déjà marquée n'est pas réécrite pour imposer les nouveaux exemples : ses enregistrements sont préservés et les nouvelles copies reflètent son modèle. Une base sans modèle partagé reconnu n'est pas complétée arbitrairement ; vérifier les journaux et utiliser un nouvel environnement H2 dédié après accord, jamais effacer une base existante.
+
+La copie reconnaît les programmes du modèle par le nom de leur première révision comparé à la ressource portable. Les programmes partagés sans correspondance ne sont pas diffusés aux autres comptes. Un modèle incomplet ou ambigu est refusé avant toute copie ; aucune réparation destructive automatique n’est effectuée.

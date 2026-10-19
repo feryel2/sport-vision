@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(classes = com.sportvision.SportVisionApplication.class, properties={"spring.datasource.url=jdbc:h2:mem:training_adaptation_tests;DB_CLOSE_DELAY=-1","spring.jpa.hibernate.ddl-auto=create-drop","training.demo.enabled=false"})
 @ActiveProfiles("test") @AutoConfigureMockMvc
+@org.springframework.security.test.context.support.WithMockUser(username="training-test-user", roles="ADMIN")
 class TrainingAdaptationApiTest {
     @Autowired MockMvc mvc;@Autowired ObjectMapper mapper;@Autowired JdbcTemplate jdbc;
     @MockBean GeminiClient gemini;@MockBean TrainingCurrentUserProvider user;
@@ -33,25 +34,25 @@ class TrainingAdaptationApiTest {
     }
     JsonNode data(ResultActions result)throws Exception{return mapper.readTree(result.andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8)).path("data");}
     JsonNode create(String type)throws Exception{
-        long exercise=data(mvc.perform(post("/api/training/exercises").contentType("application/json").content("""
+        long exercise=data(mvc.perform(post("/api/training/exercises").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("""
             {"name":"PRIVATE_EXERCISE","description":"PRIVATE_DESCRIPTION","instructions":"PRIVATE_INSTRUCTIONS","muscleGroup":"LEGS","equipment":"NONE","difficulty":"BEGINNER","measurementType":"%s"}
             """.formatted(type))).andExpect(status().isCreated())).path("id").asLong();
-        return data(mvc.perform(post("/api/training/programs").contentType("application/json").content("""
+        return data(mvc.perform(post("/api/training/programs").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("""
             {"name":"PRIVATE_PROGRAM","description":"PRIVATE_DESCRIPTION","objective":"PRIVATE_OBJECTIVE","sessions":[{"name":"PRIVATE_SESSION","prescriptions":[{"exerciseId":%d,"sets":3,%s,"restSeconds":30,"targetLoadKg":5}]}]}
             """.formatted(exercise,type.equals("REPETITIONS")?"\"repetitions\":10":"\"durationSeconds\":30"))).andExpect(status().isCreated()));
     }
     JsonNode workout(JsonNode p,int value,boolean all,Integer load)throws Exception{
-        var w=data(mvc.perform(post("/api/training/workouts").contentType("application/json").content("{\"programId\":"+p.path("id")+",\"revision\":"+p.path("currentRevision")+",\"sessionId\":"+p.at("/version/sessions/0/id")+"}")).andExpect(status().isOk()));
+        var w=data(mvc.perform(post("/api/training/workouts").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{\"programId\":"+p.path("id")+",\"revision\":"+p.path("currentRevision")+",\"sessionId\":"+p.at("/version/sessions/0/id")+"}")).andExpect(status().isOk()));
         String field=p.at("/version/sessions/0/prescriptions/0/measurementType").asText().equals("REPETITIONS")?"repetitions":"durationSeconds";
         int index=0;for(var set:w.at("/exercises/0/sets")){
             if(index++>0&&!all)break;
-            mvc.perform(put("/api/training/workouts/"+w.path("id").asLong()+"/sets/"+set.path("id").asLong()).contentType("application/json").content("{\""+field+"\":"+value+(load==null?"":",\"loadKg\":"+load)+"}")).andExpect(status().isOk());
+            mvc.perform(put("/api/training/workouts/"+w.path("id").asLong()+"/sets/"+set.path("id").asLong()).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{\""+field+"\":"+value+(load==null?"":",\"loadKg\":"+load)+"}")).andExpect(status().isOk());
         }
-        return data(mvc.perform(post("/api/training/workouts/"+w.path("id").asLong()+"/complete").contentType("application/json").content("{\"confirmSkipPending\":true,\"comment\":\"PRIVATE_COMMENT\"}")).andExpect(status().isOk()));
+        return data(mvc.perform(post("/api/training/workouts/"+w.path("id").asLong()+"/complete").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{\"confirmSkipPending\":true,\"comment\":\"PRIVATE_COMMENT\"}")).andExpect(status().isOk()));
     }
     void history()throws Exception{workout(program,8,false,4);workout(program,7,false,4);}
-    ResultActions propose()throws Exception{return mvc.perform(post(url).contentType("application/json").content("{\"expectedRevision\":1}"));}
-    ResultActions confirm(String token,int revision)throws Exception{return mvc.perform(post(url+"/confirm").contentType("application/json").content("{\"expectedRevision\":"+revision+",\"proposalId\":\""+token+"\"}"));}
+    ResultActions propose()throws Exception{return mvc.perform(post(url).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{\"expectedRevision\":1}"));}
+    ResultActions confirm(String token,int revision)throws Exception{return mvc.perform(post(url+"/confirm").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{\"expectedRevision\":"+revision+",\"proposalId\":\""+token+"\"}"));}
     @Test void insufficientDataNeverCallsGemini()throws Exception{
         mvc.perform(get(url).param("expectedRevision","1")).andExpect(status().isOk()).andExpect(jsonPath("$.data.eligible").value(false));
         propose().andExpect(status().isUnprocessableEntity());workout(program,8,true,4);propose().andExpect(status().isUnprocessableEntity());verifyNoInteractions(gemini);
@@ -95,7 +96,7 @@ class TrainingAdaptationApiTest {
     }
     @Test void rejectsForgedPayloadUnknownTokenAndWrongOwner()throws Exception{
         history();String token=data(propose().andExpect(status().isOk())).path("proposalId").asText();
-        mvc.perform(post(url+"/confirm").contentType("application/json").content("{\"expectedRevision\":1,\"proposalId\":\""+token+"\",\"changes\":[]}")).andExpect(status().isBadRequest());
+        mvc.perform(post(url+"/confirm").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{\"expectedRevision\":1,\"proposalId\":\""+token+"\",\"changes\":[]}")).andExpect(status().isBadRequest());
         confirm(UUID.randomUUID().toString(),1).andExpect(status().isNotFound());
         when(user.ownerReference()).thenReturn("OTHER_OWNER");confirm(token,1).andExpect(status().isNotFound());
         assertThat(jdbc.queryForObject("select count(*) from training_program_versions",Integer.class)).isEqualTo(1);
@@ -108,7 +109,7 @@ class TrainingAdaptationApiTest {
         history();String token=data(propose().andExpect(status().isOk())).path("proposalId").asText();
         jdbc.update("update training_adaptation_proposals set expires_at=?",java.sql.Timestamp.valueOf("2000-01-01 00:00:00"));
         confirm(token,1).andExpect(status().isConflict());
-        mvc.perform(post(url).contentType("application/json").content("{\"expectedRevision\":2}")).andExpect(status().isConflict());
+        mvc.perform(post(url).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{\"expectedRevision\":2}")).andExpect(status().isConflict());
         verify(gemini,times(1)).generate(anyString(),anyString(),any());
     }
     @Test void durationsAndObservedLoadsAreBounded()throws Exception{

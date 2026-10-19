@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 @SpringBootTest(classes = com.sportvision.SportVisionApplication.class, properties={"spring.datasource.url=jdbc:h2:mem:training_schedule_tests;DB_CLOSE_DELAY=-1","spring.jpa.hibernate.ddl-auto=create-drop","training.demo.enabled=false"})
 @ActiveProfiles("test") @AutoConfigureMockMvc
+@org.springframework.security.test.context.support.WithMockUser(username="training-test-user", roles="ADMIN")
 class TrainingScheduleApiTest {
     @Autowired MockMvc mvc;@Autowired ObjectMapper mapper;@Autowired JdbcTemplate jdbc;
     @MockBean TrainingCurrentUserProvider user;@MockBean Clock clock;@MockBean GeminiClient gemini;
@@ -28,21 +29,21 @@ class TrainingScheduleApiTest {
     @BeforeEach void setup()throws Exception{
         for(String table:List.of("training_schedules","training_workout_sets","training_workout_exercises","training_workouts","training_prescriptions","training_program_sessions","training_program_versions","training_programs","training_exercises"))jdbc.update("delete from "+table);
         when(user.ownerReference()).thenReturn("schedule-owner");when(clock.instant()).thenReturn(Instant.parse("2030-01-01T08:00:00Z"));when(clock.getZone()).thenReturn(ZoneOffset.UTC);
-        long exercise=data(mvc.perform(post("/api/training/exercises").contentType("application/json").content("""
+        long exercise=data(mvc.perform(post("/api/training/exercises").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("""
             {"name":"Squat","description":"Description","instructions":"Consignes","muscleGroup":"LEGS","equipment":"NONE","difficulty":"BEGINNER","measurementType":"REPETITIONS"}
             """)).andExpect(status().isCreated())).path("id").asLong();
         input=(ObjectNode)mapper.readTree("""
             {"name":"Programme","description":"Description","objective":"Objectif","sessions":[{"name":"Séance","prescriptions":[{"exerciseId":%d,"sets":1,"repetitions":10,"restSeconds":30}]}]}
             """.formatted(exercise));
-        program=data(mvc.perform(post("/api/training/programs").contentType("application/json").content(input.toString())).andExpect(status().isCreated()));
+        program=data(mvc.perform(post("/api/training/programs").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content(input.toString())).andExpect(status().isCreated()));
         programId=program.path("id").asLong();sessionId=program.at("/version/sessions/0/id").asLong();
     }
     @AfterEach void noAi(){verifyNoInteractions(gemini);}
     JsonNode data(ResultActions r)throws Exception{return mapper.readTree(r.andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8)).path("data");}
-    ResultActions create(String date)throws Exception{return mvc.perform(post("/api/training/schedules").contentType("application/json").content("{\"programId\":"+programId+",\"expectedRevision\":1,\"sessionId\":"+sessionId+",\"scheduledLocal\":\""+date+"\"}"));}
+    ResultActions create(String date)throws Exception{return mvc.perform(post("/api/training/schedules").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{\"programId\":"+programId+",\"expectedRevision\":1,\"sessionId\":"+sessionId+",\"scheduledLocal\":\""+date+"\"}"));}
     JsonNode scheduled()throws Exception{return data(create("2030-01-02T00:30").andExpect(status().isCreated()));}
-    ResultActions action(JsonNode s,String action)throws Exception{return mvc.perform(post("/api/training/schedules/"+s.path("id").asLong()+"/"+action).contentType("application/json").content("{\"expectedVersion\":"+s.path("version")+"}"));}
-    ResultActions update(JsonNode s,String date)throws Exception{return mvc.perform(put("/api/training/schedules/"+s.path("id").asLong()).contentType("application/json").content("{\"expectedVersion\":"+s.path("version")+",\"scheduledLocal\":\""+date+"\"}"));}
+    ResultActions action(JsonNode s,String action)throws Exception{return mvc.perform(post("/api/training/schedules/"+s.path("id").asLong()+"/"+action).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{\"expectedVersion\":"+s.path("version")+"}"));}
+    ResultActions update(JsonNode s,String date)throws Exception{return mvc.perform(put("/api/training/schedules/"+s.path("id").asLong()).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{\"expectedVersion\":"+s.path("version")+",\"scheduledLocal\":\""+date+"\"}"));}
     ResultActions list(String from,String to)throws Exception{return mvc.perform(get("/api/training/schedules").param("from",from).param("to",to));}
     @Test void tunisDateAndInclusiveRangeAreIndependentOfServerTimezone()throws Exception{
         var s=scheduled();assertThat(s.path("scheduledAt").asText()).isEqualTo("2030-01-01T23:30:00Z");assertThat(s.path("timeZone").asText()).isEqualTo("Africa/Tunis");
@@ -53,7 +54,7 @@ class TrainingScheduleApiTest {
     @Test void rejectsInvalidDatesInputsAndMismatchedSessions()throws Exception{
         for(String date:List.of("2029-12-31T12:00","2030-01-01T09:00","2030-01-02T12:00:01","not-a-date"))create(date).andExpect(status().isBadRequest());
         sessionId=999999;create("2030-01-02T12:00").andExpect(status().isBadRequest());
-        mvc.perform(post("/api/training/schedules").contentType("application/json").content("{}")).andExpect(status().isBadRequest());
+        mvc.perform(post("/api/training/schedules").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{}")).andExpect(status().isBadRequest());
         list("2030-04-01","2030-01-01").andExpect(status().isBadRequest());list("2030-01-01","2031-01-01").andExpect(status().isBadRequest());
         mvc.perform(get("/api/training/schedules")).andExpect(status().isBadRequest());
         mvc.perform(get("/api/training/schedules").param("from","2030-01-01").param("to","2030-01-02").param("size","100")).andExpect(status().isBadRequest());
@@ -78,8 +79,8 @@ class TrainingScheduleApiTest {
         action(s,"cancel").andExpect(status().isConflict());update(s,"2030-01-04T10:00").andExpect(status().isConflict());
         list("2030-01-01","2030-01-31").andExpect(status().isOk()).andExpect(jsonPath("$.data.items[0].status").value("IN_PROGRESS"));
         long wid=w.path("id").asLong(),set=w.at("/exercises/0/sets/0/id").asLong();
-        mvc.perform(put("/api/training/workouts/"+wid+"/sets/"+set).contentType("application/json").content("{\"repetitions\":10}")).andExpect(status().isOk());
-        mvc.perform(post("/api/training/workouts/"+wid+"/complete").contentType("application/json").content("{}")).andExpect(status().isOk());
+        mvc.perform(put("/api/training/workouts/"+wid+"/sets/"+set).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{\"repetitions\":10}")).andExpect(status().isOk());
+        mvc.perform(post("/api/training/workouts/"+wid+"/complete").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{}")).andExpect(status().isOk());
         var snapshot=data(mvc.perform(get("/api/training/workouts/"+wid)).andExpect(status().isOk()));
         assertThat(data(action(s,"start").andExpect(status().isOk()))).isEqualTo(snapshot);
         list("2030-01-01","2030-01-31").andExpect(status().isOk()).andExpect(jsonPath("$.data.items[0].status").value("COMPLETED"));
@@ -90,18 +91,18 @@ class TrainingScheduleApiTest {
     @Test void keepsPinnedRevisionWhenProgramChanges()throws Exception{
         var s=scheduled();input.put("name","Programme modifié");((ObjectNode)input.at("/sessions/0/prescriptions/0")).put("repetitions",20);
         ObjectNode update=mapper.createObjectNode().put("expectedRevision",1);update.set("program",input);
-        mvc.perform(put("/api/training/programs/"+programId).contentType("application/json").content(update.toString())).andExpect(status().isOk());
+        mvc.perform(put("/api/training/programs/"+programId).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content(update.toString())).andExpect(status().isOk());
         create("2030-01-04T10:00").andExpect(status().isConflict());
         action(s,"start").andExpect(status().isOk()).andExpect(jsonPath("$.data.programRevision").value(1)).andExpect(jsonPath("$.data.exercises[0].targetRepetitions").value(10));
     }
     @Test void archivedProgramsCannotBeScheduledOrStartedButCanBeCancelled()throws Exception{
-        var s=scheduled();mvc.perform(patch("/api/training/programs/"+programId+"/archive").contentType("application/json").content("{\"expectedRevision\":1}")).andExpect(status().isOk());
+        var s=scheduled();mvc.perform(patch("/api/training/programs/"+programId+"/archive").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{\"expectedRevision\":1}")).andExpect(status().isOk());
         create("2030-01-04T10:00").andExpect(status().isConflict());action(s,"start").andExpect(status().isConflict());update(s,"2030-01-04T10:00").andExpect(status().isConflict());action(s,"cancel").andExpect(status().isOk());
         assertThat(jdbc.queryForObject("select count(*) from training_workouts",Integer.class)).isZero();
     }
     @Test void reusesManualExecutionAndNeverLinksOneWorkoutToTwoSchedules()throws Exception{
         var s=scheduled();var other=data(create("2030-01-03T10:00").andExpect(status().isCreated()));
-        var manual=data(mvc.perform(post("/api/training/workouts").contentType("application/json").content("{\"programId\":"+programId+",\"revision\":1,\"sessionId\":"+sessionId+"}")).andExpect(status().isOk()));
+        var manual=data(mvc.perform(post("/api/training/workouts").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{\"programId\":"+programId+",\"revision\":1,\"sessionId\":"+sessionId+"}")).andExpect(status().isOk()));
         assertThat(data(action(s,"start").andExpect(status().isOk())).path("id")).isEqualTo(manual.path("id"));
         action(other,"start").andExpect(status().isConflict());
         assertThat(jdbc.queryForObject("select count(*) from training_workouts",Integer.class)).isEqualTo(1);
@@ -109,7 +110,7 @@ class TrainingScheduleApiTest {
     }
     @Test void abandonedExecutionIsPreservedWithoutCreatingAnotherWorkout()throws Exception{
         var s=scheduled();var w=data(action(s,"start").andExpect(status().isOk()));
-        mvc.perform(post("/api/training/workouts/"+w.path("id").asLong()+"/abandon").contentType("application/json").content("{}")).andExpect(status().isOk());
+        mvc.perform(post("/api/training/workouts/"+w.path("id").asLong()+"/abandon").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content("{}")).andExpect(status().isOk());
         action(s,"start").andExpect(status().isOk()).andExpect(jsonPath("$.data.status").value("ABANDONED"));
         list("2030-01-01","2030-01-31").andExpect(status().isOk()).andExpect(jsonPath("$.data.items[0].status").value("ABANDONED"));
         assertThat(jdbc.queryForObject("select count(*) from training_workouts",Integer.class)).isEqualTo(1);

@@ -19,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(classes = com.sportvision.SportVisionApplication.class, properties={"spring.datasource.url=jdbc:h2:mem:training_program_tests;DB_CLOSE_DELAY=-1","spring.jpa.hibernate.ddl-auto=create-drop","training.demo.enabled=false"})
 @ActiveProfiles("test") @AutoConfigureMockMvc
+@org.springframework.security.test.context.support.WithMockUser(username="training-test-user", roles="ADMIN")
 class TrainingProgramApiTest {
     @Autowired MockMvc mvc; @Autowired ObjectMapper mapper; @Autowired JdbcTemplate jdbc;
     @MockBean TrainingCurrentUserProvider user;

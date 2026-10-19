@@ -2,7 +2,7 @@
   {
     "name": "Full Body Débutant",
     "objective": "Renforcement général et apprentissage technique",
-    "description": "Cycle synthétique de démonstration : renforcement général et apprentissage technique. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main.",
+    "description": "Cycle synthétique de démonstration : renforcement général et apprentissage technique. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main. Démonstration synthétique : cibles atteintes et performances améliorées au fil des séances.",
     "sessions": [
       {
         "name": "Séance A — Technique",
@@ -99,7 +99,7 @@
   {
     "name": "Force fondamentale",
     "objective": "Développer la force sur des mouvements composés",
-    "description": "Cycle synthétique de démonstration : développer la force sur des mouvements composés. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main.",
+    "description": "Cycle synthétique de démonstration : développer la force sur des mouvements composés. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main. Démonstration synthétique : difficultés répétées en révision 2, cibles non atteintes et quelques séries ignorées.",
     "sessions": [
       {
         "name": "Séance A — Technique",

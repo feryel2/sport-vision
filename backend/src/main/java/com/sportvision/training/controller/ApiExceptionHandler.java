@@ -12,6 +12,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import com.sportvision.training.dto.ApiResponse;
 import com.sportvision.training.service.ExerciseNotFoundException;
 
+@org.springframework.core.annotation.Order(org.springframework.core.Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice(basePackageClasses = TrainingProgramController.class)
 public class ApiExceptionHandler {
     private ResponseEntity<ApiResponse<Map<String, Object>>> error(int code, String message, Map<String, String> fields) {

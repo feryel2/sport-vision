@@ -18,8 +18,9 @@ class TrainingNonlocalStartupTest {
  @Autowired ApplicationContext context; @Autowired JdbcTemplate sql; @Autowired MockMvc mvc;
  @Test void explicitNonlocalProfileDoesNotSeedOrExposeDemoApis()throws Exception{
   assertThat(context.getBeansOfType(TrainingLocalDatasetInitializer.class)).isEmpty();
+  assertThat(context.getBeansOfType(com.sportvision.training.bootstrap.TrainingPersonalDemoInitializer.class)).isEmpty();
   assertThat(sql.queryForObject("select count(*) from training_exercises",Integer.class)).isZero();
-  mvc.perform(get("/api/training/ai/options")).andExpect(status().isForbidden());
-  mvc.perform(get("/api/products")).andExpect(status().isForbidden());
+  mvc.perform(get("/api/training/ai/options")).andExpect(status().isUnauthorized());
+  mvc.perform(get("/api/products")).andExpect(status().isUnauthorized());
  }
 }

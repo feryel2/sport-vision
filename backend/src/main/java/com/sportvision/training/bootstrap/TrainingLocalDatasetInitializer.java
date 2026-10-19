@@ -23,7 +23,7 @@ import java.util.*;
 
 /** Local demonstration only. Seeds an empty H2 database atomically, once. */
 @Component
-@Profile("local-demo")
+@Profile("local-demo & !mysql & !production")
 @ConditionalOnProperty(name="training.dataset.enabled",havingValue="true")
 public class TrainingLocalDatasetInitializer implements ApplicationRunner {
  private static final Logger LOG=LoggerFactory.getLogger(TrainingLocalDatasetInitializer.class);
@@ -82,14 +82,15 @@ public class TrainingLocalDatasetInitializer implements ApplicationRunner {
      Instant started=today.minusDays(89-i).atTime(7+(i%2),10).atZone(ZONE).toInstant();
      if(started.plusSeconds(duration).isAfter(ctx.getBean(Clock.class).instant())) started=ctx.getBean(Clock.class).instant().minusSeconds(duration+60L);
      for(var ex:w.exercises())for(var set:ex.sets()){
-      boolean skip=(i%17==0&&set.position()==ex.plannedSets()&&ex.position()==w.exercises().size());
+      boolean difficultyDemo=pi==1&&exposure>=3;
+      boolean skip=((i%17==0||difficultyDemo)&&set.position()==ex.plannedSets()&&ex.position()==w.exercises().size());
       if(skip){workouts.skipSet(w.id(),set.id());continue;}
-      int shortfall=exposure==0?2:exposure==1?1:0;
-      Integer reps=ex.targetRepetitions()==null?null:Math.max(1,ex.targetRepetitions()-shortfall+((exposure>=5&&set.position()==1)?1:0));
-      Integer seconds=ex.targetDurationSeconds()==null?null:Math.max(10,ex.targetDurationSeconds()-shortfall*5+((exposure>=5)?5:0));
+      int shortfall=difficultyDemo?Math.max(2,ex.targetRepetitions()==null?0:ex.targetRepetitions()/5):exposure==0?2:exposure==1?1:0;
+      Integer reps=ex.targetRepetitions()==null?null:Math.max(1,ex.targetRepetitions()-shortfall+((!difficultyDemo&&exposure>=5&&set.position()==1)?1:0));
+      Integer seconds=ex.targetDurationSeconds()==null?null:Math.max(10,ex.targetDurationSeconds()-shortfall*5+((!difficultyDemo&&exposure>=5)?5:0));
       BigDecimal load=ex.targetLoadKg();
       if(load!=null&&(ex.equipment()==Equipment.BARBELL||ex.equipment()==Equipment.DUMBBELLS)){
-       double factor=exposure==0?.9:exposure==1?.95:1;
+       double factor=difficultyDemo?.9:exposure==0?.9:exposure==1?.95:1;
        double increment=ex.equipment()==Equipment.BARBELL?2.5:1;
        load=BigDecimal.valueOf(Math.max(increment,Math.floor(load.doubleValue()*factor/increment)*increment));
       }

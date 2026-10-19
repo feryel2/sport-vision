@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = com.sportvision.SportVisionApplication.class, properties={"spring.datasource.url=jdbc:h2:mem:training_progress_tests;DB_CLOSE_DELAY=-1","spring.jpa.hibernate.ddl-auto=create-drop","training.demo.enabled=false"})
 @Import(TrainingProgressApiTest.TimeConfig.class)
 @ActiveProfiles("test") @AutoConfigureMockMvc
+@org.springframework.security.test.context.support.WithMockUser(username="training-test-user", roles="ADMIN")
 class TrainingProgressApiTest {
     @TestConfiguration static class TimeConfig {
         @Bean @Primary Clock fixedClock(){return Clock.fixed(Instant.parse("2026-10-05T12:00:00Z"),ZoneOffset.UTC);}

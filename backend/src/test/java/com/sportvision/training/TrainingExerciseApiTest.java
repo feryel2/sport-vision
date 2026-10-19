@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest(classes = com.sportvision.SportVisionApplication.class, properties = {"spring.datasource.url=jdbc:h2:mem:training_catalog_tests;DB_CLOSE_DELAY=-1", "spring.jpa.hibernate.ddl-auto=create-drop", "training.demo.enabled=false"})
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
+@org.springframework.security.test.context.support.WithMockUser(username="training-test-user", roles="ADMIN")
 class TrainingExerciseApiTest {
     @Autowired MockMvc mvc;
     @Autowired ObjectMapper mapper;

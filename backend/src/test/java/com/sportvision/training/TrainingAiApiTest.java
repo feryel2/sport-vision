@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(classes = com.sportvision.SportVisionApplication.class, properties={"spring.datasource.url=jdbc:h2:mem:training_ai_tests;DB_CLOSE_DELAY=-1","spring.jpa.hibernate.ddl-auto=create-drop","training.demo.enabled=false"})
 @ActiveProfiles("test") @AutoConfigureMockMvc
+@org.springframework.security.test.context.support.WithMockUser(username="training-test-user", roles="ADMIN")
 class TrainingAiApiTest {
     @Autowired MockMvc mvc;@Autowired ObjectMapper mapper;@Autowired JdbcTemplate jdbc;
     @MockBean GeminiClient gemini;@MockBean TrainingCurrentUserProvider user;
@@ -35,7 +36,7 @@ class TrainingAiApiTest {
             String input="""
                 {"name":"Exercice serveur %d","description":"Description","instructions":"Consignes","muscleGroup":"LEGS","equipment":"NONE","difficulty":"BEGINNER","measurementType":"REPETITIONS"}
                 """.formatted(i+1);
-            ids[i]=mapper.readTree(mvc.perform(post("/api/training/exercises").contentType("application/json").content(input)).andExpect(status().isCreated()).andReturn().getResponse().getContentAsString()).at("/data/id").asLong();
+            ids[i]=mapper.readTree(mvc.perform(post("/api/training/exercises").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content(input)).andExpect(status().isCreated()).andReturn().getResponse().getContentAsString()).at("/data/id").asLong();
         }
     }
     String proposal(long first){
@@ -49,12 +50,12 @@ class TrainingAiApiTest {
     }
     @Test void acceptsValidSimulatedProposalWithoutSavingUntilConfirmation()throws Exception{
         String generated=proposal(ids[0]);when(gemini.generate(anyString(),anyString(),any())).thenReturn(generated);
-        mvc.perform(post("/api/training/ai/generate").contentType("application/json").content(preferences))
+        mvc.perform(post("/api/training/ai/generate").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content(preferences))
             .andExpect(status().isOk()).andExpect(jsonPath("$.data.proposal.sessions.length()").value(1))
             .andExpect(jsonPath("$.data.catalogue[0].name").value("Exercice serveur 1"));
         assertThat(jdbc.queryForObject("select count(*) from training_programs",Integer.class)).isZero();
         verify(gemini).generate(contains("DONNÉES"),argThat(data->!data.contains("owner-ai-test")&&data.contains("catalogue")),any());
-        mvc.perform(post("/api/training/ai/programs").contentType("application/json").content(confirmation(UUID.randomUUID(),generated)))
+        mvc.perform(post("/api/training/ai/programs").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content(confirmation(UUID.randomUUID(),generated)))
             .andExpect(status().isCreated()).andExpect(jsonPath("$.data.currentRevision").value(1))
             .andExpect(jsonPath("$.data.version.sessions[0].prescriptions[0].exerciseName").value("Exercice serveur 1"))
             .andExpect(jsonPath("$.data.version.sessions[0].prescriptions[0].targetLoadKg").doesNotExist());
@@ -63,9 +64,9 @@ class TrainingAiApiTest {
     }
     @Test void rejectsUnauthorizedExerciseInSimulatedProposalAndOnSave()throws Exception{
         String generated=proposal(999999);when(gemini.generate(anyString(),anyString(),any())).thenReturn(generated);
-        mvc.perform(post("/api/training/ai/generate").contentType("application/json").content(preferences))
+        mvc.perform(post("/api/training/ai/generate").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content(preferences))
             .andExpect(status().isBadGateway()).andExpect(jsonPath("$.data.code").value("INVALID_PROPOSAL"));
-        mvc.perform(post("/api/training/ai/programs").contentType("application/json").content(confirmation(UUID.randomUUID(),generated)))
+        mvc.perform(post("/api/training/ai/programs").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content(confirmation(UUID.randomUUID(),generated)))
             .andExpect(status().isBadRequest());
         assertThat(jdbc.queryForObject("select count(*) from training_programs",Integer.class)).isZero();
         assertThat(jdbc.queryForObject("select count(*) from training_program_versions",Integer.class)).isZero();
@@ -73,12 +74,12 @@ class TrainingAiApiTest {
     @Test void acceptsOmittedUnusedMeasureButStillRejectsMissingRequiredMeasureAndInvalidBounds()throws Exception{
         String generated=proposal(ids[0]).replace("\"durationSeconds\":null,","");
         when(gemini.generate(anyString(),anyString(),any())).thenReturn(generated);
-        mvc.perform(post("/api/training/ai/generate").contentType("application/json").content(preferences)).andExpect(status().isOk());
+        mvc.perform(post("/api/training/ai/generate").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content(preferences)).andExpect(status().isOk());
         for(String invalid:new String[]{generated.replace("\"repetitions\":8,",""),
             generated.replace("\"sets\":2","\"sets\":101"),generated.replace("\"restSeconds\":45","\"restSeconds\":null"),
             generated.replace("\"measurementType\":\"REPETITIONS\"","\"measurementType\":\"DURATION\"")}){
             when(gemini.generate(anyString(),anyString(),any())).thenReturn(invalid);
-            mvc.perform(post("/api/training/ai/generate").contentType("application/json").content(preferences))
+            mvc.perform(post("/api/training/ai/generate").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content(preferences))
                 .andExpect(status().isBadGateway()).andExpect(jsonPath("$.data.code").value("INVALID_PROPOSAL"));
         }
         assertThat(jdbc.queryForObject("select count(*) from training_programs",Integer.class)).isZero();
@@ -87,7 +88,7 @@ class TrainingAiApiTest {
         return "{\"idempotencyKey\":\""+key+"\",\"preferences\":"+preferences+",\"proposal\":"+proposal+"}";
     }
     JsonNode confirm(String body)throws Exception{
-        return mapper.readTree(mvc.perform(post("/api/training/ai/programs").contentType("application/json").content(body))
+        return mapper.readTree(mvc.perform(post("/api/training/ai/programs").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content(body))
             .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString()).path("data");
     }
     void counts(int expected){
@@ -107,7 +108,7 @@ class TrainingAiApiTest {
         long first=confirm(confirmation(key,generated)).path("id").asLong();
         for(String changed:new String[]{confirmation(key,generated.replace("Programme proposé","Autre programme")),
             confirmation(key,generated).replace("GENERAL_FITNESS","STRENGTH")}){
-            mvc.perform(post("/api/training/ai/programs").contentType("application/json").content(changed))
+            mvc.perform(post("/api/training/ai/programs").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content(changed))
                 .andExpect(status().isConflict()).andExpect(jsonPath("$.data.code").value("IDEMPOTENCY_CONFLICT"));
         }
         counts(1);
@@ -144,7 +145,7 @@ class TrainingAiApiTest {
         String body=confirmation(UUID.randomUUID(),proposal(ids[0]));
         doThrow(new org.springframework.dao.DataIntegrityViolationException("Échec simulé de confirmation"))
             .when(confirmations).saveAndFlush(any());
-        mvc.perform(post("/api/training/ai/programs").contentType("application/json").content(body)).andExpect(status().isInternalServerError());
+        mvc.perform(post("/api/training/ai/programs").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content(body)).andExpect(status().isInternalServerError());
         counts(0);
         reset(confirmations);
         confirm(body);counts(1);
@@ -153,7 +154,7 @@ class TrainingAiApiTest {
         for(String key:new String[]{"null","\"invalid\""}){
             var body=mapper.readTree(confirmation(UUID.randomUUID(),proposal(ids[0])));
             ((com.fasterxml.jackson.databind.node.ObjectNode)body).set("idempotencyKey",mapper.readTree(key));
-            mvc.perform(post("/api/training/ai/programs").contentType("application/json").content(body.toString())).andExpect(status().isBadRequest());
+            mvc.perform(post("/api/training/ai/programs").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("training-test-user").roles("ADMIN")).contentType("application/json").content(body.toString())).andExpect(status().isBadRequest());
         }
         counts(0);verifyNoInteractions(gemini);
     }
