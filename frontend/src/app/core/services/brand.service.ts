@@ -7,7 +7,7 @@ import { Brand } from '../models/brand.model';
   providedIn: 'root'
 })
 export class BrandService {
-  private apiUrl = 'http://localhost:8080/api/brands';
+  private apiUrl = '/api/brands';
 
   private defaultBrands: Brand[] = [
     { id: 1, name: 'Nike', country: 'USA', logoUrl: 'https://logo.clearbit.com/nike.com', description: 'Leader mondial des équipements sportifs.' },

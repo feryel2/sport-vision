@@ -3,6 +3,8 @@ package com.sportvision.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public class OrderRequest {
@@ -24,7 +26,7 @@ public class OrderRequest {
     private String paymentMethod = "CARTE_BANCAIRE";
 
     @NotEmpty(message = "Le panier ne peut pas être vide")
-    private List<OrderItemDto> items;
+    private List<@NotNull @Valid OrderItemDto> items;
 
     public OrderRequest() {}
 

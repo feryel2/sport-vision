@@ -1,0 +1,9 @@
+<section class="picker" aria-label="Choisir un exercice"><div class="heading-row"><h3>Choisir dans le catalogue</h3><button type="button" class="btn-sv btn-sv-secondary btn-sv-sm" (click)="closed.emit()">Fermer la sélection</button></div>
+  <label class="form-label-sv" for="picker-search">Rechercher un exercice</label><input id="picker-search" class="form-control-sv" type="search" maxlength="120" [formControl]="search" placeholder="Nom de l’exercice…">
+  <p class="demo-note">Seuls les exercices actifs peuvent être ajoutés.</p>
+  <ng-container *ngIf="state$|async as state"><p *ngIf="state.loading" role="status">Chargement du catalogue…</p><div *ngIf="state.error" role="alert" class="notice error">{{state.error}} <button type="button" class="btn-sv btn-sv-outline" (click)="refresh.next()">Réessayer</button></div>
+    <ng-container *ngIf="state.result as result"><p *ngIf="!result.items.length">Aucun exercice trouvé.</p><div class="picker-grid" *ngIf="state.options as opts"><div *ngFor="let exercise of result.items" class="picker-exercise"><div><strong>{{exercise.name}}</strong><small>{{label(opts,'equipment',exercise.equipment)}} · {{label(opts,'measurementTypes',exercise.measurementType)}}</small></div><button type="button" class="btn-sv btn-sv-primary btn-sv-sm" (click)="selected.emit(exercise)" [attr.aria-label]="'Ajouter '+exercise.name">Ajouter</button></div></div>
+      <nav *ngIf="result.totalPages>1" class="pagination" aria-label="Pages du sélecteur d’exercices"><button type="button" class="btn-sv btn-sv-outline btn-sv-sm" [disabled]="result.page===0" (click)="go(result.page-1)">Précédent</button><span>{{result.page+1}} / {{result.totalPages}}</span><button type="button" class="btn-sv btn-sv-outline btn-sv-sm" [disabled]="result.page+1>=result.totalPages" (click)="go(result.page+1)">Suivant</button></nav>
+    </ng-container>
+  </ng-container>
+</section>

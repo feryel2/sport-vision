@@ -5,8 +5,13 @@ import com.sportvision.dto.CoachMatchingResult;
 import com.sportvision.dto.ProductRecommendationDto;
 import com.sportvision.dto.SalesForecastDto;
 import com.sportvision.entity.Coach;
+import com.sportvision.entity.Favorite;
+import com.sportvision.entity.Order;
+import com.sportvision.entity.OrderItem;
 import com.sportvision.entity.Product;
 import com.sportvision.repository.CoachRepository;
+import com.sportvision.repository.FavoriteRepository;
+import com.sportvision.repository.OrderRepository;
 import com.sportvision.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,20 +24,49 @@ public class AiSportService {
 
     private final ProductRepository productRepository;
     private final CoachRepository coachRepository;
-    private final ImplicitFeedbackRecommendationEngine recommendationEngine;
+    private final FavoriteRepository favoriteRepository;
+    private final OrderRepository orderRepository;
+    private final ProductRecommendationAiService productRecommendationAiService;
 
     public AiSportService(ProductRepository productRepository,
                            CoachRepository coachRepository,
-                           ImplicitFeedbackRecommendationEngine recommendationEngine) {
+                           FavoriteRepository favoriteRepository,
+                           OrderRepository orderRepository,
+                           ProductRecommendationAiService productRecommendationAiService) {
         this.productRepository = productRepository;
         this.coachRepository = coachRepository;
-        this.recommendationEngine = recommendationEngine;
+        this.favoriteRepository = favoriteRepository;
+        this.orderRepository = orderRepository;
+        this.productRecommendationAiService = productRecommendationAiService;
     }
 
+    /**
+     * AI Product Recommendation based on:
+     * - Sport Goal (ex: Musculation -> bandes élastiques, gants, ceinture de musculation, shaker)
+     * - User Wishlist / Favorites
+     * - Previous Purchases / Orders
+     */
     public List<ProductRecommendationDto> recommendProducts(String goal, String userEmail) {
-        return recommendationEngine.recommend(goal, userEmail);
-    }
+        List<Product> allProducts = productRepository.findAll();
+        if (allProducts.isEmpty()) {
+            return Collections.emptyList();
+        }
 
+        Set<Long> favoriteProductIds = new HashSet<>();
+        Set<Long> orderedProductIds = new HashSet<>();
+        if (userEmail != null && !userEmail.isBlank()) {
+            for (Favorite favorite : favoriteRepository.findByUserEmailOrderByCreatedAtDesc(userEmail)) {
+                favoriteProductIds.add(favorite.getProduct().getId());
+            }
+            for (Order order : orderRepository.findByCustomerEmailOrderByCreatedAtDesc(userEmail)) {
+                for (OrderItem item : order.getItems()) {
+                    orderedProductIds.add(item.getProduct().getId());
+                }
+            }
+        }
+
+        return productRecommendationAiService.recommend(goal, allProducts, favoriteProductIds, orderedProductIds);
+    }
     /**
      * AI Sales & Stock Forecast:
      * Predicts sales for the next 30 days and alerts when stock is at risk.

@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DestroyRef, ElementRef, ViewChild, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../core/services/cart.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -18,10 +20,6 @@ import { FavoriteService } from '../../core/services/favorite.service';
           <span class="badge-pulse">SPORT VISION</span>
         </div>
         <div class="banner-actions">
-          <span class="demo-tag">Profil Démo :</span>
-          <button (click)="toggleRole()" class="btn-role-switch" [class.is-admin]="authService.isAdmin">
-            {{ authService.isAdmin ? '👑 Administrateur' : '👤 Client' }} &bull; Basculer
-          </button>
           <a *ngIf="authService.isAdmin" routerLink="/admin" class="admin-quick-link">
             ⚙️ Console Back-Office
           </a>
@@ -30,7 +28,7 @@ import { FavoriteService } from '../../core/services/favorite.service';
     </div>
 
     <!-- Navigation Principale -->
-    <header class="main-header">
+    <header class="main-header" (keydown.escape)="closeMobileMenu(true)">
       <div class="container navbar-container">
         <!-- Logo Sport Vision -->
         <a routerLink="/" class="logo">
@@ -47,9 +45,15 @@ import { FavoriteService } from '../../core/services/favorite.service';
         </a>
 
         <!-- Menu de Navigation -->
-        <nav class="nav-links">
+        <button #menuToggle type="button" class="mobile-menu-toggle"
+          [attr.aria-expanded]="mobileMenuOpen" aria-controls="public-navigation"
+          [attr.aria-label]="mobileMenuOpen ? 'Fermer le menu principal' : 'Ouvrir le menu principal'"
+          (click)="mobileMenuOpen = !mobileMenuOpen">Menu</button>
+        <nav id="public-navigation" class="nav-links" [class.is-open]="mobileMenuOpen"
+          aria-label="Navigation principale" (click)="closeMobileMenu(true)">
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Accueil</a>
           <a routerLink="/catalogue" routerLinkActive="active">Boutique & Produits</a>
+          <a routerLink="/entrainement" routerLinkActive="active">Entraînement</a>
           <a routerLink="/coach-matching" routerLinkActive="active">Trouver un Coach</a>
           <a routerLink="/aliments" routerLinkActive="active">Aliments & Nutrition</a>
           <a routerLink="/contact" routerLinkActive="active">Contact & Support</a>
@@ -85,13 +89,20 @@ import { FavoriteService } from '../../core/services/favorite.service';
           </a>
 
           <!-- Espace Client / Connexion -->
-          <a routerLink="/login" class="btn-sv btn-sv-primary btn-sv-sm">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <span>{{ authService.currentUserValue ? 'Mon Compte' : 'Connexion' }}</span>
-          </a>
+          <ng-container *ngIf="authService.currentUser$ | async as user; else guestActions">
+            <a routerLink="/profil" class="btn-sv btn-sv-primary btn-sv-sm">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <span>Mon Profil</span>
+            </a>
+            <button type="button" (click)="logout()" class="btn-sv btn-sv-outline btn-sv-sm">Déconnexion</button>
+          </ng-container>
+          <ng-template #guestActions>
+            <a routerLink="/login" class="btn-sv btn-sv-primary btn-sv-sm">Connexion</a>
+            <a routerLink="/register" class="btn-sv btn-sv-outline btn-sv-sm">S'inscrire</a>
+          </ng-template>
         </div>
       </div>
     </header>
@@ -135,6 +146,7 @@ import { FavoriteService } from '../../core/services/favorite.service';
           <div class="footer-col">
             <h4 class="footer-title">Coaching & Nutrition</h4>
             <ul class="footer-links">
+              <li><a routerLink="/entrainement">Entraînement</a></li>
               <li><a routerLink="/coach-matching">Matching Sportif & Coachs</a></li>
               <li><a routerLink="/aliments">Base Aliments & Macro-Nutriments</a></li>
               <li><a routerLink="/favoris">Ma Liste de Favoris</a></li>
@@ -226,7 +238,11 @@ import { FavoriteService } from '../../core/services/favorite.service';
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 75px;
+      min-height: 75px;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 12px;
+      padding-bottom: 12px;
     }
     .logo {
       display: flex;
@@ -261,7 +277,10 @@ import { FavoriteService } from '../../core/services/favorite.service';
 
     .nav-links {
       display: flex;
-      gap: 20px;
+      flex: 1 1 480px;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
     }
     .nav-links a {
       color: #334155;
@@ -453,13 +472,30 @@ import { FavoriteService } from '../../core/services/favorite.service';
       text-decoration: none;
     }
 
+    .mobile-menu-toggle { display: none; }
+    .mobile-menu-toggle:focus-visible, .nav-links a:focus-visible {
+      outline: 3px solid #0284c7;
+      outline-offset: 3px;
+    }
     @media (max-width: 992px) {
       .footer-grid {
         grid-template-columns: 1fr 1fr;
       }
-      .nav-links {
-        display: none;
+      .logo { flex: 1; }
+      .mobile-menu-toggle {
+        display: block;
+        padding: 8px 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        background: white;
+        color: #1d4ed8;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
       }
+      .nav-links { display: none; order: 2; flex-basis: 100%; }
+      .nav-links.is-open { display: flex; flex-direction: column; align-items: stretch; }
+      .nav-actions { order: 3; flex-basis: 100%; justify-content: flex-end; flex-wrap: wrap; }
     }
     @media (max-width: 576px) {
       .footer-grid {
@@ -472,6 +508,9 @@ import { FavoriteService } from '../../core/services/favorite.service';
   `]
 })
 export class FrontOfficeLayoutComponent implements OnInit {
+  mobileMenuOpen = false;
+  @ViewChild('menuToggle') private menuToggle?: ElementRef<HTMLButtonElement>;
+  private readonly destroyRef = inject(DestroyRef);
   searchQuery: string = '';
   favCount: number = 0;
 
@@ -483,17 +522,23 @@ export class FrontOfficeLayoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => this.closeMobileMenu());
     this.favoriteService.favorites$.subscribe(favs => {
       this.favCount = favs.length;
     });
   }
 
-  toggleRole(): void {
-    if (this.authService.isAdmin) {
-      this.authService.loginAsClient();
-    } else {
-      this.authService.loginAsAdmin();
+    closeMobileMenu(restoreFocus = false): void {
+        if (!this.mobileMenuOpen) return;
+        this.mobileMenuOpen = false;
+        if (restoreFocus) this.menuToggle?.nativeElement.focus();
     }
+
+  logout(): void {
+    this.authService.logout().subscribe(() => this.router.navigate(['/']));
   }
 
   onSearch(): void {

@@ -8,7 +8,7 @@ import { Category } from '../models/category.model';
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = '/api';
 
   // Catégories par défaut Sport Vision
   private defaultCategories: Category[] = [
@@ -205,13 +205,11 @@ export class ProductService {
   public refreshFromApi(): void {
     this.http.get<{ success: boolean; data: Product[] }>(`${this.apiUrl}/products`)
       .pipe(
-        map(res => res.data),
+        map(res => Array.isArray(res.data) ? res.data : this.loadStoredProducts()),
         catchError(() => of(this.loadStoredProducts()))
       )
       .subscribe(products => {
-        if (products && products.length > 0) {
-          this.saveStoredProducts(products);
-        }
+        this.saveStoredProducts(products);
       });
   }
 

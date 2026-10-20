@@ -1,0 +1,722 @@
+[
+  {
+    "name": "Pompes classiques",
+    "muscleGroup": "CHEST",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Garder le corps aligné et abaisser la poitrine entre les mains. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Garder le corps aligné et abaisser la poitrine entre les mains."
+  },
+  {
+    "name": "Pompes sur les genoux",
+    "muscleGroup": "CHEST",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Appuyer les genoux au sol et fléchir les coudes sans creuser le dos. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Appuyer les genoux au sol et fléchir les coudes sans creuser le dos."
+  },
+  {
+    "name": "Pompes murales",
+    "muscleGroup": "CHEST",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Placer les mains au mur et rapprocher le buste en contrôlant les coudes. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Placer les mains au mur et rapprocher le buste en contrôlant les coudes."
+  },
+  {
+    "name": "Pompes inclinées sur banc",
+    "muscleGroup": "CHEST",
+    "equipment": "BENCH",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Poser les mains sur un banc stable et conserver un alignement épaules-bassin. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Poser les mains sur un banc stable et conserver un alignement épaules-bassin."
+  },
+  {
+    "name": "Pompes déclinées",
+    "muscleGroup": "CHEST",
+    "equipment": "BENCH",
+    "difficulty": "ADVANCED",
+    "measurementType": "REPETITIONS",
+    "description": "Surélever les pieds sur le banc et abaisser le buste en gardant les abdominaux engagés. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Surélever les pieds sur le banc et abaisser le buste en gardant les abdominaux engagés."
+  },
+  {
+    "name": "Développé au sol avec haltères",
+    "muscleGroup": "CHEST",
+    "equipment": "DUMBBELLS",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Allongé au sol, pousser les haltères sans cogner les coudes au sol. Charge indiquée par haltère, sauf extension triceps réalisée avec un seul haltère.",
+    "instructions": "Allongé au sol, pousser les haltères sans cogner les coudes au sol."
+  },
+  {
+    "name": "Développé au sol avec barre",
+    "muscleGroup": "CHEST",
+    "equipment": "BARBELL",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Au sol, contrôler la barre vers le bas des pectoraux et pousser sans rebond. Charge indiquée pour la barre complète.",
+    "instructions": "Au sol, contrôler la barre vers le bas des pectoraux et pousser sans rebond."
+  },
+  {
+    "name": "Écarté avec élastique",
+    "muscleGroup": "CHEST",
+    "equipment": "RESISTANCE_BAND",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Fixer solidement la bande derrière soi et rapprocher les mains devant la poitrine. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Fixer solidement la bande derrière soi et rapprocher les mains devant la poitrine."
+  },
+  {
+    "name": "Pompes prise serrée",
+    "muscleGroup": "ARMS",
+    "equipment": "NONE",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Rapprocher les mains et garder les coudes près du corps pendant la poussée. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Rapprocher les mains et garder les coudes près du corps pendant la poussée."
+  },
+  {
+    "name": "Dips sur banc",
+    "muscleGroup": "ARMS",
+    "equipment": "BENCH",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Utiliser un banc stable, garder les épaules basses et limiter la descente à une amplitude confortable. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Utiliser un banc stable, garder les épaules basses et limiter la descente à une amplitude confortable."
+  },
+  {
+    "name": "Tractions pronation",
+    "muscleGroup": "BACK",
+    "equipment": "PULL_UP_BAR",
+    "difficulty": "ADVANCED",
+    "measurementType": "REPETITIONS",
+    "description": "Partir en suspension contrôlée puis monter la poitrine vers la barre sans élan. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Partir en suspension contrôlée puis monter la poitrine vers la barre sans élan."
+  },
+  {
+    "name": "Tractions supination",
+    "muscleGroup": "BACK",
+    "equipment": "PULL_UP_BAR",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Paumes vers soi, tirer sans balancer les jambes et redescendre lentement. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Paumes vers soi, tirer sans balancer les jambes et redescendre lentement."
+  },
+  {
+    "name": "Suspension active",
+    "muscleGroup": "BACK",
+    "equipment": "PULL_UP_BAR",
+    "difficulty": "BEGINNER",
+    "measurementType": "DURATION",
+    "description": "Suspendre le corps en gardant les épaules engagées et respirer régulièrement. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Suspendre le corps en gardant les épaules engagées et respirer régulièrement."
+  },
+  {
+    "name": "Rowing barre buste penché",
+    "muscleGroup": "BACK",
+    "equipment": "BARBELL",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Pencher le buste depuis les hanches, garder le dos neutre et tirer vers le nombril. Charge indiquée pour la barre complète.",
+    "instructions": "Pencher le buste depuis les hanches, garder le dos neutre et tirer vers le nombril."
+  },
+  {
+    "name": "Rowing unilatéral avec haltère",
+    "muscleGroup": "BACK",
+    "equipment": "DUMBBELLS",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "En position décalée, stabiliser le buste et tirer le coude vers la hanche. Charge indiquée par haltère, sauf extension triceps réalisée avec un seul haltère.",
+    "instructions": "En position décalée, stabiliser le buste et tirer le coude vers la hanche."
+  },
+  {
+    "name": "Rowing avec élastique",
+    "muscleGroup": "BACK",
+    "equipment": "RESISTANCE_BAND",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Fixer la bande devant soi et tirer les coudes en arrière sans hausser les épaules. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Fixer la bande devant soi et tirer les coudes en arrière sans hausser les épaules."
+  },
+  {
+    "name": "Tirage vertical avec élastique",
+    "muscleGroup": "BACK",
+    "equipment": "RESISTANCE_BAND",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Fixer la bande en hauteur et abaisser les coudes vers les côtes. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Fixer la bande en hauteur et abaisser les coudes vers les côtes."
+  },
+  {
+    "name": "Superman",
+    "muscleGroup": "BACK",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Allongé à plat ventre, soulever légèrement bras et jambes sans forcer la cambrure. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Allongé à plat ventre, soulever légèrement bras et jambes sans forcer la cambrure."
+  },
+  {
+    "name": "Bird dog",
+    "muscleGroup": "CORE",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "À quatre pattes, étendre un bras et la jambe opposée sans tourner le bassin. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "À quatre pattes, étendre un bras et la jambe opposée sans tourner le bassin."
+  },
+  {
+    "name": "Soulevé de terre roumain avec barre",
+    "muscleGroup": "GLUTES",
+    "equipment": "BARBELL",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Reculer les hanches, garder la barre près des jambes et remonter sans arrondir le dos. Charge indiquée pour la barre complète.",
+    "instructions": "Reculer les hanches, garder la barre près des jambes et remonter sans arrondir le dos."
+  },
+  {
+    "name": "Soulevé de terre roumain avec haltères",
+    "muscleGroup": "GLUTES",
+    "equipment": "DUMBBELLS",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Reculer les hanches en gardant les haltères près des jambes et les genoux souples. Charge indiquée par haltère, sauf extension triceps réalisée avec un seul haltère.",
+    "instructions": "Reculer les hanches en gardant les haltères près des jambes et les genoux souples."
+  },
+  {
+    "name": "Soulevé de terre sumo",
+    "muscleGroup": "GLUTES",
+    "equipment": "BARBELL",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Écarter les pieds, garder la barre proche du corps et pousser le sol avec les jambes. Charge indiquée pour la barre complète.",
+    "instructions": "Écarter les pieds, garder la barre proche du corps et pousser le sol avec les jambes."
+  },
+  {
+    "name": "Pont fessier",
+    "muscleGroup": "GLUTES",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Au sol, pousser dans les talons et relever le bassin sans cambrer les lombaires. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Au sol, pousser dans les talons et relever le bassin sans cambrer les lombaires."
+  },
+  {
+    "name": "Pont fessier unilatéral",
+    "muscleGroup": "GLUTES",
+    "equipment": "NONE",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Lever un pied puis monter le bassin sans le laisser pivoter. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Lever un pied puis monter le bassin sans le laisser pivoter."
+  },
+  {
+    "name": "Abduction de hanche avec élastique",
+    "muscleGroup": "GLUTES",
+    "equipment": "RESISTANCE_BAND",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Placer la bande autour des jambes et écarter un genou en gardant le bassin stable. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Placer la bande autour des jambes et écarter un genou en gardant le bassin stable."
+  },
+  {
+    "name": "Marche latérale avec élastique",
+    "muscleGroup": "GLUTES",
+    "equipment": "RESISTANCE_BAND",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Faire de petits pas latéraux en maintenant la tension de la bande et les genoux alignés. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Faire de petits pas latéraux en maintenant la tension de la bande et les genoux alignés."
+  },
+  {
+    "name": "Squat au poids du corps",
+    "muscleGroup": "LEGS",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Fléchir hanches et genoux, garder les talons au sol puis se redresser. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Fléchir hanches et genoux, garder les talons au sol puis se redresser."
+  },
+  {
+    "name": "Goblet squat",
+    "muscleGroup": "LEGS",
+    "equipment": "KETTLEBELL",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Tenir la kettlebell contre le buste et descendre entre les hanches sans décoller les talons. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Tenir la kettlebell contre le buste et descendre entre les hanches sans décoller les talons."
+  },
+  {
+    "name": "Squat arrière avec barre",
+    "muscleGroup": "LEGS",
+    "equipment": "BARBELL",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Placer la barre sur le haut du dos, gainer et pousser le sol en remontant. Charge indiquée pour la barre complète.",
+    "instructions": "Placer la barre sur le haut du dos, gainer et pousser le sol en remontant."
+  },
+  {
+    "name": "Squat avant avec barre",
+    "muscleGroup": "LEGS",
+    "equipment": "BARBELL",
+    "difficulty": "ADVANCED",
+    "measurementType": "REPETITIONS",
+    "description": "Garder les coudes hauts et le buste droit pendant la flexion des jambes. Charge indiquée pour la barre complète.",
+    "instructions": "Garder les coudes hauts et le buste droit pendant la flexion des jambes."
+  },
+  {
+    "name": "Fente arrière",
+    "muscleGroup": "LEGS",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Reculer un pied, fléchir les deux jambes puis revenir en poussant sur le pied avant. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Reculer un pied, fléchir les deux jambes puis revenir en poussant sur le pied avant."
+  },
+  {
+    "name": "Fente avant avec haltères",
+    "muscleGroup": "LEGS",
+    "equipment": "DUMBBELLS",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Avancer un pied, contrôler la descente et repousser le sol sans laisser rentrer le genou. Charge indiquée par haltère, sauf extension triceps réalisée avec un seul haltère.",
+    "instructions": "Avancer un pied, contrôler la descente et repousser le sol sans laisser rentrer le genou."
+  },
+  {
+    "name": "Fente latérale",
+    "muscleGroup": "LEGS",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Déplacer le poids sur une jambe fléchie en reculant les hanches. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Déplacer le poids sur une jambe fléchie en reculant les hanches."
+  },
+  {
+    "name": "Split squat avec haltères",
+    "muscleGroup": "LEGS",
+    "equipment": "DUMBBELLS",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Garder les pieds en position décalée et descendre verticalement entre les deux appuis. Charge indiquée par haltère, sauf extension triceps réalisée avec un seul haltère.",
+    "instructions": "Garder les pieds en position décalée et descendre verticalement entre les deux appuis."
+  },
+  {
+    "name": "Montée sur banc",
+    "muscleGroup": "LEGS",
+    "equipment": "BENCH",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Monter sur un banc bas et stable en poussant sur le pied posé dessus. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Monter sur un banc bas et stable en poussant sur le pied posé dessus."
+  },
+  {
+    "name": "Chaise contre un mur",
+    "muscleGroup": "LEGS",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "DURATION",
+    "description": "Adosser le dos au mur, fléchir les genoux et maintenir une position confortable. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Adosser le dos au mur, fléchir les genoux et maintenir une position confortable."
+  },
+  {
+    "name": "Élévation des mollets debout",
+    "muscleGroup": "LEGS",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Monter sur la pointe des pieds puis redescendre lentement sans rebond. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Monter sur la pointe des pieds puis redescendre lentement sans rebond."
+  },
+  {
+    "name": "Élévation des mollets avec haltères",
+    "muscleGroup": "LEGS",
+    "equipment": "DUMBBELLS",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Tenir les haltères au côté du corps et monter les talons en contrôlant la descente. Charge indiquée par haltère, sauf extension triceps réalisée avec un seul haltère.",
+    "instructions": "Tenir les haltères au côté du corps et monter les talons en contrôlant la descente."
+  },
+  {
+    "name": "Squat sauté",
+    "muscleGroup": "LEGS",
+    "equipment": "NONE",
+    "difficulty": "ADVANCED",
+    "measurementType": "REPETITIONS",
+    "description": "Effectuer un saut modéré depuis le squat et amortir la réception avec les jambes. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Effectuer un saut modéré depuis le squat et amortir la réception avec les jambes."
+  },
+  {
+    "name": "Développé militaire avec barre",
+    "muscleGroup": "SHOULDERS",
+    "equipment": "BARBELL",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Pousser la barre au-dessus de la tête avec les abdominaux engagés sans cambrer. Charge indiquée pour la barre complète.",
+    "instructions": "Pousser la barre au-dessus de la tête avec les abdominaux engagés sans cambrer."
+  },
+  {
+    "name": "Développé épaules avec haltères",
+    "muscleGroup": "SHOULDERS",
+    "equipment": "DUMBBELLS",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Pousser les haltères au-dessus des épaules et redescendre sans à-coup. Charge indiquée par haltère, sauf extension triceps réalisée avec un seul haltère.",
+    "instructions": "Pousser les haltères au-dessus des épaules et redescendre sans à-coup."
+  },
+  {
+    "name": "Élévation latérale avec haltères",
+    "muscleGroup": "SHOULDERS",
+    "equipment": "DUMBBELLS",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Écarter les bras jusqu'à hauteur des épaules avec une charge légère. Charge indiquée par haltère, sauf extension triceps réalisée avec un seul haltère.",
+    "instructions": "Écarter les bras jusqu'à hauteur des épaules avec une charge légère."
+  },
+  {
+    "name": "Élévation frontale avec haltères",
+    "muscleGroup": "SHOULDERS",
+    "equipment": "DUMBBELLS",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Lever les bras devant soi sans balancer le buste ni dépasser une amplitude confortable. Charge indiquée par haltère, sauf extension triceps réalisée avec un seul haltère.",
+    "instructions": "Lever les bras devant soi sans balancer le buste ni dépasser une amplitude confortable."
+  },
+  {
+    "name": "Oiseau avec haltères",
+    "muscleGroup": "SHOULDERS",
+    "equipment": "DUMBBELLS",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Buste incliné et dos neutre, écarter les bras en contrôlant les omoplates. Charge indiquée par haltère, sauf extension triceps réalisée avec un seul haltère.",
+    "instructions": "Buste incliné et dos neutre, écarter les bras en contrôlant les omoplates."
+  },
+  {
+    "name": "Face pull avec élastique",
+    "muscleGroup": "SHOULDERS",
+    "equipment": "RESISTANCE_BAND",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Fixer la bande à hauteur du visage et tirer en écartant les coudes. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Fixer la bande à hauteur du visage et tirer en écartant les coudes."
+  },
+  {
+    "name": "Rotation externe avec élastique",
+    "muscleGroup": "SHOULDERS",
+    "equipment": "RESISTANCE_BAND",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Garder le coude près du corps et tourner lentement l'avant-bras vers l'extérieur. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Garder le coude près du corps et tourner lentement l'avant-bras vers l'extérieur."
+  },
+  {
+    "name": "Pike push-up",
+    "muscleGroup": "SHOULDERS",
+    "equipment": "NONE",
+    "difficulty": "ADVANCED",
+    "measurementType": "REPETITIONS",
+    "description": "Placer les hanches hautes puis fléchir les coudes pour rapprocher la tête du sol. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Placer les hanches hautes puis fléchir les coudes pour rapprocher la tête du sol."
+  },
+  {
+    "name": "Curl biceps avec haltères",
+    "muscleGroup": "ARMS",
+    "equipment": "DUMBBELLS",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Fléchir les coudes sans avancer les épaules et redescendre lentement. Charge indiquée par haltère, sauf extension triceps réalisée avec un seul haltère.",
+    "instructions": "Fléchir les coudes sans avancer les épaules et redescendre lentement."
+  },
+  {
+    "name": "Curl marteau",
+    "muscleGroup": "ARMS",
+    "equipment": "DUMBBELLS",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Garder les paumes face à face et lever les haltères sans balancer le corps. Charge indiquée par haltère, sauf extension triceps réalisée avec un seul haltère.",
+    "instructions": "Garder les paumes face à face et lever les haltères sans balancer le corps."
+  },
+  {
+    "name": "Curl biceps avec barre",
+    "muscleGroup": "ARMS",
+    "equipment": "BARBELL",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Garder les coudes fixes et remonter la barre en contrôlant la descente. Charge indiquée pour la barre complète.",
+    "instructions": "Garder les coudes fixes et remonter la barre en contrôlant la descente."
+  },
+  {
+    "name": "Curl avec élastique",
+    "muscleGroup": "ARMS",
+    "equipment": "RESISTANCE_BAND",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Bloquer la bande sous les pieds et fléchir les coudes en gardant le buste stable. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Bloquer la bande sous les pieds et fléchir les coudes en gardant le buste stable."
+  },
+  {
+    "name": "Extension triceps avec haltère",
+    "muscleGroup": "ARMS",
+    "equipment": "DUMBBELLS",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Tenir un haltère au-dessus de la tête et déplier les coudes sans les écarter. Charge indiquée par haltère, sauf extension triceps réalisée avec un seul haltère.",
+    "instructions": "Tenir un haltère au-dessus de la tête et déplier les coudes sans les écarter."
+  },
+  {
+    "name": "Extension triceps avec élastique",
+    "muscleGroup": "ARMS",
+    "equipment": "RESISTANCE_BAND",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Fixer la bande en hauteur et tendre les coudes en gardant les bras contre le corps. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Fixer la bande en hauteur et tendre les coudes en gardant les bras contre le corps."
+  },
+  {
+    "name": "Planche ventrale",
+    "muscleGroup": "CORE",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "DURATION",
+    "description": "Aligner épaules, bassin et chevilles sur les avant-bras en respirant librement. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Aligner épaules, bassin et chevilles sur les avant-bras en respirant librement."
+  },
+  {
+    "name": "Planche latérale",
+    "muscleGroup": "CORE",
+    "equipment": "NONE",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "DURATION",
+    "description": "Prendre appui sur un avant-bras et garder le bassin dans l'axe du corps. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Prendre appui sur un avant-bras et garder le bassin dans l'axe du corps."
+  },
+  {
+    "name": "Dead bug",
+    "muscleGroup": "CORE",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Allongé sur le dos, étendre des membres opposés sans décoller les lombaires. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Allongé sur le dos, étendre des membres opposés sans décoller les lombaires."
+  },
+  {
+    "name": "Crunch abdominal",
+    "muscleGroup": "CORE",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Contracter les abdominaux pour relever légèrement les épaules sans tirer la nuque. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Contracter les abdominaux pour relever légèrement les épaules sans tirer la nuque."
+  },
+  {
+    "name": "Crunch inversé",
+    "muscleGroup": "CORE",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Ramener les genoux vers le buste et décoller légèrement le bassin sans élan. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Ramener les genoux vers le buste et décoller légèrement le bassin sans élan."
+  },
+  {
+    "name": "Relevé de genoux suspendu",
+    "muscleGroup": "CORE",
+    "equipment": "PULL_UP_BAR",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "En suspension stable, remonter les genoux sans balancer les jambes. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "En suspension stable, remonter les genoux sans balancer les jambes."
+  },
+  {
+    "name": "Pallof press avec élastique",
+    "muscleGroup": "CORE",
+    "equipment": "RESISTANCE_BAND",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Debout de côté à la fixation, tendre les bras en résistant à la rotation du buste. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Debout de côté à la fixation, tendre les bras en résistant à la rotation du buste."
+  },
+  {
+    "name": "Mountain climber",
+    "muscleGroup": "FULL_BODY",
+    "equipment": "NONE",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "DURATION",
+    "description": "En appui sur les mains, alterner les genoux vers le buste sans affaisser le bassin. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "En appui sur les mains, alterner les genoux vers le buste sans affaisser le bassin."
+  },
+  {
+    "name": "Jumping jack",
+    "muscleGroup": "FULL_BODY",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "DURATION",
+    "description": "Écarter pieds et bras ensemble avec des réceptions légères et contrôlées. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Écarter pieds et bras ensemble avec des réceptions légères et contrôlées."
+  },
+  {
+    "name": "Marche rapide",
+    "muscleGroup": "FULL_BODY",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "DURATION",
+    "description": "Marcher d'un pas soutenu avec un balancement naturel des bras et une respiration confortable. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Marcher d'un pas soutenu avec un balancement naturel des bras et une respiration confortable."
+  },
+  {
+    "name": "Course à allure facile",
+    "muscleGroup": "FULL_BODY",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "DURATION",
+    "description": "Courir à une allure permettant de parler avec une foulée souple et régulière. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Courir à une allure permettant de parler avec une foulée souple et régulière."
+  },
+  {
+    "name": "Course fractionnée courte",
+    "muscleGroup": "FULL_BODY",
+    "equipment": "NONE",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "DURATION",
+    "description": "Courir le temps prescrit à allure soutenue et utiliser le repos prévu pour récupérer. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Courir le temps prescrit à allure soutenue et utiliser le repos prévu pour récupérer."
+  },
+  {
+    "name": "Corde à sauter pieds joints",
+    "muscleGroup": "FULL_BODY",
+    "equipment": "JUMP_ROPE",
+    "difficulty": "BEGINNER",
+    "measurementType": "DURATION",
+    "description": "Faire de petits sauts souples en tournant la corde avec les poignets. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Faire de petits sauts souples en tournant la corde avec les poignets."
+  },
+  {
+    "name": "Corde à sauter alternée",
+    "muscleGroup": "FULL_BODY",
+    "equipment": "JUMP_ROPE",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "DURATION",
+    "description": "Alterner les appuis au rythme de la corde en restant relâché au niveau des épaules. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Alterner les appuis au rythme de la corde en restant relâché au niveau des épaules."
+  },
+  {
+    "name": "Burpee sans pompe",
+    "muscleGroup": "FULL_BODY",
+    "equipment": "NONE",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Passer debout à la planche puis se relever avec un saut modéré, sans ajouter de pompe. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Passer debout à la planche puis se relever avec un saut modéré, sans ajouter de pompe."
+  },
+  {
+    "name": "Burpee avec pompe",
+    "muscleGroup": "FULL_BODY",
+    "equipment": "NONE",
+    "difficulty": "ADVANCED",
+    "measurementType": "REPETITIONS",
+    "description": "Passer en planche, effectuer une pompe puis se relever en contrôlant les réceptions. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Passer en planche, effectuer une pompe puis se relever en contrôlant les réceptions."
+  },
+  {
+    "name": "Swing kettlebell",
+    "muscleGroup": "GLUTES",
+    "equipment": "KETTLEBELL",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Reculer les hanches puis projeter la kettlebell par extension des hanches sans tirer avec les bras. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Reculer les hanches puis projeter la kettlebell par extension des hanches sans tirer avec les bras."
+  },
+  {
+    "name": "Soulevé de terre kettlebell",
+    "muscleGroup": "GLUTES",
+    "equipment": "KETTLEBELL",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Saisir la kettlebell entre les pieds et se redresser avec le dos neutre. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Saisir la kettlebell entre les pieds et se redresser avec le dos neutre."
+  },
+  {
+    "name": "Marche du fermier avec haltères",
+    "muscleGroup": "FULL_BODY",
+    "equipment": "DUMBBELLS",
+    "difficulty": "BEGINNER",
+    "measurementType": "DURATION",
+    "description": "Marcher le temps prévu avec les haltères au côté du corps et le buste vertical. Charge indiquée par haltère, sauf extension triceps réalisée avec un seul haltère.",
+    "instructions": "Marcher le temps prévu avec les haltères au côté du corps et le buste vertical."
+  },
+  {
+    "name": "Marche valise avec kettlebell",
+    "muscleGroup": "CORE",
+    "equipment": "KETTLEBELL",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "DURATION",
+    "description": "Marcher avec une kettlebell d'un côté en évitant de pencher le buste. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Marcher avec une kettlebell d'un côté en évitant de pencher le buste."
+  },
+  {
+    "name": "Étirement des fléchisseurs de hanche",
+    "muscleGroup": "LEGS",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "DURATION",
+    "description": "En demi-fente au sol, engager légèrement les fessiers et avancer le bassin sans cambrer. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "En demi-fente au sol, engager légèrement les fessiers et avancer le bassin sans cambrer."
+  },
+  {
+    "name": "Étirement des ischio-jambiers",
+    "muscleGroup": "LEGS",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "DURATION",
+    "description": "Allonger une jambe et incliner le buste depuis les hanches sans arrondir excessivement le dos. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Allonger une jambe et incliner le buste depuis les hanches sans arrondir excessivement le dos."
+  },
+  {
+    "name": "Étirement des mollets au mur",
+    "muscleGroup": "LEGS",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "DURATION",
+    "description": "Reculer un pied, garder le talon au sol et avancer doucement le bassin. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Reculer un pied, garder le talon au sol et avancer doucement le bassin."
+  },
+  {
+    "name": "Posture de l'enfant",
+    "muscleGroup": "BACK",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "DURATION",
+    "description": "S'asseoir vers les talons et allonger les bras devant soi en respirant lentement. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "S'asseoir vers les talons et allonger les bras devant soi en respirant lentement."
+  },
+  {
+    "name": "Mobilité chat-vache",
+    "muscleGroup": "BACK",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "À quatre pattes, alterner doucement flexion et extension de la colonne. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "À quatre pattes, alterner doucement flexion et extension de la colonne."
+  },
+  {
+    "name": "Rotation thoracique au sol",
+    "muscleGroup": "BACK",
+    "equipment": "NONE",
+    "difficulty": "BEGINNER",
+    "measurementType": "REPETITIONS",
+    "description": "Allongé sur le côté avec les genoux réunis, ouvrir le bras et tourner le haut du dos. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Allongé sur le côté avec les genoux réunis, ouvrir le bras et tourner le haut du dos."
+  },
+  {
+    "name": "Fente avec rotation thoracique",
+    "muscleGroup": "FULL_BODY",
+    "equipment": "NONE",
+    "difficulty": "INTERMEDIATE",
+    "measurementType": "REPETITIONS",
+    "description": "Depuis une fente basse, tourner doucement le buste en suivant la main du regard. Mouvement à réaliser dans une amplitude maîtrisée.",
+    "instructions": "Depuis une fente basse, tourner doucement le buste en suivant la main du regard."
+  }
+]

@@ -1,0 +1,35 @@
+<section class="program-shell">
+  <a class="back-link" routerLink="/entrainement/programmes">← Mes programmes</a>
+  <p *ngIf="message" class="notice success" role="status">{{message}}</p>
+  <div *ngIf="error" class="notice error" role="alert">{{error}} <button class="btn-sv btn-sv-outline" [disabled]="busy" (click)="refresh.next();error=''">Recharger la fiche</button></div>
+  <a *ngIf="activeWorkoutId" class="btn-sv btn-sv-primary" [routerLink]="['/entrainement/seances',activeWorkoutId]">Reprendre ma séance</a>
+  <ng-container *ngIf="state$|async as state"><p *ngIf="state.loading" class="sv-card state-panel" role="status">Chargement du programme…</p>
+    <div *ngIf="state.error" class="notice error" role="alert">{{state.error}} <button class="btn-sv btn-sv-primary" (click)="refresh.next()">Réessayer</button></div>
+    <ng-container *ngIf="state.program as program"><ng-container *ngIf="state.options as opts">
+      <div class="heading-row"><div><p class="eyebrow">PROGRAMME · RÉVISION {{program.version.revision}}</p><h1>{{program.version.name}}</h1><p class="demo-note">Créé le {{program.createdAt|date:'dd/MM/yyyy à HH:mm'}} · Révision enregistrée le {{program.version.createdAt|date:'dd/MM/yyyy à HH:mm'}}</p></div><span class="badge-sv" [class.badge-warning]="program.version.archived" [class.badge-success]="!program.version.archived">{{program.version.archived?'Archivé':'Actif'}}</span></div>
+      <div *ngIf="state.historical" class="notice warning"><strong>Historique en lecture seule · Révision {{program.version.revision}}</strong><p>Les noms, matériels et mesures sont ceux enregistrés à cette révision. Le statut des exercices reflète leur état actuel dans le catalogue.</p><a class="btn-sv btn-sv-outline" [routerLink]="['/entrainement/programmes',program.id]">Revenir à la version courante ({{program.currentRevision}})</a></div>
+      <div class="actions section-space" *ngIf="!state.historical"><a *ngIf="!program.archived" class="btn-sv btn-sv-primary" [routerLink]="['/entrainement/programmes',program.id,'modifier']">Modifier le programme</a><button class="btn-sv btn-sv-outline" [disabled]="busy" (click)="duplicate(program)">Dupliquer le programme</button><button *ngIf="!program.archived" class="btn-sv btn-sv-danger" [disabled]="busy" (click)="confirmArchive=true">Archiver le programme</button><button *ngIf="program.archived" class="btn-sv btn-sv-primary" [disabled]="busy" (click)="changeStatus(program)">Réactiver le programme</button></div>
+      <a *ngIf="!program.archived&&!state.historical" class="btn-sv btn-sv-outline" [routerLink]="['/entrainement/programmes',program.id,'adaptation']">Bilan et adaptation IA</a>
+      <p *ngIf="program.archived&&!state.historical" class="notice warning">Ce programme reste consultable. Sa modification nécessite une réactivation.</p>
+      <section *ngIf="confirmArchive&&!state.historical" class="notice warning"><h2>Archiver ce programme ?</h2><p>Son historique et ses séances seront conservés.</p><div class="actions"><button class="btn-sv btn-sv-danger" [disabled]="busy" (click)="changeStatus(program)">Confirmer l’archivage</button><button class="btn-sv btn-sv-outline" [disabled]="busy" (click)="confirmArchive=false">Annuler</button></div></section>
+      <section class="sv-card section-space"><h2>Objectif</h2><p class="preserve-lines">{{program.version.objective}}</p><h2>Description</h2><p class="preserve-lines">{{program.version.description}}</p></section>
+      <h2 class="section-title">{{program.version.sessions.length}} séance{{program.version.sessions.length>1?'s':''}} prévue{{program.version.sessions.length>1?'s':''}}</h2>
+      <section class="sv-card section-space" *ngFor="let session of program.version.sessions"><h3 class="session-title"><span class="number-badge">{{session.position}}</span>{{session.name}}</h3>
+        <button *ngIf="!state.historical&&!program.archived" class="btn-sv btn-sv-primary" [disabled]="busy" (click)="startSession(program,session.id)">Démarrer cette séance</button>
+        <a *ngIf="!state.historical&&!program.archived" class="btn-sv btn-sv-outline" routerLink="/entrainement/planification" [queryParams]="{programId:program.id,sessionId:session.id}">Planifier cette séance</a>
+        <article *ngFor="let p of session.prescriptions" class="prescription"><div class="heading-row"><div><h4>{{p.position}}. {{p.exerciseName}}</h4><small>{{label(opts,'equipment',p.equipment)}} · {{label(opts,'measurementTypes',p.measurementType)}}</small><p *ngIf="p.exerciseArchived" class="archive-note">Exercice actuellement archivé dans le catalogue</p></div><a class="btn-sv btn-sv-outline btn-sv-sm" [routerLink]="['/entrainement/exercices',p.exerciseId]">Fiche actuelle</a></div>
+          <dl class="prescription-facts"><div><dt>Séries</dt><dd>{{p.sets}}</dd></div><div><dt>{{p.measurementType==='REPETITIONS'?'Répétitions / série':'Durée / série'}}</dt><dd>{{p.measurementType==='REPETITIONS'?p.repetitions:p.durationSeconds+' s'}}</dd></div><div><dt>Repos</dt><dd>{{p.restSeconds}} s</dd></div><div><dt>Charge cible</dt><dd>{{p.targetLoadKg===null?'Non renseignée':p.targetLoadKg+' kg'}}</dd></div></dl>
+          <button *ngIf="!state.historical&&!program.archived&&program.version.revision===program.currentRevision" class="btn-sv btn-sv-outline section-title" [disabled]="busy" (click)="alternativeTarget={program:program,prescription:p}">Proposer une alternative</button>
+        </article>
+      </section>
+      <section class="sv-card section-space" *ngIf="state.history as history"><h2>Historique des révisions</h2><p class="demo-note">Chaque enregistrement effectif, archivage ou réactivation conserve une révision distincte.</p>
+        <ol class="revision-list"><li *ngFor="let revision of history.items"><a [routerLink]="['/entrainement/programmes',program.id]" [queryParams]="{revision:revision.revision}" [attr.aria-current]="program.version.revision===revision.revision?'true':null">Révision {{revision.revision}} · {{revision.name}}</a><small>{{revision.createdAt|date:'dd/MM/yyyy à HH:mm'}} · {{revision.archived?'Archivé':'Actif'}}{{revision.revision===program.currentRevision?' · Courante':''}}</small></li></ol>
+        <nav *ngIf="history.totalPages>1" class="pagination" aria-label="Pages de l’historique"><button class="btn-sv btn-sv-outline" [disabled]="history.page===0" (click)="goHistory(history.page-1)">Précédent</button><span>{{history.page+1}} / {{history.totalPages}}</span><button class="btn-sv btn-sv-outline" [disabled]="history.page+1>=history.totalPages" (click)="goHistory(history.page+1)">Suivant</button></nav>
+      </section>
+    </ng-container></ng-container>
+  </ng-container>
+</section>
+<app-alternative-dialog *ngIf="alternativeTarget as target" [program]="target.program" [prescription]="target.prescription" (closed)="alternativeTarget=undefined" (saved)="replaced($event)" (reload)="reloadAlternative()"></app-alternative-dialog>
+
+
+

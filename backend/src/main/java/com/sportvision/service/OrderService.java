@@ -69,6 +69,9 @@ public class OrderService {
         BigDecimal total = BigDecimal.ZERO;
 
         for (OrderItemDto itemDto : request.getItems()) {
+            if (itemDto == null || itemDto.getProductId() == null || itemDto.getQuantity() == null || itemDto.getQuantity() < 1) {
+                throw new IllegalArgumentException("Chaque article doit avoir un produit et une quantité d'au moins 1");
+            }
             Product product = productRepository.findById(itemDto.getProductId())
                     .orElseThrow(() -> new RuntimeException("Produit introuvable ID : " + itemDto.getProductId()));
 

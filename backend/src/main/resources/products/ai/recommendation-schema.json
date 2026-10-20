@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "required": ["recommendations"],
+  "properties": {
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["productId", "matchPercentage", "recommendationReason", "badge"],
+        "properties": {
+          "productId": { "type": "integer" },
+          "matchPercentage": { "type": "integer" },
+          "recommendationReason": { "type": "string" },
+          "badge": { "type": "string" }
+        }
+      }
+    }
+  }
+}

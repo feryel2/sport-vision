@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@org.springframework.context.annotation.Profile({"local", "integration"})
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name="sportvision.demo.enabled", havingValue="true")
 public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
@@ -397,3 +399,5 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println(">>> Initialisation Sport Vision terminée avec succès !");
     }
 }
+
+

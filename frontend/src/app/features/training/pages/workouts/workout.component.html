@@ -1,0 +1,35 @@
+<section class="program-shell">
+  <a class="back-link" routerLink="/entrainement/historique">← Historique des séances</a>
+  <p *ngIf="loading" class="sv-card state-panel" role="status">Chargement de la séance…</p>
+  <div *ngIf="error" class="notice error" role="alert">{{error}} <button *ngIf="!workout" class="btn-sv btn-sv-outline" (click)="load()">Réessayer</button></div>
+  <p *ngIf="message" class="notice success" role="status">{{message}}</p>
+  <ng-container *ngIf="workout as w">
+    <div class="heading-row"><div><p class="eyebrow">SÉANCE · {{w.programName}} · RÉVISION {{w.programRevision}}</p><h1>{{w.sessionName}}</h1></div><span class="badge-sv" [class.badge-success]="w.status==='COMPLETED'" [class.badge-warning]="w.status!=='COMPLETED'">{{labels[w.status]}}</span></div>
+    <p class="demo-note">Début : {{w.startedAt|date:'dd/MM/yyyy à HH:mm:ss'}} <span *ngIf="w.endedAt">· Fin : {{w.endedAt|date:'dd/MM/yyyy à HH:mm:ss'}}</span><br>Temps écoulé : {{elapsedLabel(elapsed)}} · repos compris.</p>
+    <div class="sv-card section-space"><h2>Progression</h2><p>{{w.doneSets}} / {{w.totalSets}} séries réalisées · {{w.skippedSets}} ignorées · {{w.pendingSets}} en attente</p><progress [value]="w.doneSets+w.skippedSets" [max]="w.totalSets" aria-label="Séries traitées"></progress><p *ngIf="!active" class="demo-note">Récapitulatif en lecture seule. Informations conservées au démarrage.</p></div>
+    <section *ngFor="let ex of w.exercises" class="sv-card section-space">
+      <h2>{{ex.position}}. {{ex.name}}</h2><p class="demo-note">{{ex.equipmentLabel}} · {{ex.measurementLabel}}</p>
+      <details><summary>Description et consignes enregistrées</summary><p class="preserve-lines">{{ex.description}}</p><p class="preserve-lines">{{ex.instructions}}</p></details>
+      <div class="planned"><strong>Prévu par série</strong><p>{{ex.measurementType==='REPETITIONS'?ex.targetRepetitions+' répétitions':ex.targetDurationSeconds+' s'}} · Repos {{ex.restSeconds}} s · Charge {{ex.targetLoadKg===null?'non renseignée':ex.targetLoadKg+' kg'}}</p><small>{{ex.plannedSets}} séries prévues</small></div>
+      <article *ngFor="let s of ex.sets" class="set-row">
+        <div class="heading-row"><h3>Série {{s.position}}</h3><span class="badge-sv" [class.badge-success]="s.status==='DONE'">{{setLabels[s.status]}}</span></div>
+        <form *ngIf="active" [formGroup]="forms[s.id]" (ngSubmit)="save(ex,s)" [attr.aria-label]="'Série '+s.position+' de '+ex.name">
+          <fieldset [disabled]="busy"><legend>Réalisé</legend><div class="actual-fields">
+            <div><label class="form-label-sv" [for]="'performance-'+s.id">{{ex.measurementType==='REPETITIONS'?'Répétitions réalisées':'Durée réalisée (secondes)'}}</label><input class="form-control-sv" [id]="'performance-'+s.id" type="number" min="1" step="1" [max]="ex.measurementType==='REPETITIONS'?10000:86400" formControlName="performance"><span *ngIf="forms[s.id].controls.performance.touched&&forms[s.id].controls.performance.invalid" class="field-error">Entier positif obligatoire (maximum {{ex.measurementType==='REPETITIONS'?10000:86400}}).</span></div>
+            <div *ngIf="ex.equipment!=='NONE'||ex.targetLoadKg!==null||forms[s.id].controls.load.value!==null"><label class="form-label-sv" [for]="'load-'+s.id">Charge réelle (kg, facultative)</label><input class="form-control-sv" [id]="'load-'+s.id" type="number" min="0" max="10000" step="0.01" formControlName="load"><span *ngIf="forms[s.id].controls.load.touched&&forms[s.id].controls.load.invalid" class="field-error">De 0 à 10 000 kg, deux décimales maximum.</span></div>
+          </div><div class="actions"><button type="submit" class="btn-sv btn-sv-primary" [disabled]="busy">{{savingId===s.id?'Enregistrement…':rowErrors[s.id]?'Réessayer l’enregistrement':s.status==='DONE'?'Enregistrer la correction':'Valider la série'}}</button><button type="button" class="btn-sv btn-sv-outline" [disabled]="busy||(s.status==='SKIPPED'&&!forms[s.id].dirty)" (click)="skip(s)">Ignorer la série</button><small *ngIf="forms[s.id].dirty">Saisie non enregistrée</small></div></fieldset>
+          <p *ngIf="rowErrors[s.id]" class="notice error" role="alert">{{rowErrors[s.id]}} Votre saisie est conservée.</p>
+        </form>
+        <p *ngIf="!active"><strong>Réalisé :</strong> {{s.status==='DONE'?(ex.measurementType==='REPETITIONS'?s.repetitions+' répétitions':s.durationSeconds+' s'):'Aucune performance enregistrée'}}<span *ngIf="s.status==='DONE'&&s.loadKg!==null"> · {{s.loadKg}} kg</span></p>
+      </article>
+    </section>
+    <section class="sv-card section-space" *ngIf="active"><label class="form-label-sv" for="workout-comment">Commentaire de fin (facultatif)</label><textarea id="workout-comment" class="form-control-sv" rows="3" maxlength="2000" [formControl]="comment" [readonly]="busy"></textarea><p class="demo-note">Enregistré lorsque vous terminez ou abandonnez la séance.</p><span *ngIf="comment.touched&&comment.invalid" class="field-error">2 000 caractères maximum.</span><div class="actions"><button class="btn-sv btn-sv-primary" [disabled]="busy" (click)="finish()">Terminer la séance</button><button class="btn-sv btn-sv-danger" [disabled]="busy" (click)="openModal('abandon')">Abandonner la séance</button></div><p class="demo-note">Quitter cette page conserve la séance en cours et ses séries déjà enregistrées.</p></section>
+    <section *ngIf="!active&&w.comment" class="sv-card section-space"><h2>Commentaire</h2><p class="preserve-lines">{{w.comment}}</p></section>
+    <a *ngIf="!active" class="btn-sv btn-sv-primary" routerLink="/entrainement/historique">Consulter l’historique</a>
+  </ng-container>
+</section>
+<div class="workout-overlay" *ngIf="modal"><section class="sv-card workout-dialog" role="dialog" aria-modal="true" aria-labelledby="workout-confirm-title" (keydown)="modalKey($event)">
+  <h2 id="workout-confirm-title">{{modal==='leave'?'Quitter sans enregistrer ?':modal==='complete'?'Terminer les séries restantes ?':'Abandonner cette séance ?'}}</h2>
+  <p>{{modal==='leave'?'Les saisies non enregistrées seront perdues. La séance reste en cours et les résultats enregistrés sont conservés.':modal==='complete'?'Les '+workout?.pendingSets+' séries encore en attente seront marquées ignorées. La séance deviendra non modifiable.':'Les résultats déjà enregistrés seront conservés. Les saisies non enregistrées seront perdues et la séance ne pourra plus être modifiée.'}}</p>
+  <div class="actions"><button #cancelButton class="btn-sv btn-sv-outline" [disabled]="busy" (click)="cancel()">Annuler</button><button class="btn-sv" [class.btn-sv-danger]="modal!=='complete'" [class.btn-sv-primary]="modal==='complete'" [disabled]="busy" (click)="confirm()">{{busy?'Enregistrement…':modal==='complete'?'Ignorer les restantes et terminer':modal==='abandon'?'Confirmer l’abandon':'Quitter sans enregistrer'}}</button></div>
+</section></div>

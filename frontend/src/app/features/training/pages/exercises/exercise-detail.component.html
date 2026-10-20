@@ -1,0 +1,21 @@
+<section class="page-shell detail-shell">
+  <a routerLink="/entrainement/exercices" class="back-link">← Retour au catalogue</a>
+  <ng-container *ngIf="state$ | async as state">
+    <div class="state-panel sv-card" *ngIf="state.loading" role="status">Chargement de la fiche…</div>
+    <div class="state-panel sv-card" *ngIf="state.error" role="alert"><h1>Fiche indisponible</h1><p>{{ state.error }}</p><button class="btn-sv btn-sv-primary" (click)="retry.next()">Réessayer</button></div>
+    <ng-container *ngIf="state.exercise as exercise"><ng-container *ngIf="state.options as opts">
+      <article class="sv-card detail-card">
+        <div class="actions"><span class="badge-sv badge-blue">{{ label(opts, 'muscleGroups', exercise.muscleGroup) }}</span>
+          <span class="badge-sv" [class.badge-warning]="exercise.archived" [class.badge-success]="!exercise.archived">{{ exercise.archived ? 'Archivé' : 'Actif' }}</span></div>
+        <h1>{{ exercise.name }}</h1>
+        <p *ngIf="exercise.archived" class="notice archive-confirm">Cet exercice est archivé et n’apparaît plus dans le catalogue actif.</p>
+        <p class="intro preserve-lines">{{ exercise.description }}</p>
+        <dl class="detail-facts"><div><dt>Difficulté</dt><dd>{{ label(opts, 'difficulties', exercise.difficulty) }}</dd></div>
+          <div><dt>Matériel</dt><dd>{{ label(opts, 'equipment', exercise.equipment) }}</dd></div>
+          <div><dt>Type de mesure</dt><dd>{{ label(opts, 'measurementTypes', exercise.measurementType) }}</dd></div></dl>
+        <section class="instructions"><h2>Consignes d’exécution</h2><p class="preserve-lines">{{ exercise.instructions }}</p></section>
+        <p class="demo-note">Créé le {{ exercise.createdAt | date:'dd/MM/yyyy à HH:mm' }} · Mis à jour le {{ exercise.updatedAt | date:'dd/MM/yyyy à HH:mm' }}</p>
+      </article>
+    </ng-container></ng-container>
+  </ng-container>
+</section>

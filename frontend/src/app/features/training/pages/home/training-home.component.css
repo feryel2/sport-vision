@@ -1,0 +1,26 @@
+.container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+.hero-section { position: relative; overflow: hidden; background: linear-gradient(120deg,#0f172a 0%,#1e3a8a 56%,#0284c7 100%); color: white; }
+.hero-content { position: relative; padding-top: 64px; padding-bottom: 72px; }
+.hero-decoration { position: absolute; width: 560px; height: 560px; right: -100px; top: -100px; border: 70px solid #ffffff06; border-radius: 50%; box-shadow: 0 0 0 80px #ffffff03,0 0 0 160px #ffffff02; }
+.hero-badges { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 30px; }
+.theme-badge { border: 1px solid #ffffff40; border-radius: 999px; color: #dbeafe; padding: 5px 12px; font-size: .75rem; font-weight: 700; letter-spacing: .8px; }
+.eyebrow { color: #7dd3fc; font-size: .78rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 14px; }
+h1 { color: white; font-size: clamp(2.3rem,4.8vw,4.1rem); line-height: 1.09; font-weight: 800; letter-spacing: -1.5px; max-width: 900px; }
+h1 span { color: #7dd3fc; }
+.hero-subtitle { max-width: 620px; color: #dbeafe; font-size: 1.08rem; line-height: 1.8; margin: 24px 0 30px; }
+.training-universe { padding-top: 60px; padding-bottom: 64px; scroll-margin-top: 160px; }
+.section-heading { max-width: 740px; margin-bottom: 30px; }
+h2 { font-size: clamp(1.6rem,3vw,2.1rem); margin: 16px 0 12px; }
+.section-heading p { color: #475569; font-size: .95rem; }
+.training-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; }
+.sv-card { position: relative; padding: 28px; }
+.card-icon { width: 50px; height: 50px; display: grid; place-items: center; color: #1d4ed8; background: #eff6ff; border: 1px solid #dbeafe; border-radius: 12px; margin-bottom: 24px; }
+.card-icon svg { width: 28px; height: 28px; }
+.coming-soon { position: absolute; right: 22px; top: 30px; font-size: .65rem; font-weight: 800; letter-spacing: 1px; color: #475569; background: #f1f5f9; padding: 4px 8px; border-radius: 6px; }
+h3 { font-size: 1.2rem; margin-bottom: 12px; }
+.sv-card p { font-size: .9rem; line-height: 1.8; color: #475569; }
+.welcome-note { display: flex; align-items: center; gap: 12px; color: #475569; margin-top: 28px; font-size: .85rem; }
+.note-mark { flex-shrink: 0; border: 1px solid #94a3b8; width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; font-weight: 700; font-size: .75rem; }
+a:focus-visible { outline: 3px solid #7dd3fc; outline-offset: 5px; }
+@media(max-width: 800px) { .training-grid { grid-template-columns: 1fr; } .hero-content { padding-top: 44px; padding-bottom: 48px; } .training-universe { padding-top: 40px; } }
+.catalog-link { margin-top: 18px; white-space: normal; }

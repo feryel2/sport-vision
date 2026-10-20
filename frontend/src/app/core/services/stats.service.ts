@@ -9,7 +9,7 @@ import { OrderService } from './order.service';
   providedIn: 'root'
 })
 export class StatsService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = '/api';
 
   constructor(
     private http: HttpClient,

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/ai")
@@ -49,5 +50,13 @@ public class AiSportController {
     @GetMapping("/coaches")
     public ResponseEntity<ApiResponse<List<Coach>>> getAllCoaches() {
         return ResponseEntity.ok(ApiResponse.ok(coachRepository.findAll()));
+    }
+
+    @ExceptionHandler(com.sportvision.training.service.TrainingAiException.class)
+    public ResponseEntity<ApiResponse<Map<String, Object>>> aiFailure(
+            com.sportvision.training.service.TrainingAiException exception) {
+        return ResponseEntity.status(exception.getStatus())
+                .body(new ApiResponse<>(false, exception.getMessage(),
+                        Map.of("code", exception.getCode(), "errors", Map.of())));
     }
 }

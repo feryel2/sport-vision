@@ -1,0 +1,35 @@
+<section class="program-shell">
+  <a class="back-link" routerLink="/entrainement/programmes">← Mes programmes</a>
+  <div class="heading-row"><div><p class="eyebrow">ASSISTANT DE PRÉPARATION</p><h1>Générer avec l’IA</h1><p class="intro">Choisissez vos préférences, consultez la proposition, puis décidez de l’enregistrer.</p></div><span class="badge-sv badge-blue">APERÇU AVANT ENREGISTREMENT</span></div>
+  <p class="demo-note">Seuls vos choix structurés et les exercices compatibles sont transmis à Gemini. Votre identité et votre historique ne sont pas envoyés.</p>
+  <div *ngIf="error" class="notice error" role="alert">{{error}}<p>Vos préférences sont conservées. Vous pouvez réessayer ou créer un programme manuellement.</p><a class="btn-sv btn-sv-outline" routerLink="/entrainement/programmes/nouveau">Créer manuellement</a></div>
+  <p *ngIf="loading" class="sv-card state-panel" role="status">Chargement des préférences…</p>
+  <div *ngIf="optionsError" class="notice error" role="alert">{{optionsError}} <button class="btn-sv btn-sv-outline" (click)="loadOptions()">Réessayer</button></div>
+  <ng-container *ngIf="options as opts">
+    <form *ngIf="!preview" class="sv-card" [formGroup]="form" (ngSubmit)="generate()">
+      <fieldset [disabled]="busy"><legend class="section-title">Vos préférences</legend><div class="ai-fields">
+        <div><label for="ai-objective" class="form-label-sv">Objectif</label><select id="ai-objective" class="form-control-sv" formControlName="objective"><option *ngFor="let o of opts.objectives" [value]="o.value">{{o.label}}</option></select></div>
+        <div><label for="ai-level" class="form-label-sv">Niveau</label><select id="ai-level" class="form-control-sv" formControlName="level"><option *ngFor="let o of opts.levels" [value]="o.value">{{o.label}}</option></select></div>
+        <div><label for="ai-sessions" class="form-label-sv">Nombre de séances souhaité</label><input id="ai-sessions" class="form-control-sv" type="number" min="1" max="5" step="1" formControlName="sessionCount"><span *ngIf="form.controls.sessionCount.touched&&form.controls.sessionCount.invalid" class="field-error">Choisissez un entier entre 1 et 5.</span></div>
+      </div>
+      <fieldset class="equipment-picker"><legend>Matériel disponible</legend><div class="equipment-grid"><label *ngFor="let o of opts.equipment"><input type="checkbox" [disabled]="o.value==='NONE'&&form.controls.equipment.value.includes('NONE')" [checked]="form.controls.equipment.value.includes(o.value)" (change)="toggleEquipment(o.value,checked($event))"> {{o.label}}</label></div></fieldset>
+      <p class="demo-note">Les exercices sans matériel restent disponibles avec tout équipement. Le niveau choisi inclut les niveaux inférieurs. Au moins trois exercices actifs compatibles sont nécessaires.</p>
+      <div class="actions"><button type="submit" class="btn-sv btn-sv-primary" [disabled]="busy">{{busy?'Génération en cours…':error?'Réessayer la génération':'Générer la proposition'}}</button><a class="btn-sv btn-sv-outline" routerLink="/entrainement/programmes/nouveau">Créer manuellement</a></div>
+      </fieldset>
+      <p *ngIf="busy" role="status" class="demo-note">La proposition est en préparation. Aucun programme n’est enregistré à cette étape.</p>
+    </form>
+    <ng-container *ngIf="preview as result">
+      <div class="notice warning">Proposition à relire avant utilisation. Elle ne garantit aucun résultat et ne remplace pas un accompagnement personnalisé.</div>
+      <section class="sv-card section-space"><h2>{{result.proposal.name}}</h2><p class="preserve-lines">{{result.proposal.description}}</p><h3>Pourquoi cette proposition ?</h3><p class="preserve-lines">{{result.proposal.justification}}</p></section>
+      <section *ngFor="let session of result.proposal.sessions;let index=index" class="sv-card section-space">
+        <h2>{{index+1}}. {{session.name}}</h2>
+        <article class="prescription" *ngFor="let p of session.exercises">
+          <h3>{{exerciseName(p.exerciseId)}}</h3><p class="demo-note">{{equipmentLabel(p.exerciseId)}}</p>
+          <dl class="prescription-facts"><div><dt>Séries</dt><dd>{{p.sets}}</dd></div><div><dt>{{p.measurementType==='REPETITIONS'?'Répétitions / série':'Durée / série'}}</dt><dd>{{p.measurementType==='REPETITIONS'?p.repetitions:p.durationSeconds+' s'}}</dd></div><div><dt>Repos</dt><dd>{{p.restSeconds}} s</dd></div><div><dt>Charge cible</dt><dd>Non renseignée</dd></div></dl>
+        </article>
+      </section>
+      <div class="save-bar"><p class="demo-note">L’enregistrement crée un programme et sa première révision. Vous pourrez ensuite le modifier dans l’éditeur habituel.</p><div class="actions"><button class="btn-sv btn-sv-primary" [disabled]="busy" (click)="save()">{{busy?'Enregistrement…':'Enregistrer ce programme'}}</button><button class="btn-sv btn-sv-outline" [disabled]="busy" (click)="back()">Revenir aux préférences</button></div></div>
+    </ng-container>
+  </ng-container>
+</section>
+

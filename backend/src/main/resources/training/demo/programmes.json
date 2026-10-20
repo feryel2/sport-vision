@@ -1,0 +1,1150 @@
+[
+  {
+    "name": "Full Body Débutant",
+    "objective": "Renforcement général et apprentissage technique",
+    "description": "Cycle synthétique de démonstration : renforcement général et apprentissage technique. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main. Démonstration synthétique : cibles atteintes et performances améliorées au fil des séances.",
+    "sessions": [
+      {
+        "name": "Séance A — Technique",
+        "prescriptions": [
+          {
+            "exerciseId": 27,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 6,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": 8
+          },
+          {
+            "exerciseId": 16,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 23,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 56,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          }
+        ]
+      },
+      {
+        "name": "Séance B — Contrôle",
+        "prescriptions": [
+          {
+            "exerciseId": 27,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 6,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": 8
+          },
+          {
+            "exerciseId": 16,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 23,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 56,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Force fondamentale",
+    "objective": "Développer la force sur des mouvements composés",
+    "description": "Cycle synthétique de démonstration : développer la force sur des mouvements composés. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main. Démonstration synthétique : difficultés répétées en révision 2, cibles non atteintes et quelques séries ignorées.",
+    "sessions": [
+      {
+        "name": "Séance A — Technique",
+        "prescriptions": [
+          {
+            "exerciseId": 29,
+            "sets": 3,
+            "repetitions": 5,
+            "durationSeconds": null,
+            "restSeconds": 150,
+            "targetLoadKg": 40
+          },
+          {
+            "exerciseId": 7,
+            "sets": 3,
+            "repetitions": 5,
+            "durationSeconds": null,
+            "restSeconds": 150,
+            "targetLoadKg": 30
+          },
+          {
+            "exerciseId": 14,
+            "sets": 3,
+            "repetitions": 5,
+            "durationSeconds": null,
+            "restSeconds": 150,
+            "targetLoadKg": 25
+          },
+          {
+            "exerciseId": 20,
+            "sets": 3,
+            "repetitions": 5,
+            "durationSeconds": null,
+            "restSeconds": 150,
+            "targetLoadKg": 35
+          },
+          {
+            "exerciseId": 40,
+            "sets": 3,
+            "repetitions": 5,
+            "durationSeconds": null,
+            "restSeconds": 150,
+            "targetLoadKg": 20
+          }
+        ]
+      },
+      {
+        "name": "Séance B — Contrôle",
+        "prescriptions": [
+          {
+            "exerciseId": 29,
+            "sets": 3,
+            "repetitions": 5,
+            "durationSeconds": null,
+            "restSeconds": 150,
+            "targetLoadKg": 40
+          },
+          {
+            "exerciseId": 7,
+            "sets": 3,
+            "repetitions": 5,
+            "durationSeconds": null,
+            "restSeconds": 150,
+            "targetLoadKg": 30
+          },
+          {
+            "exerciseId": 14,
+            "sets": 3,
+            "repetitions": 5,
+            "durationSeconds": null,
+            "restSeconds": 150,
+            "targetLoadKg": 25
+          },
+          {
+            "exerciseId": 20,
+            "sets": 3,
+            "repetitions": 5,
+            "durationSeconds": null,
+            "restSeconds": 150,
+            "targetLoadKg": 35
+          },
+          {
+            "exerciseId": 40,
+            "sets": 3,
+            "repetitions": 5,
+            "durationSeconds": null,
+            "restSeconds": 150,
+            "targetLoadKg": 20
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Hypertrophie Haut du corps",
+    "objective": "Développer la masse musculaire du haut du corps",
+    "description": "Cycle synthétique de démonstration : développer la masse musculaire du haut du corps. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main.",
+    "sessions": [
+      {
+        "name": "Séance A — Technique",
+        "prescriptions": [
+          {
+            "exerciseId": 6,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 8
+          },
+          {
+            "exerciseId": 15,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 10
+          },
+          {
+            "exerciseId": 41,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 6
+          },
+          {
+            "exerciseId": 42,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 3
+          },
+          {
+            "exerciseId": 48,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 5
+          },
+          {
+            "exerciseId": 53,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": null
+          }
+        ]
+      },
+      {
+        "name": "Séance B — Contrôle",
+        "prescriptions": [
+          {
+            "exerciseId": 6,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 8
+          },
+          {
+            "exerciseId": 15,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 10
+          },
+          {
+            "exerciseId": 41,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 6
+          },
+          {
+            "exerciseId": 42,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 3
+          },
+          {
+            "exerciseId": 48,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 5
+          },
+          {
+            "exerciseId": 53,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Hypertrophie Bas du corps",
+    "objective": "Développer quadriceps, ischio-jambiers et fessiers",
+    "description": "Cycle synthétique de démonstration : développer quadriceps, ischio-jambiers et fessiers. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main.",
+    "sessions": [
+      {
+        "name": "Séance A — Technique",
+        "prescriptions": [
+          {
+            "exerciseId": 28,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 12
+          },
+          {
+            "exerciseId": 21,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 10
+          },
+          {
+            "exerciseId": 34,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 8
+          },
+          {
+            "exerciseId": 25,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 38,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 8
+          }
+        ]
+      },
+      {
+        "name": "Séance B — Contrôle",
+        "prescriptions": [
+          {
+            "exerciseId": 28,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 12
+          },
+          {
+            "exerciseId": 21,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 10
+          },
+          {
+            "exerciseId": 34,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 8
+          },
+          {
+            "exerciseId": 25,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 38,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Circuit remise en forme",
+    "objective": "Soutenir la condition physique et une démarche de gestion du poids",
+    "description": "Cycle synthétique de démonstration : soutenir la condition physique et une démarche de gestion du poids. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main.",
+    "sessions": [
+      {
+        "name": "Séance A — Technique",
+        "prescriptions": [
+          {
+            "exerciseId": 27,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 1,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 16,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 31,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 61,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 45,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          }
+        ]
+      },
+      {
+        "name": "Séance B — Contrôle",
+        "prescriptions": [
+          {
+            "exerciseId": 27,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 1,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 16,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 31,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 61,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 45,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Endurance fondamentale",
+    "objective": "Construire une base aérobie sans recherche de vitesse",
+    "description": "Cycle synthétique de démonstration : construire une base aérobie sans recherche de vitesse. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main.",
+    "sessions": [
+      {
+        "name": "Séance A — Technique",
+        "prescriptions": [
+          {
+            "exerciseId": 63,
+            "sets": 1,
+            "repetitions": null,
+            "durationSeconds": 1200,
+            "restSeconds": 30,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 64,
+            "sets": 1,
+            "repetitions": null,
+            "durationSeconds": 900,
+            "restSeconds": 30,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 76,
+            "sets": 2,
+            "repetitions": null,
+            "durationSeconds": 30,
+            "restSeconds": 30,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 74,
+            "sets": 2,
+            "repetitions": null,
+            "durationSeconds": 30,
+            "restSeconds": 30,
+            "targetLoadKg": null
+          }
+        ]
+      },
+      {
+        "name": "Séance B — Contrôle",
+        "prescriptions": [
+          {
+            "exerciseId": 63,
+            "sets": 1,
+            "repetitions": null,
+            "durationSeconds": 1200,
+            "restSeconds": 30,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 64,
+            "sets": 1,
+            "repetitions": null,
+            "durationSeconds": 900,
+            "restSeconds": 30,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 76,
+            "sets": 2,
+            "repetitions": null,
+            "durationSeconds": 30,
+            "restSeconds": 30,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 74,
+            "sets": 2,
+            "repetitions": null,
+            "durationSeconds": 30,
+            "restSeconds": 30,
+            "targetLoadKg": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Cardio fractionné progressif",
+    "objective": "Alterner efforts courts et récupération contrôlée",
+    "description": "Cycle synthétique de démonstration : alterner efforts courts et récupération contrôlée. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main.",
+    "sessions": [
+      {
+        "name": "Séance A — Technique",
+        "prescriptions": [
+          {
+            "exerciseId": 62,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 45,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 65,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 90,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 66,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 45,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 54,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 40,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          }
+        ]
+      },
+      {
+        "name": "Séance B — Contrôle",
+        "prescriptions": [
+          {
+            "exerciseId": 62,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 45,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 65,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 90,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 66,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 45,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 54,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 40,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Mobilité et récupération",
+    "objective": "Développer une mobilité confortable sans effort maximal",
+    "description": "Cycle synthétique de démonstration : développer une mobilité confortable sans effort maximal. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main.",
+    "sessions": [
+      {
+        "name": "Séance A — Technique",
+        "prescriptions": [
+          {
+            "exerciseId": 78,
+            "sets": 2,
+            "repetitions": 8,
+            "durationSeconds": null,
+            "restSeconds": 20,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 79,
+            "sets": 2,
+            "repetitions": 8,
+            "durationSeconds": null,
+            "restSeconds": 20,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 74,
+            "sets": 2,
+            "repetitions": null,
+            "durationSeconds": 30,
+            "restSeconds": 20,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 75,
+            "sets": 2,
+            "repetitions": null,
+            "durationSeconds": 30,
+            "restSeconds": 20,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 77,
+            "sets": 2,
+            "repetitions": null,
+            "durationSeconds": 30,
+            "restSeconds": 20,
+            "targetLoadKg": null
+          }
+        ]
+      },
+      {
+        "name": "Séance B — Contrôle",
+        "prescriptions": [
+          {
+            "exerciseId": 78,
+            "sets": 2,
+            "repetitions": 8,
+            "durationSeconds": null,
+            "restSeconds": 20,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 79,
+            "sets": 2,
+            "repetitions": 8,
+            "durationSeconds": null,
+            "restSeconds": 20,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 74,
+            "sets": 2,
+            "repetitions": null,
+            "durationSeconds": 30,
+            "restSeconds": 20,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 75,
+            "sets": 2,
+            "repetitions": null,
+            "durationSeconds": 30,
+            "restSeconds": 20,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 77,
+            "sets": 2,
+            "repetitions": null,
+            "durationSeconds": 30,
+            "restSeconds": 20,
+            "targetLoadKg": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Gainage et stabilité",
+    "objective": "Renforcer le tronc avec une respiration régulière",
+    "description": "Cycle synthétique de démonstration : renforcer le tronc avec une respiration régulière. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main.",
+    "sessions": [
+      {
+        "name": "Séance A — Technique",
+        "prescriptions": [
+          {
+            "exerciseId": 54,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 40,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 55,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 30,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 56,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 19,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 60,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          }
+        ]
+      },
+      {
+        "name": "Séance B — Contrôle",
+        "prescriptions": [
+          {
+            "exerciseId": 54,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 40,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 55,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 30,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 56,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 19,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 60,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 45,
+            "targetLoadKg": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Renforcement avec élastiques",
+    "objective": "Renforcer tout le corps avec des résistances modulables",
+    "description": "Cycle synthétique de démonstration : renforcer tout le corps avec des résistances modulables. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main.",
+    "sessions": [
+      {
+        "name": "Séance A — Technique",
+        "prescriptions": [
+          {
+            "exerciseId": 8,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 16,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 25,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 45,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 51,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          }
+        ]
+      },
+      {
+        "name": "Séance B — Contrôle",
+        "prescriptions": [
+          {
+            "exerciseId": 8,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 16,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 25,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 45,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 51,
+            "sets": 3,
+            "repetitions": 12,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Kettlebell essentiel",
+    "objective": "Améliorer force générale et contrôle des hanches",
+    "description": "Cycle synthétique de démonstration : améliorer force générale et contrôle des hanches. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main.",
+    "sessions": [
+      {
+        "name": "Séance A — Technique",
+        "prescriptions": [
+          {
+            "exerciseId": 28,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 12
+          },
+          {
+            "exerciseId": 71,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 16
+          },
+          {
+            "exerciseId": 70,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 12
+          },
+          {
+            "exerciseId": 73,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 30,
+            "restSeconds": 90,
+            "targetLoadKg": 12
+          },
+          {
+            "exerciseId": 23,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": null
+          }
+        ]
+      },
+      {
+        "name": "Séance B — Contrôle",
+        "prescriptions": [
+          {
+            "exerciseId": 28,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 12
+          },
+          {
+            "exerciseId": 71,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 16
+          },
+          {
+            "exerciseId": 70,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": 12
+          },
+          {
+            "exerciseId": 73,
+            "sets": 3,
+            "repetitions": null,
+            "durationSeconds": 30,
+            "restSeconds": 90,
+            "targetLoadKg": 12
+          },
+          {
+            "exerciseId": 23,
+            "sets": 3,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 90,
+            "targetLoadKg": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Reprise sportive à domicile",
+    "objective": "Reprendre une activité régulière et progressive",
+    "description": "Cycle synthétique de démonstration : reprendre une activité régulière et progressive. Deux séances alternées, charge ajustée selon les résultats enregistrés. Les charges d’haltères sont indiquées par main.",
+    "sessions": [
+      {
+        "name": "Séance A — Technique",
+        "prescriptions": [
+          {
+            "exerciseId": 3,
+            "sets": 2,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 27,
+            "sets": 2,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 23,
+            "sets": 2,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 18,
+            "sets": 2,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 57,
+            "sets": 2,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          }
+        ]
+      },
+      {
+        "name": "Séance B — Contrôle",
+        "prescriptions": [
+          {
+            "exerciseId": 3,
+            "sets": 2,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 27,
+            "sets": 2,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 23,
+            "sets": 2,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 18,
+            "sets": 2,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          },
+          {
+            "exerciseId": 57,
+            "sets": 2,
+            "repetitions": 10,
+            "durationSeconds": null,
+            "restSeconds": 60,
+            "targetLoadKg": null
+          }
+        ]
+      }
+    ]
+  }
+]

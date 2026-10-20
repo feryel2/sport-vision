@@ -1,0 +1,33 @@
+{
+  "type":"object",
+  "required":["name","description","justification","sessions"],
+  "properties":{
+    "name":{"type":"string"},
+    "description":{"type":"string"},
+    "justification":{"type":"string"},
+    "sessions":{
+      "type":"array",
+      "items":{
+        "type":"object","required":["name","exercises"],
+        "properties":{
+          "name":{"type":"string"},
+          "exercises":{
+            "type":"array",
+            "items":{
+              "type":"object",
+              "required":["exerciseId","measurementType","sets","restSeconds"],
+              "properties":{
+                "exerciseId":{"type":"integer"},
+                "measurementType":{"type":"string"},
+                "sets":{"type":"integer"},
+                "repetitions":{"type":"integer"},
+                "durationSeconds":{"type":"integer"},
+                "restSeconds":{"type":"integer"}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -165,6 +165,9 @@ public class ProductService {
     }
 
     public Product updateStock(Long id, Integer newStock) {
+        if (newStock == null || newStock < 0) {
+            throw new IllegalArgumentException("Le stock ne peut pas être négatif");
+        }
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Produit non trouvé avec l'id : " + id));
         product.setStock(newStock);
@@ -181,11 +184,11 @@ public class ProductService {
     }
 
     public Product updatePrice(Long id, BigDecimal newPrice) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produit non trouvé avec l'id : " + id));
-        if (newPrice.compareTo(BigDecimal.ZERO) <= 0) {
+        if (newPrice == null || newPrice.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Le prix doit être strictement supérieur à zéro");
         }
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produit non trouvé avec l'id : " + id));
         product.setPrice(newPrice);
         return productRepository.save(product);
     }
