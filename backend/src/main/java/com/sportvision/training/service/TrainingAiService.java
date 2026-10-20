@@ -32,7 +32,7 @@ public class TrainingAiService {
         proposalReader=mapper.copy().disable(MapperFeature.ALLOW_COERCION_OF_SCALARS).readerFor(Proposal.class)
             // Seules les mesures optionnelles peuvent manquer ; Bean Validation exige tous les autres champs.
             .without(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, DeserializationFeature.ACCEPT_FLOAT_AS_INT)
-            .with(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+            .with(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS,
                 DeserializationFeature.FAIL_ON_TRAILING_TOKENS).with(JsonParser.Feature.STRICT_DUPLICATE_DETECTION);
     }
     public Options options(){
